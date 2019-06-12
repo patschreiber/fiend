@@ -12,13 +12,22 @@
     </style>
 </head>
 <body>
+    <!-- We need to ensure the spritemap is loaded before the game. -->
+    <img id="spritemap" style="display: none;" src="src/lib/data/low-res-spritesheet.png">
     <canvas id="game-pane" width="640" height="480"></canvas>
 
+    <!-- Exceptions -->
+    <script src="src/exceptions/MapException.js"></script>
+    <script src="src/exceptions/MapDefinitionException.js"></script>
+
     <!-- Assets and discrete entities (classes) -->
+    <script src="src/atlases/MapBase.js"></script>
+    <script src="src/atlases/Overworld.js"></script>
 
     <!-- Core engine -->
+    <script src="src/engine/Renderer/Loader.js"></script>
     <script src="src/engine/FiendGame.js"></script>
-    <script src="src/engine/Renderer.js"></script>
+    <script src="src/engine/Renderer/Renderer.js"></script>
 
     <!-- Init -->
     <script src="src/main.js"></script>

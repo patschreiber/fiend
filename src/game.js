@@ -27,19 +27,9 @@ const bg = {
   }
 }
 
-const overworld = new Overworld();
-
 function render() {
-
-  for (let y=0; y<overworld.topography.length; y++) {
-    for (let x=0; x<overworld.topography[y].length; x++) {
-      if (overworld[y][x] === 1) {
-        console.log('overworld[y][x] :', overworld[y][x]);
         bg.draw();
-      }
-      console.log('overworld.topography[y][x] :', overworld.topography[y][x]);
-    }
-  }
+
 }
 
 function update() {
