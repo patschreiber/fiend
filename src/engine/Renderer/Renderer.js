@@ -9,8 +9,16 @@ class Renderer {'use strict';
     this.ctx = context
 
     /**
+     * Prevent anti-aliasing in the event a tile gets scaled.
+     * 
+     * @property {CanvasRenderingContext2D.imageSmoothingEnabled}
+     */
+    this.ctx.imageSmoothingEnabled = false;
+
+    /**
      * The empty tile value. If this value is set for a position in a map's 
      * array, it will not be rendered. 
+     * 
      * @var {integer} 
      */
     this.EMPTY_TILE = 0;
