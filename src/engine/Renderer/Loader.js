@@ -1,8 +1,8 @@
-var Loader = {
+var F_LOADER = {
   images: {}
 };
 
-Loader.initAssets = function() {
+F_LOADER.initAssets = function() {
   return [
     this.loadImage("testTileset", "src/lib/data/1bittest.png"),
     this.loadImage("testTileset2", "src/lib/data/psychic-swamp.png"),
@@ -15,7 +15,7 @@ Loader.initAssets = function() {
   ];
 }
 
-Loader.loadImage = function(key, src) {
+F_LOADER.loadImage = function(key, src) {
   var img = new Image();
 
   var d = new Promise(function (resolve, reject) {
@@ -34,6 +34,6 @@ Loader.loadImage = function(key, src) {
   return d;
 };
 
-Loader.getImage = function (key) {
+F_LOADER.getImage = function (key) {
   return (key in this.images) ? this.images[key] : null;
 };

@@ -11,7 +11,7 @@ class Overworld extends MapBase {
      * The spritemap to be used.
      * @var {HTMLImageElement}
      */
-    this.SM = Loader.getImage('TESTNUMBERED');
+    this.SM = F_LOADER.getImage('TESTNUMBERED');
 
     this.cols = 20;
     this.rows = 15;

@@ -2,26 +2,19 @@ class Renderer {'use strict';
 
   constructor(context) {
     /**
-     * The canvas context.
-     * 
-     * @var {CanvasRenderingContext2D}
-     */
-    this.ctx = context
-
-    /**
-     * Prevent anti-aliasing in the event a tile gets scaled.
-     * 
-     * @property {CanvasRenderingContext2D.imageSmoothingEnabled}
-     */
-    this.ctx.imageSmoothingEnabled = false;
-
-    /**
      * The empty tile value. If this value is set for a position in a map's 
      * array, it will not be rendered. 
      * 
      * @var {integer} 
      */
     this.EMPTY_TILE = 0;
+
+    /**
+     * The canvas context.
+     * 
+     * @var {CanvasRenderingContext2D}
+     */
+    this.ctx = context;
 
     /**
      * Multiplier for x,y position to pixels. What size the tiles for the game
@@ -39,6 +32,11 @@ class Renderer {'use strict';
      * @var {integer}
      */
     this.scale = 1;
+  }
+
+  draw() {
+    this.ctx.clearRect(0, 0, FG.canvas.width, FG.canvas.height);
+    this.drawTileMap(new Overworld());
   }
 
   /**
@@ -63,7 +61,7 @@ class Renderer {'use strict';
    *
    * @param {Object} map  The map object that extends MapBase.
    */
-  draw(map) {
+  drawTileMap(map) {
     for (let x=0; x<map.cols; x++) {
       for (let y=0; y<map.rows; y++) {
         let tile = map.getTile(x, y);

@@ -4,7 +4,24 @@
  */
 class FiendGame {'use strict';
 
-  constructor() {
+  constructor(gamePaneWidth, gamePaneHeight) {
+
+    /**
+     * 
+     */
+    this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
+    this.container = document.getElementById("fiend-game");
+    this.container.insertBefore(this.canvas, this.container.firstChild);
+
+    this.ctx = this.canvas.ctx;
+
+    /**
+     * Prevent anti-aliasing in the event a tile gets scaled.
+     * 
+     * @property {CanvasRenderingContext2D.imageSmoothingEnabled}
+     */
+    this.ctx.imageSmoothingEnabled = false;
+
     /**
      * The ID returned from our main loop's most recent call to
      * requestAnimationFrame(). The token can then be used when we call
@@ -25,6 +42,22 @@ class FiendGame {'use strict';
      * @type {double} DOMHighResTimeStamp
      */
     this.lastFrameTime = 0;
+  }
+
+  /**
+   * 
+   * @param {integer} w The width of the canvas, in pixels. 
+   * @param {integer} h The height of the canvas, in pixels.
+   */
+  genCanvas(w, h) {
+    let canvas = document.createElement('canvas');
+    canvas.ctx = canvas.getContext('2d');
+
+    canvas.id = "game-pane";
+    canvas.width = w;
+    canvas.height = h;
+
+    return canvas;
   }
 
   /**

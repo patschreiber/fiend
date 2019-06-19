@@ -1,9 +1,10 @@
 /**
+/**
  * Ensure the assets are loaded before we initialize the game. We do this with a
  * promise to ensure all the images are loaded and ready to be used.
  */
 window.onload = function() {
-  var p = Loader.initAssets();
+  var p = F_LOADER.initAssets();
   Promise.all(p).then(function (loaded) {
     init();
   }.bind(this));
@@ -16,17 +17,11 @@ window.onload = function() {
  * leading semicolon marks the beginning of our new line if the previous one was
  * not empty or terminated.
  */
-function init() {'use strict';
-
-  // Where's our canvas?
-  const ctx = document.getElementById("game-pane").getContext("2d");
+function init() {
 
   // init functionality, for now
-  let FG = new FiendGame();
-  let R = new Renderer(ctx);
-
-  R.draw(new Overworld());
-  throw "hi";
+  window.FG = new FiendGame(640, 480);
+  window.R = new Renderer(FG.ctx);
 
   main(performance.now());
 
@@ -62,5 +57,5 @@ function init() {'use strict';
   FG.lastFrameTime = tFrame;
 
   FG.update(delta);
-  R.render();
+  R.draw();
 }
