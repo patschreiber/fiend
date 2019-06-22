@@ -37,6 +37,10 @@ class Renderer {'use strict';
   draw() {
     this.ctx.clearRect(0, 0, FG.canvas.width, FG.canvas.height);
     this.drawTileMap(new Overworld());
+    
+    for (let i=0; i<FG.gameObjectCount; i++) {
+      FG.gameObjects[i].draw();
+    }
   }
 
   /**

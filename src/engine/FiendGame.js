@@ -42,6 +42,17 @@ class FiendGame {'use strict';
      * @type {double} DOMHighResTimeStamp
      */
     this.lastFrameTime = 0;
+
+    this.maxEntities = 1000;
+
+    this.gameObjectCount = 0;
+
+    /**
+     * The list of active game objects to be updated each framr
+     */
+    this.gameObjects = [
+      new Enemy(),
+    ];
   }
 
   /**
@@ -69,8 +80,11 @@ class FiendGame {'use strict';
    * frame, in seconds.
    */
   update(delta) {
-    console.log('this.lastTick :', this.lastFrameTime);
-    console.log('delta :', delta);
+    for (let i=0; i<this.gameObjectCount; i++) {
+      this.gameObjects[i].update(delta);
+    }
+
+    this.gameObjectCount = this.gameObjects.length;
   }
 
   /**

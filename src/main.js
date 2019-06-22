@@ -56,6 +56,7 @@ function init() {
   // Keep track of when the last frame happened.
   FG.lastFrameTime = tFrame;
 
+  // TODO processInput();
   FG.update(delta);
   R.draw();
 }
