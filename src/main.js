@@ -1,11 +1,10 @@
 /**
-/**
  * Ensure the assets are loaded before we initialize the game. We do this with a
  * promise to ensure all the images are loaded and ready to be used.
  */
 window.onload = function() {
   var p = F_LOADER.initAssets();
-  Promise.all(p).then(function (loaded) {
+  Promise.all(p).then(function () {
     init();
   }.bind(this));
 }

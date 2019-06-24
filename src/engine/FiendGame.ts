@@ -1,10 +1,23 @@
+import { Enemy } from "../entities/Enemy";
+
 /**
  * The Game superclass. Operations to act upon the main game thread are found
  * here.
  */
-class FiendGame {'use strict';
+export class FiendGame implements FiendGameInterface {
 
-  constructor(gamePaneWidth, gamePaneHeight) {
+  public canvas: HTMLCanvasElement;
+  public ctx: CanvasRenderingContext2D;
+  public gameObjectCount: number;
+  public gameObjects: Array<Enemy>;
+  
+  private container: HTMLElement;
+  private stopToken: number|null;
+  private tickLength: number;
+  private lastFrameTime: number;
+  private maxEntities: number;
+
+  constructor(gamePaneWidth: number, gamePaneHeight: number) {
 
     /**
      * 
@@ -12,10 +25,9 @@ class FiendGame {'use strict';
     this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
     this.container = document.getElementById("fiend-game");
     this.container.insertBefore(this.canvas, this.container.firstChild);
+    this.ctx = this.canvas.getContext('2d');
 
-    this.ctx = this.canvas.ctx;
-
-    /**
+    /**t
      * Prevent anti-aliasing in the event a tile gets scaled.
      * 
      * @property {CanvasRenderingContext2D.imageSmoothingEnabled}
@@ -60,10 +72,8 @@ class FiendGame {'use strict';
    * @param {integer} w The width of the canvas, in pixels. 
    * @param {integer} h The height of the canvas, in pixels.
    */
-  genCanvas(w, h) {
+  genCanvas(w: number, h: number): HTMLCanvasElement {
     let canvas = document.createElement('canvas');
-    canvas.ctx = canvas.getContext('2d');
-
     canvas.id = "game-pane";
     canvas.width = w;
     canvas.height = h;
@@ -79,7 +89,7 @@ class FiendGame {'use strict';
    * @param {float} delta  The difference in time between this frame and last
    * frame, in seconds.
    */
-  update(delta) {
+  update(delta: number): void {
     for (let i=0; i<this.gameObjectCount; i++) {
       this.gameObjects[i].update(delta);
     }
@@ -90,7 +100,7 @@ class FiendGame {'use strict';
   /**
    * Stops the main game loop.
    */
-  stopMainLoop() {
+  stopMainLoop(): void {
     window.cancelAnimationFrame(this.stopToken);
     console.log("Goodbye...");
   }
@@ -98,8 +108,7 @@ class FiendGame {'use strict';
   /**
    * Attempts to gracefully tear down the game.
    */
-  shutdownGame() {
+  shutdownGame(): void {
 
   }
-
 }
