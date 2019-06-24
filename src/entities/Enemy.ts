@@ -1,4 +1,4 @@
-import { FiendGame as FG } from "../engine/FiendGame";
+// import { FiendGame as FG } from "../engine/FiendGame";
 
 export class Enemy {
   public HP: number;
@@ -16,16 +16,16 @@ export class Enemy {
     };
   }
 
-  update(delta) {
+  update(delta: number) {
     this.position.x += this.speed * delta;
     this.position.y += this.speed * delta;
   }
 
   draw() {
-    FG.ctx.beginPath();
-    FG.ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI*2);
-    FG.ctx.fillStyle = "#0095DD";
-    FG.ctx.fill();
-    FG.ctx.closePath();
+    window.FG.ctx.beginPath();
+    window.FG.ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI*2);
+    window.FG.ctx.fillStyle = "#0095DD";
+    window.FG.ctx.fill();
+    window.FG.ctx.closePath();
   }
 }

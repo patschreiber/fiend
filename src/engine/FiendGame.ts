@@ -4,18 +4,19 @@ import { Enemy } from "../entities/Enemy";
  * The Game superclass. Operations to act upon the main game thread are found
  * here.
  */
-export class FiendGame implements FiendGameInterface {
+export class FiendGame {
 
   public canvas: HTMLCanvasElement;
-  public ctx: CanvasRenderingContext2D;
   public gameObjectCount: number;
   public gameObjects: Array<Enemy>;
+
+  public ctx: CanvasRenderingContext2D;
   
-  private container: HTMLElement;
-  private stopToken: number|null;
-  private tickLength: number;
-  private lastFrameTime: number;
-  private maxEntities: number;
+  protected container: HTMLElement;
+  stopToken: number|null;
+  tickLength: number;
+  lastFrameTime: number;
+  maxEntities: number;
 
   constructor(gamePaneWidth: number, gamePaneHeight: number) {
 
