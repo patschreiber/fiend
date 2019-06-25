@@ -19,6 +19,7 @@ export class FiendGame {
   public lastFrameTime: number;
   public maxEntities: number;
   protected _renderer: Renderer;
+  protected _currentMap: MapBase; 
 
   public ctx: CanvasRenderingContext2D;
 
@@ -71,6 +72,8 @@ export class FiendGame {
       // new Enemy(),
     ];
 
+    this._currentMap = new Overworld();
+
     this._renderer = new Renderer(this.ctx);
 
     // Let's kick off the game loop!
@@ -100,6 +103,7 @@ export class FiendGame {
    * frame, in seconds.
    */
   update(delta: number): void {
+    console.log('delta :', delta);
     for (let i=0; i<this.gameObjectCount; i++) {
       this.gameObjects[i].update(delta);
     }
@@ -107,8 +111,18 @@ export class FiendGame {
     this.gameObjectCount = this.gameObjects.length;
   }
 
-  draw() {
-    this._renderer.drawTileMap(new Overworld());
+  draw(delta: number): void {
+    // Clear the screen
+    this.ctx.clearRect(
+      0, 
+      0, 
+      this.canvas.width, 
+      this.canvas.height
+    );
+
+    // Always store the texture in a var so we don't call "new Foo()" multiple
+    // times a second. 
+    this._renderer.drawTileMap(this._currentMap);
   }
 
   /**
@@ -155,6 +169,6 @@ export class FiendGame {
   
     // TODO processInput();
     this.update(delta);
-    this.draw();
+    this.draw(delta);
   }
 }

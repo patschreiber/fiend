@@ -41,15 +41,7 @@ export class Renderer {
     this.scale = 1;
   }
 
-  draw() {
-    // Clear the screen
-    window.FG.ctx.clearRect(
-      0, 
-      0, 
-      window.FG.canvas.width, 
-      window.FG.canvas.height
-    );
-    
+  draw() {    
     for (let i=0; i<window.FG.gameObjectCount; i++) {
       window.FG.gameObjects[i].draw();
     }
@@ -81,7 +73,6 @@ export class Renderer {
     for (let x=0; x<map.cols; x++) {
       for (let y=0; y<map.rows; y++) {
         let tile = map.getTile(x, y);
-        console.log('tile :', tile);
 
         // Let's skip rendering empty tiles.
         if (tile !== this.EMPTY_TILE) { 

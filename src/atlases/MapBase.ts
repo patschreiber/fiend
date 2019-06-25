@@ -26,7 +26,7 @@ export class MapBase {
       || this.rows === 0
       || this.tsize === 0
     ) {
-      throw new MapDefinitionException(this, "Map size needs to have proper dimensions.");
+      throw new Error("Map size needs to have proper dimensions.");
     }
 
     return this.tiles[y * this.cols + x];

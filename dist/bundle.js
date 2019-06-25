@@ -32,7 +32,7 @@ var MapBase = exports.MapBase = function () {
         key: "getTile",
         value: function getTile(x, y) {
             if (this.cols === 0 || this.rows === 0 || this.tsize === 0) {
-                throw new MapDefinitionException(this, "Map size needs to have proper dimensions.");
+                throw new Error("Map size needs to have proper dimensions.");
             }
             return this.tiles[y * this.cols + x];
         }
@@ -144,6 +144,7 @@ var FiendGame = exports.FiendGame = function () {
     this.gameObjects = [
       // new Enemy(),
     ];
+    this._currentMap = new _Overworld.Overworld();
     this._renderer = new _Renderer.Renderer(this.ctx);
     // Let's kick off the game loop!
     this.main(performance.now());
@@ -176,6 +177,7 @@ var FiendGame = exports.FiendGame = function () {
   }, {
     key: "update",
     value: function update(delta) {
+      console.log('delta :', delta);
       for (var i = 0; i < this.gameObjectCount; i++) {
         this.gameObjects[i].update(delta);
       }
@@ -183,8 +185,12 @@ var FiendGame = exports.FiendGame = function () {
     }
   }, {
     key: "draw",
-    value: function draw() {
-      this._renderer.drawTileMap(new _Overworld.Overworld());
+    value: function draw(delta) {
+      // Clear the screen
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      // Always store the texture in a var so we don't call "new Foo()" multiple
+      // times a second. 
+      this._renderer.drawTileMap(this._currentMap);
     }
     /**
      * Stops the main game loop.
@@ -235,7 +241,7 @@ var FiendGame = exports.FiendGame = function () {
       this.lastFrameTime = tFrame;
       // TODO processInput();
       this.update(delta);
-      this.draw();
+      this.draw(delta);
     }
   }]);
 
@@ -292,7 +298,7 @@ var Loader = exports.Loader = function () {
 }();
 
 },{}],5:[function(require,module,exports){
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -337,7 +343,7 @@ var Renderer = exports.Renderer = function () {
     }
 
     _createClass(Renderer, [{
-        key: 'draw',
+        key: "draw",
         value: function draw() {
             // Clear the screen
             window.FG.ctx.clearRect(0, 0, window.FG.canvas.width, window.FG.canvas.height);
@@ -369,12 +375,11 @@ var Renderer = exports.Renderer = function () {
          */
 
     }, {
-        key: 'drawTileMap',
+        key: "drawTileMap",
         value: function drawTileMap(map) {
             for (var x = 0; x < map.cols; x++) {
                 for (var y = 0; y < map.rows; y++) {
                     var tile = map.getTile(x, y);
-                    console.log('tile :', tile);
                     // Let's skip rendering empty tiles.
                     if (tile !== this.EMPTY_TILE) {
                         this.ctx.drawImage(
@@ -413,22 +418,17 @@ var _FiendGame = require("./engine/FiendGame");
 var _Loader = require("./engine/Loader");
 
 /**
- * Starting with the semicolon is in case whatever line of code above this
- * example relied on automatic semicolon insertion (ASI). The browser could
- * accidentally think this whole example continues from the previous line. The
- * leading semicolon marks the beginning of our new line if the previous one was
- * not empty or terminated.
+ * Load a new instance of FiendGame, which loads the game.
  */
 function init() {
     // init functionality, for now
     window.FG = new _FiendGame.FiendGame(640, 480);
-    // window.R = new Renderer(window.FG.ctx);
-    // main(performance.now());
 }
 ;
 /**
  * Ensure the assets are loaded before we initialize the game. We do this with a
  * promise to ensure all the images are loaded and ready to be used.
+ * TODO Make this better, maybe in it's own class.
  */
 window.onload = function () {
     window.F_LOADER = new _Loader.Loader();
