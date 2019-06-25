@@ -1,3 +1,5 @@
+import { MapBase } from "../atlases/MapBase";
+
 export class Renderer {
 
   EMPTY_TILE: number;
@@ -47,8 +49,6 @@ export class Renderer {
       window.FG.canvas.width, 
       window.FG.canvas.height
     );
-
-    this.drawTileMap(new Overworld());
     
     for (let i=0; i<window.FG.gameObjectCount; i++) {
       window.FG.gameObjects[i].draw();
@@ -77,10 +77,11 @@ export class Renderer {
    *
    * @param {Object} map  The map object that extends MapBase.
    */
-  drawTileMap(map): void {
+  drawTileMap(map: MapBase): void {
     for (let x=0; x<map.cols; x++) {
       for (let y=0; y<map.rows; y++) {
         let tile = map.getTile(x, y);
+        console.log('tile :', tile);
 
         // Let's skip rendering empty tiles.
         if (tile !== this.EMPTY_TILE) { 

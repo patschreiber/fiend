@@ -1,9 +1,14 @@
-/**
- * 20x15 grid squares.
- * 32x32 pixels per square.
- * 640x480 resolution.
- */
-class Overworld extends MapBase {
+import { MapBase } from "./MapBase";
+import { Loader } from "../engine/Loader";
+
+export class Overworld extends MapBase {
+  SM: HTMLImageElement;
+  tiles: Array<any>;
+  layers: Array<any>;
+  cols: number;
+  rows: number;
+  tsize: number;
+  
   constructor() {
     super();
 
@@ -11,7 +16,7 @@ class Overworld extends MapBase {
      * The spritemap to be used.
      * @var {HTMLImageElement}
      */
-    this.SM = F_LOADER.getImage('TESTNUMBERED');
+    this.SM = window.F_LOADER.getImage('TESTNUMBERED');
 
     this.cols = 20;
     this.rows = 15;

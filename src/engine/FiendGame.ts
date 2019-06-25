@@ -1,4 +1,8 @@
-import { Enemy } from "../entities/Enemy";
+import { Renderer } from "./Renderer";
+
+// Atlases
+import { MapBase } from "../atlases/MapBase";
+import { Overworld } from "../atlases/Overworld";
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -8,15 +12,15 @@ export class FiendGame {
 
   public canvas: HTMLCanvasElement;
   public gameObjectCount: number;
-  public gameObjects: Array<Enemy>;
+  public gameObjects: Array<any>;
+  public stopToken: number|null;
+  public container: HTMLElement;
+  public tickLength: number;
+  public lastFrameTime: number;
+  public maxEntities: number;
+  protected _renderer: Renderer;
 
   public ctx: CanvasRenderingContext2D;
-  
-  protected container: HTMLElement;
-  stopToken: number|null;
-  tickLength: number;
-  lastFrameTime: number;
-  maxEntities: number;
 
   constructor(gamePaneWidth: number, gamePaneHeight: number) {
 
@@ -64,8 +68,13 @@ export class FiendGame {
      * The list of active game objects to be updated each framr
      */
     this.gameObjects = [
-      new Enemy(),
+      // new Enemy(),
     ];
+
+    this._renderer = new Renderer(this.ctx);
+
+    // Let's kick off the game loop!
+    this.main(performance.now());
   }
 
   /**
@@ -98,6 +107,10 @@ export class FiendGame {
     this.gameObjectCount = this.gameObjects.length;
   }
 
+  draw() {
+    this._renderer.drawTileMap(new Overworld());
+  }
+
   /**
    * Stops the main game loop.
    */
@@ -109,7 +122,39 @@ export class FiendGame {
   /**
    * Attempts to gracefully tear down the game.
    */
-  shutdownGame(): void {
+  shutdownGame(): void {}
 
+/**
+  * The main game loop. We use requestAnimationFrame to be thread-safe and not
+  * dominate the browser when the player blurs focus on our tab.
+  *
+  * render() is passed tFrame because it is assumed that the render method will
+  *          calculate how long it has been since the most recently passed
+  *          update tick for extrapolation (purely cosmetic for fast devices).
+  *          It draws the scene.
+  *
+  * update() calculates the game state as of a given point in time.
+  *
+  * init()   Performs whatever tasks are needed before the main loop can run.
+  *
+  *
+  * @param {DOMHighResTimeStamp} tFrame The number of milliseconds since
+  * navigationStart (when the previous document is unloaded.
+  * window.requestAnimationFrame() always provides a DOMHighResTimeStamp to
+  * callbacks as an argument when they are executed.
+  */
+  main(tFrame: DOMHighResTimeStamp): void {
+    // Store the ID returned from our main loop's most recent call to
+    // requestAnimationFrame().
+    this.stopToken = window.requestAnimationFrame(this.main.bind(this));
+  
+    // Delta should be in seconds, not ms, so we divide by 1000.
+    let delta = (tFrame - this.lastFrameTime) / 1000.0;
+    // Keep track of when the last frame happened.
+    this.lastFrameTime = tFrame;
+  
+    // TODO processInput();
+    this.update(delta);
+    this.draw();
   }
 }

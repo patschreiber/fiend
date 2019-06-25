@@ -13,7 +13,6 @@
     "src/main.ts",
     "src/entities/Enemy.ts",
     "src/engine/FiendGame.ts",
-    "src/engine/Renderer/Renderer.ts",
-    "src/engine/Renderer/Loader.js"
+    "src/engine/Renderer.ts"
   ] 
 }

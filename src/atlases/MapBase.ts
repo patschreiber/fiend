@@ -1,4 +1,10 @@
-class MapBase {
+export class MapBase {
+  SM: HTMLImageElement;
+  cols: number;
+  rows: number;
+  tsize: number;
+  tiles: Array<any>;
+  
   constructor() {
     this.cols = 0;
     this.rows = 0;
@@ -14,10 +20,9 @@ class MapBase {
    * @param {integer} x   The x-axis position of the requested tile.
    * @param {integer} y   The y-axis position of the requested tile.
    */
-  getTile(x, y) {
+  getTile(x: number, y: number): number {
     if (
-      this.tilePixelSize
-      || this.cols === 0
+      this.cols === 0
       || this.rows === 0
       || this.tsize === 0
     ) {

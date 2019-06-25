@@ -2,13 +2,98 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var MapBase = exports.MapBase = function () {
+    function MapBase() {
+        _classCallCheck(this, MapBase);
+
+        this.cols = 0;
+        this.rows = 0;
+        this.tsize = 0;
+        this.tiles = null;
+    }
+    /**
+     * Gets the tile value located by the column and row (x,y) coordinates.
+     * This is trivial with a 2D array, but this method allows us to use a 1D
+     * array instead.
+     *
+     * @param {integer} x   The x-axis position of the requested tile.
+     * @param {integer} y   The y-axis position of the requested tile.
+     */
+
+
+    _createClass(MapBase, [{
+        key: "getTile",
+        value: function getTile(x, y) {
+            if (this.cols === 0 || this.rows === 0 || this.tsize === 0) {
+                throw new MapDefinitionException(this, "Map size needs to have proper dimensions.");
+            }
+            return this.tiles[y * this.cols + x];
+        }
+    }]);
+
+    return MapBase;
+}();
+
+},{}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Overworld = undefined;
+
+var _MapBase2 = require("./MapBase");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Overworld = exports.Overworld = function (_MapBase) {
+    _inherits(Overworld, _MapBase);
+
+    function Overworld() {
+        _classCallCheck(this, Overworld);
+
+        /**
+         * The spritemap to be used.
+         * @var {HTMLImageElement}
+         */
+        var _this = _possibleConstructorReturn(this, (Overworld.__proto__ || Object.getPrototypeOf(Overworld)).call(this));
+
+        _this.SM = window.F_LOADER.getImage('TESTNUMBERED');
+        _this.cols = 20;
+        _this.rows = 15;
+        _this.tsize = 300;
+        _this.tiles = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10];
+        _this.layers = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
+        return _this;
+    }
+
+    return Overworld;
+}(_MapBase2.MapBase);
+
+},{"./MapBase":1}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.FiendGame = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Enemy = require("../entities/Enemy");
+var _Renderer = require("./Renderer");
+
+var _Overworld = require("../atlases/Overworld");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -56,7 +141,12 @@ var FiendGame = exports.FiendGame = function () {
     /**
      * The list of active game objects to be updated each framr
      */
-    this.gameObjects = [new _Enemy.Enemy()];
+    this.gameObjects = [
+      // new Enemy(),
+    ];
+    this._renderer = new _Renderer.Renderer(this.ctx);
+    // Let's kick off the game loop!
+    this.main(performance.now());
   }
   /**
    *
@@ -91,6 +181,11 @@ var FiendGame = exports.FiendGame = function () {
       }
       this.gameObjectCount = this.gameObjects.length;
     }
+  }, {
+    key: "draw",
+    value: function draw() {
+      this._renderer.drawTileMap(new _Overworld.Overworld());
+    }
     /**
      * Stops the main game loop.
      */
@@ -108,13 +203,96 @@ var FiendGame = exports.FiendGame = function () {
   }, {
     key: "shutdownGame",
     value: function shutdownGame() {}
+    /**
+      * The main game loop. We use requestAnimationFrame to be thread-safe and not
+      * dominate the browser when the player blurs focus on our tab.
+      *
+      * render() is passed tFrame because it is assumed that the render method will
+      *          calculate how long it has been since the most recently passed
+      *          update tick for extrapolation (purely cosmetic for fast devices).
+      *          It draws the scene.
+      *
+      * update() calculates the game state as of a given point in time.
+      *
+      * init()   Performs whatever tasks are needed before the main loop can run.
+      *
+      *
+      * @param {DOMHighResTimeStamp} tFrame The number of milliseconds since
+      * navigationStart (when the previous document is unloaded.
+      * window.requestAnimationFrame() always provides a DOMHighResTimeStamp to
+      * callbacks as an argument when they are executed.
+      */
+
+  }, {
+    key: "main",
+    value: function main(tFrame) {
+      // Store the ID returned from our main loop's most recent call to
+      // requestAnimationFrame().
+      this.stopToken = window.requestAnimationFrame(this.main.bind(this));
+      // Delta should be in seconds, not ms, so we divide by 1000.
+      var delta = (tFrame - this.lastFrameTime) / 1000.0;
+      // Keep track of when the last frame happened.
+      this.lastFrameTime = tFrame;
+      // TODO processInput();
+      this.update(delta);
+      this.draw();
+    }
   }]);
 
   return FiendGame;
 }();
 
-},{"../entities/Enemy":3}],2:[function(require,module,exports){
+},{"../atlases/Overworld":2,"./Renderer":5}],4:[function(require,module,exports){
 "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Loader = exports.Loader = function () {
+    function Loader() {
+        _classCallCheck(this, Loader);
+
+        this._assetList = [];
+    }
+
+    _createClass(Loader, [{
+        key: "initAssets",
+        value: function initAssets() {
+            return [this.loadImage("testTileset", "./DAT/1bittest.png"), this.loadImage("testTileset2", "./DAT/psychic-swamp.png"), this.loadImage("TESTORIG", "./DAT/low-res-spritesheet.png"), this.loadImage("TESTNUMBERED", "./DAT/pixel_art_tileset_test.png")];
+        }
+    }, {
+        key: "loadImage",
+        value: function loadImage(key, src) {
+            var img = new Image();
+            var d = new Promise(function (resolve, reject) {
+                img.onload = function () {
+                    this._assetList[key] = img;
+                    resolve(img);
+                }.bind(this);
+                img.onerror = function () {
+                    reject('Could not load image: ' + src);
+                };
+            }.bind(this));
+            img.src = src;
+            return d;
+        }
+    }, {
+        key: "getImage",
+        value: function getImage(key) {
+            return key in this._assetList ? this._assetList[key] : null;
+        }
+    }]);
+
+    return Loader;
+}();
+
+},{}],5:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -159,11 +337,10 @@ var Renderer = exports.Renderer = function () {
     }
 
     _createClass(Renderer, [{
-        key: "draw",
+        key: 'draw',
         value: function draw() {
             // Clear the screen
             window.FG.ctx.clearRect(0, 0, window.FG.canvas.width, window.FG.canvas.height);
-            this.drawTileMap(new Overworld());
             for (var i = 0; i < window.FG.gameObjectCount; i++) {
                 window.FG.gameObjects[i].draw();
             }
@@ -192,11 +369,12 @@ var Renderer = exports.Renderer = function () {
          */
 
     }, {
-        key: "drawTileMap",
+        key: 'drawTileMap',
         value: function drawTileMap(map) {
             for (var x = 0; x < map.cols; x++) {
                 for (var y = 0; y < map.rows; y++) {
                     var tile = map.getTile(x, y);
+                    console.log('tile :', tile);
                     // Let's skip rendering empty tiles.
                     if (tile !== this.EMPTY_TILE) {
                         this.ctx.drawImage(
@@ -227,57 +405,12 @@ var Renderer = exports.Renderer = function () {
     return Renderer;
 }();
 
-},{}],3:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-// import { FiendGame as FG } from "../engine/FiendGame";
-var Enemy = exports.Enemy = function () {
-    function Enemy() {
-        _classCallCheck(this, Enemy);
-
-        this.HP = 100;
-        this.ATK = 1;
-        this.speed = 100;
-        this.position = {
-            x: 0,
-            y: 0
-        };
-    }
-
-    _createClass(Enemy, [{
-        key: "update",
-        value: function update(delta) {
-            this.position.x += this.speed * delta;
-            this.position.y += this.speed * delta;
-        }
-    }, {
-        key: "draw",
-        value: function draw() {
-            window.FG.ctx.beginPath();
-            window.FG.ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI * 2);
-            window.FG.ctx.fillStyle = "#0095DD";
-            window.FG.ctx.fill();
-            window.FG.ctx.closePath();
-        }
-    }]);
-
-    return Enemy;
-}();
-
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 var _FiendGame = require("./engine/FiendGame");
 
-var _Renderer = require("./engine/Renderer/Renderer");
+var _Loader = require("./engine/Loader");
 
 /**
  * Starting with the semicolon is in case whatever line of code above this
@@ -289,8 +422,8 @@ var _Renderer = require("./engine/Renderer/Renderer");
 function init() {
     // init functionality, for now
     window.FG = new _FiendGame.FiendGame(640, 480);
-    window.R = new _Renderer.Renderer(window.FG.ctx);
-    main(performance.now());
+    // window.R = new Renderer(window.FG.ctx);
+    // main(performance.now());
 }
 ;
 /**
@@ -298,43 +431,13 @@ function init() {
  * promise to ensure all the images are loaded and ready to be used.
  */
 window.onload = function () {
-    var p = F_LOADER.initAssets();
+    window.F_LOADER = new _Loader.Loader();
+    var p = window.F_LOADER.initAssets();
     Promise.all(p).then(function () {
         init();
     }.bind(this));
 };
-/**
-  * The main game loop. We use requestAnimationFrame to be thread-safe and not
-  * dominate the browser when the player blurs focus on our tab.
-  *
-  * render() is passed tFrame because it is assumed that the render method will
-  *          calculate how long it has been since the most recently passed
-  *          update tick for extrapolation (purely cosmetic for fast devices).
-  *          It draws the scene.
-  *
-  * update() calculates the game state as of a given point in time.
-  *
-  * init()   Performs whatever tasks are needed before the main loop can run.
-  *
-  *
-  * @param {DOMHighResTimeStamp} tFrame The number of milliseconds since
-  * navigationStart (when the previous document is unloaded.
-  * window.requestAnimationFrame() always provides a DOMHighResTimeStamp to
-  * callbacks as an argument when they are executed.
-  */
-function main(tFrame) {
-    // Store the ID returned from our main loop's most recent call to
-    // requestAnimationFrame().
-    window.FG.stopToken = window.requestAnimationFrame(main);
-    // Delta should be in seconds, not ms, so we divide by 1000.
-    var delta = (tFrame - window.FG.lastFrameTime) / 1000.0;
-    // Keep track of when the last frame happened.
-    window.FG.lastFrameTime = tFrame;
-    // TODO processInput();
-    window.FG.update(delta);
-    window.R.draw();
-}
 
-},{"./engine/FiendGame":1,"./engine/Renderer/Renderer":2}]},{},[4])
+},{"./engine/FiendGame":3,"./engine/Loader":4}]},{},[6])
 
 //# sourceMappingURL=bundle.js.map
