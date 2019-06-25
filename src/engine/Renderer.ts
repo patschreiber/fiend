@@ -7,7 +7,7 @@ export class Renderer {
   pixels: number;
   scale: number;
 
-  constructor(context) {
+  constructor(context: CanvasRenderingContext2D) {
     /**
      * The empty tile value. If this value is set for a position in a map's 
      * array, it will not be rendered. 
@@ -41,9 +41,9 @@ export class Renderer {
     this.scale = 1;
   }
 
-  draw() {    
-    for (let i=0; i<window.FG.gameObjectCount; i++) {
-      window.FG.gameObjects[i].draw();
+  draw(gameObjectCount: number, gameObjects: Array<any>) {    
+    for (let i=0; i<gameObjectCount; i++) {
+      gameObjects[i].draw(this.ctx);
     }
   }
 

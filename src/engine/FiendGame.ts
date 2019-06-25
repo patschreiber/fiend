@@ -3,6 +3,7 @@ import { Renderer } from "./Renderer";
 // Atlases
 import { MapBase } from "../atlases/MapBase";
 import { Overworld } from "../atlases/Overworld";
+import { Enemy } from "../entities/Enemy";
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -69,7 +70,7 @@ export class FiendGame {
      * The list of active game objects to be updated each framr
      */
     this.gameObjects = [
-      // new Enemy(),
+      new Enemy(),
     ];
 
     this._currentMap = new Overworld();
@@ -123,6 +124,7 @@ export class FiendGame {
     // Always store the texture in a var so we don't call "new Foo()" multiple
     // times a second. 
     this._renderer.drawTileMap(this._currentMap);
+    this._renderer.draw(this.gameObjectCount, this.gameObjects);
   }
 
   /**

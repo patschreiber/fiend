@@ -95,6 +95,8 @@ var _Renderer = require("./Renderer");
 
 var _Overworld = require("../atlases/Overworld");
 
+var _Enemy = require("../entities/Enemy");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
@@ -141,9 +143,7 @@ var FiendGame = exports.FiendGame = function () {
     /**
      * The list of active game objects to be updated each framr
      */
-    this.gameObjects = [
-      // new Enemy(),
-    ];
+    this.gameObjects = [new _Enemy.Enemy()];
     this._currentMap = new _Overworld.Overworld();
     this._renderer = new _Renderer.Renderer(this.ctx);
     // Let's kick off the game loop!
@@ -191,6 +191,7 @@ var FiendGame = exports.FiendGame = function () {
       // Always store the texture in a var so we don't call "new Foo()" multiple
       // times a second. 
       this._renderer.drawTileMap(this._currentMap);
+      this._renderer.draw(this.gameObjectCount, this.gameObjects);
     }
     /**
      * Stops the main game loop.
@@ -248,7 +249,7 @@ var FiendGame = exports.FiendGame = function () {
   return FiendGame;
 }();
 
-},{"../atlases/Overworld":2,"./Renderer":5}],4:[function(require,module,exports){
+},{"../atlases/Overworld":2,"../entities/Enemy":6,"./Renderer":5}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -344,11 +345,9 @@ var Renderer = exports.Renderer = function () {
 
     _createClass(Renderer, [{
         key: "draw",
-        value: function draw() {
-            // Clear the screen
-            window.FG.ctx.clearRect(0, 0, window.FG.canvas.width, window.FG.canvas.height);
-            for (var i = 0; i < window.FG.gameObjectCount; i++) {
-                window.FG.gameObjects[i].draw();
+        value: function draw(gameObjectCount, gameObjects) {
+            for (var i = 0; i < gameObjectCount; i++) {
+                gameObjects[i].draw(this.ctx);
             }
         }
         /**
@@ -413,6 +412,51 @@ var Renderer = exports.Renderer = function () {
 },{}],6:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Enemy = exports.Enemy = function () {
+    function Enemy() {
+        _classCallCheck(this, Enemy);
+
+        this.HP = 100;
+        this.ATK = 1;
+        this.speed = 100;
+        this.position = {
+            x: 0,
+            y: 0
+        };
+    }
+
+    _createClass(Enemy, [{
+        key: "update",
+        value: function update(delta) {
+            this.position.x += this.speed * delta;
+            this.position.y += this.speed * delta;
+        }
+    }, {
+        key: "draw",
+        value: function draw(ctx) {
+            console.log('window.FG :', window.FG);
+            ctx.beginPath();
+            ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI * 2);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+    }]);
+
+    return Enemy;
+}();
+
+},{}],7:[function(require,module,exports){
+"use strict";
+
 var _FiendGame = require("./engine/FiendGame");
 
 var _Loader = require("./engine/Loader");
@@ -438,6 +482,6 @@ window.onload = function () {
     }.bind(this));
 };
 
-},{"./engine/FiendGame":3,"./engine/Loader":4}]},{},[6])
+},{"./engine/FiendGame":3,"./engine/Loader":4}]},{},[7])
 
 //# sourceMappingURL=bundle.js.map
