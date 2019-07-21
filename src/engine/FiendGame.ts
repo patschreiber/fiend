@@ -3,6 +3,9 @@ import { Renderer } from "./Renderer";
 // Atlases
 import { MapBase } from "../atlases/MapBase";
 import { Overworld } from "../atlases/Overworld";
+
+// Enemies
+// TODO This might change
 import { Enemy } from "../entities/Enemy";
 
 /**
@@ -25,6 +28,9 @@ export class FiendGame {
   public ctx: CanvasRenderingContext2D;
 
   constructor(gamePaneWidth: number, gamePaneHeight: number) {
+    if (FiendGame._instance) {
+      return FiendGame._instance;
+    }
 
     /**
      * 
@@ -67,9 +73,10 @@ export class FiendGame {
     this.gameObjectCount = 0;
 
     /**
-     * The list of active game objects to be updated each framr
+     * The list of active game objects to be updated each frame.
      */
     this.gameObjects = [
+      // TODO This is a test, do should be empty on init.
       new Enemy(),
     ];
 
@@ -104,6 +111,7 @@ export class FiendGame {
    * frame, in seconds.
    */
   update(delta: number): void {
+    // TODO Remove clog. 
     console.log('delta :', delta);
     for (let i=0; i<this.gameObjectCount; i++) {
       this.gameObjects[i].update(delta);
