@@ -442,7 +442,6 @@ var Enemy = exports.Enemy = function () {
     }, {
         key: "draw",
         value: function draw(ctx) {
-            console.log('window.FG :', window.FG);
             ctx.beginPath();
             ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI * 2);
             ctx.fillStyle = "#0095DD";
