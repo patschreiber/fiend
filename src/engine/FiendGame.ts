@@ -28,9 +28,6 @@ export class FiendGame {
   public ctx: CanvasRenderingContext2D;
 
   constructor(gamePaneWidth: number, gamePaneHeight: number) {
-    if (FiendGame._instance) {
-      return FiendGame._instance;
-    }
 
     /**
      * 

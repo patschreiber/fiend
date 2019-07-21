@@ -8,15 +8,5 @@
     "allowJs": true             // allow a partial TypeScript and JavaScript codebase
   },
   "include": ["./src/"],
-  "exclude": ["node_modules", "build", "**/*.spec.ts"],
-  "files": [
-    "src/main.ts",
-    "src/entities/Enemy.ts",
-    "src/engine/FiendGame.ts",
-    "src/engine/Renderer.ts",
-    "src/atlases/MapBase.ts",
-    "src/atlases/Overworld.ts",
-    "src/exceptions/MapDefinitionException",
-    "src/exceptions/MapException"
-  ] 
+  "exclude": ["node_modules", "build", "**/*.spec.ts"]
 }

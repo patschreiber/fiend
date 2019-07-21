@@ -91,6 +91,7 @@ exports.FiendGame = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 // Enemies
+// TODO This might change
 
 
 var _Renderer = require("./Renderer");
@@ -181,7 +182,6 @@ var FiendGame = exports.FiendGame = function () {
   }, {
     key: "update",
     value: function update(delta) {
-      this.gameObjects.push(new _Enemy.Enemy());
       // TODO Remove clog. 
       console.log('delta :', delta);
       for (var i = 0; i < this.gameObjectCount; i++) {
@@ -442,11 +442,8 @@ var Enemy = exports.Enemy = function () {
     _createClass(Enemy, [{
         key: "update",
         value: function update(delta) {
-            // FG.gameObjects.push(new Enemy());
-            // console.log('FG :', FG);
-            // console.log('FG.gameObjects :', FG.gameObjects);
-            this.position.x += Math.floor(Math.random() * Math.floor(100)) * delta;
-            this.position.y += Math.floor(Math.random() * Math.floor(100)) * delta;
+            this.position.x += this.speed * delta;
+            this.position.y += this.speed * delta;
         }
     }, {
         key: "draw",
