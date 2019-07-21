@@ -1,5 +1,3 @@
-import { FiendGame as FG } from "../engine/FiendGame";
-
 export class Enemy {
   public HP: number;
   public ATK: number;

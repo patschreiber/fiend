@@ -1,5 +1,4 @@
 import { MapBase } from "./MapBase";
-import { Loader } from "../engine/Loader";
 
 export class Overworld extends MapBase {
   SM: HTMLImageElement;
