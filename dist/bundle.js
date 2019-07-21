@@ -90,6 +90,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.FiendGame = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+// Enemies
+
 
 var _Renderer = require("./Renderer");
 
@@ -141,9 +143,11 @@ var FiendGame = exports.FiendGame = function () {
     this.maxEntities = 1000;
     this.gameObjectCount = 0;
     /**
-     * The list of active game objects to be updated each framr
+     * The list of active game objects to be updated each frame.
      */
-    this.gameObjects = [new _Enemy.Enemy()];
+    this.gameObjects = [
+    // TODO This is a test, do should be empty on init.
+    new _Enemy.Enemy()];
     this._currentMap = new _Overworld.Overworld();
     this._renderer = new _Renderer.Renderer(this.ctx);
     // Let's kick off the game loop!
@@ -177,6 +181,8 @@ var FiendGame = exports.FiendGame = function () {
   }, {
     key: "update",
     value: function update(delta) {
+      this.gameObjects.push(new _Enemy.Enemy());
+      // TODO Remove clog. 
       console.log('delta :', delta);
       for (var i = 0; i < this.gameObjectCount; i++) {
         this.gameObjects[i].update(delta);
@@ -436,8 +442,11 @@ var Enemy = exports.Enemy = function () {
     _createClass(Enemy, [{
         key: "update",
         value: function update(delta) {
-            this.position.x += this.speed * delta;
-            this.position.y += this.speed * delta;
+            // FG.gameObjects.push(new Enemy());
+            // console.log('FG :', FG);
+            // console.log('FG.gameObjects :', FG.gameObjects);
+            this.position.x += Math.floor(Math.random() * Math.floor(100)) * delta;
+            this.position.y += Math.floor(Math.random() * Math.floor(100)) * delta;
         }
     }, {
         key: "draw",
