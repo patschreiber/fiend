@@ -7,3 +7,5 @@ A browser based game.
 $ npm install
 $ gulp
 ```
+
+Files are generated in the `dist/` directory. 
