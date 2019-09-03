@@ -1,3 +1,4 @@
+import { InputHandler } from "./Input/InputHandler";
 import { Renderer } from "./Renderer";
 
 // Atlases
@@ -15,9 +16,13 @@ import { Enemy } from "../entities/Enemy";
 export class FiendGame {
 
   public canvas: HTMLCanvasElement;
+  public inputHandler: InputHandler;
   public gameObjectCount: number;
   public gameObjects: Array<any>;
   public stopToken: number|null;
+
+  /**
+   */
   public container: HTMLElement;
   public tickLength: number;
   public lastFrameTime: number;
@@ -81,6 +86,10 @@ export class FiendGame {
 
     this._renderer = new Renderer(this.ctx);
 
+    // We need to attach the input handling to the enclosing div, since you 
+    // can't get a handle on `canvas` DOM element since it's not focusable. 
+    this.inputHandler = new InputHandler(this.container);
+
     // Let's kick off the game loop!
     this.main(performance.now());
   }
@@ -109,7 +118,7 @@ export class FiendGame {
    */
   update(delta: number): void {
     // TODO Remove clog. 
-    console.log('delta :', delta);
+    // console.log('delta :', delta);
     for (let i=0; i<this.gameObjectCount; i++) {
       this.gameObjects[i].update(delta);
     }

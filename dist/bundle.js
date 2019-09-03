@@ -94,6 +94,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 // TODO This might change
 
 
+var _InputHandler = require("./Input/InputHandler");
+
 var _Renderer = require("./Renderer");
 
 var _Overworld = require("../atlases/Overworld");
@@ -151,6 +153,10 @@ var FiendGame = exports.FiendGame = function () {
     new _Enemy.Enemy()];
     this._currentMap = new _Overworld.Overworld();
     this._renderer = new _Renderer.Renderer(this.ctx);
+    // We need to attach the input handling to the enclosing div, since you 
+    // can't get a handle on `canvas` DOM element since it's not focusable. 
+    this.inputHandler = new _InputHandler.InputHandler(this.container);
+    console.log('this.inputHandler :', this.inputHandler);
     // Let's kick off the game loop!
     this.main(performance.now());
   }
@@ -183,7 +189,7 @@ var FiendGame = exports.FiendGame = function () {
     key: "update",
     value: function update(delta) {
       // TODO Remove clog. 
-      console.log('delta :', delta);
+      // console.log('delta :', delta);
       for (var i = 0; i < this.gameObjectCount; i++) {
         this.gameObjects[i].update(delta);
       }
@@ -255,7 +261,73 @@ var FiendGame = exports.FiendGame = function () {
   return FiendGame;
 }();
 
-},{"../atlases/Overworld":2,"../entities/Enemy":6,"./Renderer":5}],4:[function(require,module,exports){
+},{"../atlases/Overworld":2,"../entities/Enemy":7,"./Input/InputHandler":4,"./Renderer":6}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var InputHandler = exports.InputHandler = function () {
+    function InputHandler(gameDiv) {
+        var _this = this;
+
+        _classCallCheck(this, InputHandler);
+
+        this._gameContainerElement = gameDiv;
+        // this.keyboardEventListener = () => this.handleInput(); 
+        document.getElementById("fiend-game").addEventListener('keydown', function (event) {
+            return _this.handleInput(event);
+        });
+    }
+
+    _createClass(InputHandler, [{
+        key: "execute",
+        value: function execute() {
+            throw new Error("Abstract method!");
+        }
+        /**
+         *
+         * @param {KeyboardEvent} event The user interaction with a keyboard.
+         * Deprecates event keyCode.
+         */
+
+    }, {
+        key: "handleInput",
+        value: function handleInput(event) {
+            console.log("hi");
+            console.log('event.key :', event.keyCode);
+        }
+    }]);
+
+    return InputHandler;
+}();
+// var key = {
+//   BACKSPACE: 8,
+//   TAB:       9,
+//   RETURN:   13,
+//   ESC:      27,
+//   SPACE:    32,
+//   PAGEUP:   33,
+//   PAGEDOWN: 34,
+//   END:      35,
+//   HOME:     36,
+//   LEFT:     37,
+//   UP:       38,
+//   RIGHT:    39,
+//   DOWN:     40,
+//   INSERT:   45,
+//   DELETE:   46,
+//   ZERO:     48, ONE: 49, TWO: 50, THREE: 51, FOUR: 52, FIVE: 53, SIX: 54, SEVEN: 55, EIGHT: 56, NINE: 57,
+//   A:        65, B: 66, C: 67, D: 68, E: 69, F: 70, G: 71, H: 72, I: 73, J: 74, K: 75, L: 76, M: 77, N: 78, O: 79, P: 80, Q: 81, R: 82, S: 83, T: 84, U: 85, V: 86, W: 87, X: 88, Y: 89, Z: 90,
+//   TILDA:    192
+// };
+
+},{}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -304,7 +376,7 @@ var Loader = exports.Loader = function () {
     return Loader;
 }();
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -415,7 +487,7 @@ var Renderer = exports.Renderer = function () {
     return Renderer;
 }();
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -459,7 +531,7 @@ var Enemy = exports.Enemy = function () {
     return Enemy;
 }();
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 var _FiendGame = require("./engine/FiendGame");
@@ -480,6 +552,10 @@ function init() {
  * TODO Make this better, maybe in it's own class.
  */
 window.onload = function () {
+    document.getElementById("fiend-game").addEventListener('keydown', function (e) {
+        console.log("hi");
+        console.log('event.key :', e.keyCode);
+    });
     window.F_LOADER = new _Loader.Loader();
     var p = window.F_LOADER.initAssets();
     Promise.all(p).then(function () {
@@ -487,6 +563,6 @@ window.onload = function () {
     }.bind(this));
 };
 
-},{"./engine/FiendGame":3,"./engine/Loader":4}]},{},[7])
+},{"./engine/FiendGame":3,"./engine/Loader":5}]},{},[8])
 
 //# sourceMappingURL=bundle.js.map
