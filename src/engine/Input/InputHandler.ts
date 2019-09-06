@@ -30,11 +30,10 @@ export class InputHandler {
 
     this._gameContainerElement = gameDiv;
 
-
     // this.keyboardEventListener = () => this.handleInput(); 
 
     document.getElementById("fiend-game").addEventListener(
-      'keydown', event=> this.handleInput(event)
+      'keydown', event => this.handleInput(event)
     );
   }
   

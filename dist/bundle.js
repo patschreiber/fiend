@@ -85,6 +85,55 @@ var Overworld = exports.Overworld = function (_MapBase) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AssetLoader = exports.AssetLoader = function () {
+    function AssetLoader() {
+        _classCallCheck(this, AssetLoader);
+
+        this._assetList = [];
+    }
+
+    _createClass(AssetLoader, [{
+        key: "initAssets",
+        value: function initAssets() {
+            return [this.loadImage("testTileset", "./DAT/1bittest.png"), this.loadImage("testTileset2", "./DAT/psychic-swamp.png"), this.loadImage("TESTORIG", "./DAT/low-res-spritesheet.png"), this.loadImage("TESTNUMBERED", "./DAT/pixel_art_tileset_test.png")];
+        }
+    }, {
+        key: "loadImage",
+        value: function loadImage(key, src) {
+            var img = new Image();
+            var d = new Promise(function (resolve, reject) {
+                img.onload = function () {
+                    this._assetList[key] = img;
+                    resolve(img);
+                }.bind(this);
+                img.onerror = function () {
+                    reject('Could not load image: ' + src);
+                };
+            }.bind(this));
+            img.src = src;
+            return d;
+        }
+    }, {
+        key: "getImage",
+        value: function getImage(key) {
+            return key in this._assetList ? this._assetList[key] : null;
+        }
+    }]);
+
+    return AssetLoader;
+}();
+
+},{}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.FiendGame = undefined;
@@ -152,11 +201,10 @@ var FiendGame = exports.FiendGame = function () {
     // TODO This is a test, do should be empty on init.
     new _Enemy.Enemy()];
     this._currentMap = new _Overworld.Overworld();
-    this._renderer = new _Renderer.Renderer(this.ctx);
+    this.Renderer = new _Renderer.Renderer(this.ctx);
     // We need to attach the input handling to the enclosing div, since you 
     // can't get a handle on `canvas` DOM element since it's not focusable. 
-    this.inputHandler = new _InputHandler.InputHandler(this.container);
-    console.log('this.inputHandler :', this.inputHandler);
+    this.InputHandler = new _InputHandler.InputHandler(this.container);
     // Let's kick off the game loop!
     this.main(performance.now());
   }
@@ -202,8 +250,8 @@ var FiendGame = exports.FiendGame = function () {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       // Always store the texture in a var so we don't call "new Foo()" multiple
       // times a second. 
-      this._renderer.drawTileMap(this._currentMap);
-      this._renderer.draw(this.gameObjectCount, this.gameObjects);
+      this.Renderer.drawTileMap(this._currentMap);
+      this.Renderer.draw(this.gameObjectCount, this.gameObjects);
     }
     /**
      * Stops the main game loop.
@@ -252,7 +300,7 @@ var FiendGame = exports.FiendGame = function () {
       var delta = (tFrame - this.lastFrameTime) / 1000.0;
       // Keep track of when the last frame happened.
       this.lastFrameTime = tFrame;
-      // TODO processInput();
+      // this.InputHandler.handleInput();
       this.update(delta);
       this.draw(delta);
     }
@@ -261,7 +309,7 @@ var FiendGame = exports.FiendGame = function () {
   return FiendGame;
 }();
 
-},{"../atlases/Overworld":2,"../entities/Enemy":7,"./Input/InputHandler":4,"./Renderer":6}],4:[function(require,module,exports){
+},{"../atlases/Overworld":2,"../entities/Enemy":7,"./Input/InputHandler":5,"./Renderer":6}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -326,55 +374,6 @@ var InputHandler = exports.InputHandler = function () {
 //   A:        65, B: 66, C: 67, D: 68, E: 69, F: 70, G: 71, H: 72, I: 73, J: 74, K: 75, L: 76, M: 77, N: 78, O: 79, P: 80, Q: 81, R: 82, S: 83, T: 84, U: 85, V: 86, W: 87, X: 88, Y: 89, Z: 90,
 //   TILDA:    192
 // };
-
-},{}],5:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Loader = exports.Loader = function () {
-    function Loader() {
-        _classCallCheck(this, Loader);
-
-        this._assetList = [];
-    }
-
-    _createClass(Loader, [{
-        key: "initAssets",
-        value: function initAssets() {
-            return [this.loadImage("testTileset", "./DAT/1bittest.png"), this.loadImage("testTileset2", "./DAT/psychic-swamp.png"), this.loadImage("TESTORIG", "./DAT/low-res-spritesheet.png"), this.loadImage("TESTNUMBERED", "./DAT/pixel_art_tileset_test.png")];
-        }
-    }, {
-        key: "loadImage",
-        value: function loadImage(key, src) {
-            var img = new Image();
-            var d = new Promise(function (resolve, reject) {
-                img.onload = function () {
-                    this._assetList[key] = img;
-                    resolve(img);
-                }.bind(this);
-                img.onerror = function () {
-                    reject('Could not load image: ' + src);
-                };
-            }.bind(this));
-            img.src = src;
-            return d;
-        }
-    }, {
-        key: "getImage",
-        value: function getImage(key) {
-            return key in this._assetList ? this._assetList[key] : null;
-        }
-    }]);
-
-    return Loader;
-}();
 
 },{}],6:[function(require,module,exports){
 "use strict";
@@ -536,33 +535,38 @@ var Enemy = exports.Enemy = function () {
 
 var _FiendGame = require("./engine/FiendGame");
 
-var _Loader = require("./engine/Loader");
+var _AssetLoader = require("./engine/AssetLoader");
 
 /**
  * Load a new instance of FiendGame, which loads the game.
  */
 function init() {
     // init functionality, for now
-    window.FG = new _FiendGame.FiendGame(640, 480);
+    new _FiendGame.FiendGame(640, 480);
 }
 ;
+// Alternative to DOMContentLoaded event
+// document.onreadystatechange = function () {
+//   if (document.readyState === 'complete') {
+//     let assets = window.F_LOADER.initAssets();
+//     Promise.all(assets).then(function () {
+//       init();
+//     }.bind(this));
+//   }
+// }
 /**
  * Ensure the assets are loaded before we initialize the game. We do this with a
  * promise to ensure all the images are loaded and ready to be used.
  * TODO Make this better, maybe in it's own class.
  */
 window.onload = function () {
-    document.getElementById("fiend-game").addEventListener('keydown', function (e) {
-        console.log("hi");
-        console.log('event.key :', e.keyCode);
-    });
-    window.F_LOADER = new _Loader.Loader();
+    window.F_LOADER = new _AssetLoader.AssetLoader();
     var p = window.F_LOADER.initAssets();
     Promise.all(p).then(function () {
         init();
     }.bind(this));
 };
 
-},{"./engine/FiendGame":3,"./engine/Loader":5}]},{},[8])
+},{"./engine/AssetLoader":3,"./engine/FiendGame":4}]},{},[8])
 
 //# sourceMappingURL=bundle.js.map
