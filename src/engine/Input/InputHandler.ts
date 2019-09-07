@@ -1,54 +1,235 @@
-export interface KeyCode {
-  [key: string]: number
+import { Command } from "./Commands/Command";
+import { MoveNorthCommand } from "./Commands/MoveNorthCommand";
+import { MoveSouthCommand } from "./Commands/MoveSouthCommand";
+
+/**
+ * The interface for the InputHandler
+ */
+interface IInputHandler {
+
+  /**
+   * 
+   * @param event The user interaction with a keyboard.
+   * @param command 
+   */
+  keyBind(event: KeyboardEvent, command: Command): void;
+
+  /**
+   * Handles any input if a mapped button is pressed. Run once per game update
+   * tick. 
+   */
+  handleInput(): void;
 }
 
-export class InputHandler {
+/**
+ * The ButtonPress Interface.
+ * [Keyboard key: pressed] pair
+ */
+interface ButtonStatus {
+  [key: string]: boolean
+}
 
-  // /**
-  //   * The keyboard event listener
-  //   * 
-  //   * @var {EventListener}
-  //   */
-  // protected keyboardEventListener: EventListener;
+/**
+ * The KeyMap interface. 
+ */
+interface KeyMap {
+  [key: string]: Command
+}
 
-    /**
-     * The game div container. id="fiend-game"
-     * 
-     * @var {HTMLElement}
-     */
-  private _gameContainerElement: HTMLElement;
+/**
+ * The built-in control scheme types. Allows a user to change the control scheme
+ * without remapping all the keys individually. 
+ *
+ * @type {enum} ControlSchemes
+ */
+enum ControlSchemes {
+  DEFAULT,
+  FPS,
+  ONEHANDED_RIGHT,
+  ONEHANDED_LEFT,    
+}
 
-  // TODO These are commands to be delegated
-  public moveN: number;
-  public moveS: number;
-  public moveE: number;
-  public moveW: number;
-  public confirm: number;
-  public cancel: number;
+/**
+ * Maps a button to a keyboard input key. 
+ * 
+ * @type {enum} Button
+ */
+enum Button {
+  UP = "ArrowUp",
+  DOWN = "ArrowDown",
+  LEFT = "ArrowLeft",
+  RIGHT = "ArrowRight",
+  E = "e",
+  Q = "q",
+  BSPACE = "Backspace",
+  ENTER = "Enter",
+  SHIFT = "Shift",
+}
 
-  constructor(gameDiv: HTMLElement) {
+/**
+ * Available actions for game actors.
+ */
+enum Action {
+  moveN,
+  moveS,
+  moveE,
+  moveW,
+  confirm,
+  cancel,
+  interact,
+}
 
-    this._gameContainerElement = gameDiv;
+/**
+ * The InputHandler class.
+ */
+export class InputHandler implements IInputHandler {
 
-    // this.keyboardEventListener = () => this.handleInput(); 
+  /**
+   * TODO Structure should be ["context"][KeyboardEvent.key][Command]
+   * e.g. "overworld": {"ArrowUp": this.MoveN, "ArrowDown": this.moveS}
+   */
+   private buttonMapping: KeyMap;
 
-    document.getElementById("fiend-game").addEventListener(
-      'keydown', event => this.handleInput(event)
+  /** 
+   * List of buttons that have been pressed.
+   * [Keyboard key: true]
+   */
+  private buttonStatus: ButtonStatus = {
+    ArrowUp: false,
+    ArrowDown: false,
+    ArrowLeft: false,
+    ArrowRight: false,
+    e: false,
+    q: false,
+    Backspace: false,
+    Enter: false,
+    Shift: false,
+  };
+
+  /**
+   * The InputHandler constructor. 
+   * Attaches the keydown and keyup KeyboardEvent to the document.
+   */
+  constructor() {
+
+    document.addEventListener(
+      'keydown', (event) => this.buttonPressed(event), false
     );
+
+    document.addEventListener(
+      'keyup', (event) => this.buttonReleased(event), false
+    );
+
+    // this.moveN = new MoveNorthCommand();
+
+    // TODO: This should read in user-defined input mappings, otheriwse load 
+    // default settings. (if user has saved control scheme, else load default)
+    this.loadControlScheme(ControlSchemes.DEFAULT);
   }
-  
-  public execute(): void {
-    throw new Error("Abstract method!");
+
+  /**
+   * 
+   * @param {KeyboardEvent} event The key to bind the event to 
+   * @param {Command} command The command to bind to the button
+   */
+  public keyBind(event: KeyboardEvent, command: Command): void {
+    this.buttonMapping[event.key] = command;
+  }
+
+  /**
+   * Determins if a button was pressed. Callback for when a button is pressed by
+   * the user.
+   *
+   * @param {KeyboardEvent} event The user interaction with a keyboard. 
+   */
+  public buttonPressed(event: KeyboardEvent): void {
+    event.preventDefault();
+
+    // Toggles a boolean.
+    this.buttonStatus[event.key] = !this.buttonStatus[event.key];
+  }
+
+  /**
+   * Callback for when a button is released by the user. 
+   * 
+   * @param {KeyboardEvent} event The user interaction with a keyboard.
+   */
+  private buttonReleased(event: KeyboardEvent): void {
+    event.preventDefault();
+
+    // Toggles a boolean.
+    this.buttonStatus[event.key] = !this.buttonStatus[event.key];
   }
   
   /**
-   * 
-   * @param {KeyboardEvent} event The user interaction with a keyboard. 
-   * Deprecates event keyCode.
+   * Handles user input. Runs once per game loop. 
    */
-  handleInput(event: KeyboardEvent): void {
-    console.log("hi");
-    console.log('event.key :', event.keyCode);
+  public handleInput(): void {
+
+    if (this.buttonStatus[Button.UP]) { 
+      this.buttonMapping[Button.UP].execute(); 
+    }
+    if (this.buttonStatus[Button.DOWN]) { 
+      this.buttonMapping[Button.DOWN].execute(); 
+    }
+    if (this.buttonStatus[Button.LEFT]) { 
+      this.buttonMapping[Button.LEFT].execute(); 
+    }
+    if (this.buttonStatus[Button.RIGHT]) { 
+      this.buttonMapping[Button.RIGHT].execute(); 
+    }
+    if (this.buttonStatus[Button.E]) { 
+      this.buttonMapping[Button.E].execute(); 
+    }
+    if (this.buttonStatus[Button.Q]) { 
+      this.buttonMapping[Button.Q].execute(); 
+    }
+    if (this.buttonStatus[Button.BSPACE]) { 
+      this.buttonMapping[Button.BSPACE].execute(); 
+    }
+    if (this.buttonStatus[Button.ENTER]) { 
+      this.buttonMapping[Button.ENTER].execute(); 
+    }
+    if (this.buttonStatus[Button.SHIFT]) { 
+      this.buttonMapping[Button.SHIFT].execute();
+    }
+
+    // Nothing pressed, so do nothing.
+    return null;
+  }
+
+  /**
+   * 
+   * @param controlScheme 
+   */
+  private loadControlScheme(controlScheme: ControlSchemes): void {
+    switch(controlScheme) {
+      case 1:
+        break;
+      default: 
+      this.buttonMapping = {
+        "ArrowUp": new MoveNorthCommand,
+        "ArrowDown": new MoveSouthCommand,
+        // "ArrowRight": this.moveE,
+        // "ArrowLeft": this.moveW,
+        // "e": this.interact,
+        // "q": this.cancel,
+        // "Backspace": this.cancel,
+        // "Enter": this.confirm,
+        // "Shift": this.cancel,
+      }
+
+
+        // this.buttonMapping[Button.UP] = new MoveNorthCommand;
+        // this.buttonMapping[Button.DOWN] = new MoveSouthCommand;
+        // this.buttonMapping[Button.LEFT] = new MoveNorthCommand;
+        // this.buttonMapping[Button.RIGHT] = new MoveNorthCommand;
+        // this.buttonMapping[Button.E] = new MoveNorthCommand;
+        // this.buttonMapping[Button.Q] = new MoveNorthCommand;
+        // this.buttonMapping[Button.BSPACE] = new MoveNorthCommand;
+        // this.buttonMapping[Button.ENTER] = new MoveNorthCommand;
+        // this.buttonMapping[Button.SHIFT] = new MoveNorthCommand;
+    }
   }
 }
 

@@ -89,7 +89,7 @@ export class FiendGame {
 
     // We need to attach the input handling to the enclosing div, since you 
     // can't get a handle on `canvas` DOM element since it's not focusable. 
-    this.InputHandler = new InputHandler(this.container);
+    this.InputHandler = new InputHandler();
 
     // Let's kick off the game loop!
     this.main(performance.now());
@@ -184,7 +184,7 @@ export class FiendGame {
     // Keep track of when the last frame happened.
     this.lastFrameTime = tFrame;
   
-    // this.InputHandler.handleInput();
+    this.InputHandler.handleInput();
     this.update(delta);
     this.draw(delta);
   }

@@ -204,7 +204,7 @@ var FiendGame = exports.FiendGame = function () {
     this.Renderer = new _Renderer.Renderer(this.ctx);
     // We need to attach the input handling to the enclosing div, since you 
     // can't get a handle on `canvas` DOM element since it's not focusable. 
-    this.InputHandler = new _InputHandler.InputHandler(this.container);
+    this.InputHandler = new _InputHandler.InputHandler();
     // Let's kick off the game loop!
     this.main(performance.now());
   }
@@ -300,7 +300,7 @@ var FiendGame = exports.FiendGame = function () {
       var delta = (tFrame - this.lastFrameTime) / 1000.0;
       // Keep track of when the last frame happened.
       this.lastFrameTime = tFrame;
-      // this.InputHandler.handleInput();
+      this.InputHandler.handleInput();
       this.update(delta);
       this.draw(delta);
     }
@@ -309,46 +309,308 @@ var FiendGame = exports.FiendGame = function () {
   return FiendGame;
 }();
 
-},{"../atlases/Overworld":2,"../entities/Enemy":7,"./Input/InputHandler":5,"./Renderer":6}],5:[function(require,module,exports){
+},{"../atlases/Overworld":2,"../entities/Enemy":10,"./Input/InputHandler":8,"./Renderer":9}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Command = exports.Command = function Command() {
+  _classCallCheck(this, Command);
+};
+
+},{}],6:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MoveNorthCommand = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Command2 = require("./Command");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The MoveNorthCommand class.
+ */
+var MoveNorthCommand = exports.MoveNorthCommand = function (_Command) {
+  _inherits(MoveNorthCommand, _Command);
+
+  function MoveNorthCommand() {
+    _classCallCheck(this, MoveNorthCommand);
+
+    return _possibleConstructorReturn(this, (MoveNorthCommand.__proto__ || Object.getPrototypeOf(MoveNorthCommand)).apply(this, arguments));
+  }
+
+  _createClass(MoveNorthCommand, [{
+    key: "execute",
+
+    /**
+     * Executes the command.
+     */
+    value: function execute() {
+      console.log("Move North!");
+    }
+  }]);
+
+  return MoveNorthCommand;
+}(_Command2.Command);
+
+},{"./Command":5}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MoveSouthCommand = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Command2 = require("./Command");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The MoveSouthCommand class.
+ */
+var MoveSouthCommand = exports.MoveSouthCommand = function (_Command) {
+  _inherits(MoveSouthCommand, _Command);
+
+  function MoveSouthCommand() {
+    _classCallCheck(this, MoveSouthCommand);
+
+    return _possibleConstructorReturn(this, (MoveSouthCommand.__proto__ || Object.getPrototypeOf(MoveSouthCommand)).apply(this, arguments));
+  }
+
+  _createClass(MoveSouthCommand, [{
+    key: "execute",
+
+    /**
+     * Executes the command.
+     */
+    value: function execute() {
+      console.log("Move South!");
+    }
+  }]);
+
+  return MoveSouthCommand;
+}(_Command2.Command);
+
+},{"./Command":5}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.InputHandler = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _MoveNorthCommand = require("./Commands/MoveNorthCommand");
+
+var _MoveSouthCommand = require("./Commands/MoveSouthCommand");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * The built-in control scheme types. Allows a user to change the control scheme
+ * without remapping all the keys individually.
+ *
+ * @type {enum} ControlSchemes
+ */
+var ControlSchemes;
+(function (ControlSchemes) {
+    ControlSchemes[ControlSchemes["DEFAULT"] = 0] = "DEFAULT";
+    ControlSchemes[ControlSchemes["FPS"] = 1] = "FPS";
+    ControlSchemes[ControlSchemes["ONEHANDED_RIGHT"] = 2] = "ONEHANDED_RIGHT";
+    ControlSchemes[ControlSchemes["ONEHANDED_LEFT"] = 3] = "ONEHANDED_LEFT";
+})(ControlSchemes || (ControlSchemes = {}));
+/**
+ * Maps a button to a keyboard input key.
+ *
+ * @type {enum} Button
+ */
+var Button;
+(function (Button) {
+    Button["UP"] = "ArrowUp";
+    Button["DOWN"] = "ArrowDown";
+    Button["LEFT"] = "ArrowLeft";
+    Button["RIGHT"] = "ArrowRight";
+    Button["E"] = "e";
+    Button["Q"] = "q";
+    Button["BSPACE"] = "Backspace";
+    Button["ENTER"] = "Enter";
+    Button["SHIFT"] = "Shift";
+})(Button || (Button = {}));
+/**
+ * Available actions for game actors.
+ */
+var Action;
+(function (Action) {
+    Action[Action["moveN"] = 0] = "moveN";
+    Action[Action["moveS"] = 1] = "moveS";
+    Action[Action["moveE"] = 2] = "moveE";
+    Action[Action["moveW"] = 3] = "moveW";
+    Action[Action["confirm"] = 4] = "confirm";
+    Action[Action["cancel"] = 5] = "cancel";
+    Action[Action["interact"] = 6] = "interact";
+})(Action || (Action = {}));
+/**
+ * The InputHandler class.
+ */
+
 var InputHandler = exports.InputHandler = function () {
-    function InputHandler(gameDiv) {
+    /**
+     * The InputHandler constructor.
+     * Attaches the keydown and keyup KeyboardEvent to the document.
+     */
+    function InputHandler() {
         var _this = this;
 
         _classCallCheck(this, InputHandler);
 
-        this._gameContainerElement = gameDiv;
-        // this.keyboardEventListener = () => this.handleInput(); 
-        document.getElementById("fiend-game").addEventListener('keydown', function (event) {
-            return _this.handleInput(event);
-        });
+        /**
+         * List of buttons that have been pressed.
+         * [Keyboard key: true]
+         */
+        this.buttonStatus = {
+            ArrowUp: false,
+            ArrowDown: false,
+            ArrowLeft: false,
+            ArrowRight: false,
+            e: false,
+            q: false,
+            Backspace: false,
+            Enter: false,
+            Shift: false
+        };
+        document.addEventListener('keydown', function (event) {
+            return _this.buttonPressed(event);
+        }, false);
+        document.addEventListener('keyup', function (event) {
+            return _this.buttonReleased(event);
+        }, false);
+        // this.moveN = new MoveNorthCommand();
+        // TODO: This should read in user-defined input mappings, otheriwse load 
+        // default settings. (if user has saved control scheme, else load default)
+        this.loadControlScheme(ControlSchemes.DEFAULT);
     }
+    /**
+     *
+     * @param {KeyboardEvent} event The key to bind the event to
+     * @param {Command} command The command to bind to the button
+     */
+
 
     _createClass(InputHandler, [{
-        key: "execute",
-        value: function execute() {
-            throw new Error("Abstract method!");
+        key: "keyBind",
+        value: function keyBind(event, command) {
+            this.buttonMapping[event.key] = command;
         }
         /**
+         * Determins if a button was pressed. Callback for when a button is pressed by
+         * the user.
          *
          * @param {KeyboardEvent} event The user interaction with a keyboard.
-         * Deprecates event keyCode.
+         */
+
+    }, {
+        key: "buttonPressed",
+        value: function buttonPressed(event) {
+            event.preventDefault();
+            // Toggles a boolean.
+            this.buttonStatus[event.key] = !this.buttonStatus[event.key];
+        }
+        /**
+         * Callback for when a button is released by the user.
+         *
+         * @param {KeyboardEvent} event The user interaction with a keyboard.
+         */
+
+    }, {
+        key: "buttonReleased",
+        value: function buttonReleased(event) {
+            event.preventDefault();
+            // Toggles a boolean.
+            this.buttonStatus[event.key] = !this.buttonStatus[event.key];
+        }
+        /**
+         * Handles user input. Runs once per game loop.
          */
 
     }, {
         key: "handleInput",
-        value: function handleInput(event) {
-            console.log("hi");
-            console.log('event.key :', event.keyCode);
+        value: function handleInput() {
+            if (this.buttonStatus[Button.UP]) {
+                this.buttonMapping[Button.UP].execute();
+            }
+            if (this.buttonStatus[Button.DOWN]) {
+                this.buttonMapping[Button.DOWN].execute();
+            }
+            if (this.buttonStatus[Button.LEFT]) {
+                this.buttonMapping[Button.LEFT].execute();
+            }
+            if (this.buttonStatus[Button.RIGHT]) {
+                this.buttonMapping[Button.RIGHT].execute();
+            }
+            if (this.buttonStatus[Button.E]) {
+                this.buttonMapping[Button.E].execute();
+            }
+            if (this.buttonStatus[Button.Q]) {
+                this.buttonMapping[Button.Q].execute();
+            }
+            if (this.buttonStatus[Button.BSPACE]) {
+                this.buttonMapping[Button.BSPACE].execute();
+            }
+            if (this.buttonStatus[Button.ENTER]) {
+                this.buttonMapping[Button.ENTER].execute();
+            }
+            if (this.buttonStatus[Button.SHIFT]) {
+                this.buttonMapping[Button.SHIFT].execute();
+            }
+            // Nothing pressed, so do nothing.
+            return null;
+        }
+        /**
+         *
+         * @param controlScheme
+         */
+
+    }, {
+        key: "loadControlScheme",
+        value: function loadControlScheme(controlScheme) {
+            switch (controlScheme) {
+                case 1:
+                    break;
+                default:
+                    this.buttonMapping = {
+                        "ArrowUp": new _MoveNorthCommand.MoveNorthCommand(),
+                        "ArrowDown": new _MoveSouthCommand.MoveSouthCommand()
+                    };
+                // this.buttonMapping[Button.UP] = new MoveNorthCommand;
+                // this.buttonMapping[Button.DOWN] = new MoveSouthCommand;
+                // this.buttonMapping[Button.LEFT] = new MoveNorthCommand;
+                // this.buttonMapping[Button.RIGHT] = new MoveNorthCommand;
+                // this.buttonMapping[Button.E] = new MoveNorthCommand;
+                // this.buttonMapping[Button.Q] = new MoveNorthCommand;
+                // this.buttonMapping[Button.BSPACE] = new MoveNorthCommand;
+                // this.buttonMapping[Button.ENTER] = new MoveNorthCommand;
+                // this.buttonMapping[Button.SHIFT] = new MoveNorthCommand;
+            }
         }
     }]);
 
@@ -375,7 +637,7 @@ var InputHandler = exports.InputHandler = function () {
 //   TILDA:    192
 // };
 
-},{}],6:[function(require,module,exports){
+},{"./Commands/MoveNorthCommand":6,"./Commands/MoveSouthCommand":7}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -486,7 +748,7 @@ var Renderer = exports.Renderer = function () {
     return Renderer;
 }();
 
-},{}],7:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -530,7 +792,7 @@ var Enemy = exports.Enemy = function () {
     return Enemy;
 }();
 
-},{}],8:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 var _FiendGame = require("./engine/FiendGame");
@@ -545,19 +807,10 @@ function init() {
     new _FiendGame.FiendGame(640, 480);
 }
 ;
-// Alternative to DOMContentLoaded event
-// document.onreadystatechange = function () {
-//   if (document.readyState === 'complete') {
-//     let assets = window.F_LOADER.initAssets();
-//     Promise.all(assets).then(function () {
-//       init();
-//     }.bind(this));
-//   }
-// }
 /**
  * Ensure the assets are loaded before we initialize the game. We do this with a
  * promise to ensure all the images are loaded and ready to be used.
- * TODO Make this better, maybe in it's own class.
+ * TODO Make this better, more TypeScript-y.
  */
 window.onload = function () {
     window.F_LOADER = new _AssetLoader.AssetLoader();
@@ -567,6 +820,6 @@ window.onload = function () {
     }.bind(this));
 };
 
-},{"./engine/AssetLoader":3,"./engine/FiendGame":4}]},{},[8])
+},{"./engine/AssetLoader":3,"./engine/FiendGame":4}]},{},[11])
 
 //# sourceMappingURL=bundle.js.map
