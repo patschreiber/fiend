@@ -309,7 +309,7 @@ var FiendGame = exports.FiendGame = function () {
   return FiendGame;
 }();
 
-},{"../atlases/Overworld":2,"../entities/Enemy":10,"./Input/InputHandler":8,"./Renderer":9}],5:[function(require,module,exports){
+},{"../atlases/Overworld":2,"../entities/Enemy":11,"./Input/InputHandler":9,"./Renderer":10}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -414,11 +414,57 @@ var MoveSouthCommand = exports.MoveSouthCommand = function (_Command) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.NullCommand = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Command2 = require("./Command");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The NullCommand class.
+ * This class is special in that it intentionally doesn't execute anything, in
+ * so if a user doesn't have a mapped button, we don't have to check fo `null`.
+ */
+var NullCommand = exports.NullCommand = function (_Command) {
+  _inherits(NullCommand, _Command);
+
+  function NullCommand() {
+    _classCallCheck(this, NullCommand);
+
+    return _possibleConstructorReturn(this, (NullCommand.__proto__ || Object.getPrototypeOf(NullCommand)).apply(this, arguments));
+  }
+
+  _createClass(NullCommand, [{
+    key: "execute",
+
+    /**
+     * Executes the command.
+     */
+    value: function execute() {}
+  }]);
+
+  return NullCommand;
+}(_Command2.Command);
+
+},{"./Command":5}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.InputHandler = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _NullCommand = require("./Commands/NullCommand");
 
 var _MoveNorthCommand = require("./Commands/MoveNorthCommand");
 
@@ -457,6 +503,23 @@ var Button;
     Button["SHIFT"] = "Shift";
 })(Button || (Button = {}));
 /**
+ * The ButtonStatus enum.
+ * - PRESSED: The button is pressed.
+ * - RAISED: The button is NOT pressed, it is raised. Also can be considered
+ * "untouched" by the player.
+ * - HELD: The button is held down.
+ * - RELEASED: The button has been released from a pressed state.
+ * - DISABLED: The button has been disabled and will not fire events.
+ */
+var ButtonStatus;
+(function (ButtonStatus) {
+    ButtonStatus[ButtonStatus["PRESSED"] = 0] = "PRESSED";
+    ButtonStatus[ButtonStatus["RAISED"] = 1] = "RAISED";
+    ButtonStatus[ButtonStatus["HELD"] = 2] = "HELD";
+    ButtonStatus[ButtonStatus["RELEASED"] = 3] = "RELEASED";
+    ButtonStatus[ButtonStatus["DISABLED"] = 4] = "DISABLED";
+})(ButtonStatus || (ButtonStatus = {}));
+/**
  * Available actions for game actors.
  */
 var Action;
@@ -483,28 +546,13 @@ var InputHandler = exports.InputHandler = function () {
 
         _classCallCheck(this, InputHandler);
 
-        /**
-         * List of buttons that have been pressed.
-         * [Keyboard key: true]
-         */
-        this.buttonStatus = {
-            ArrowUp: false,
-            ArrowDown: false,
-            ArrowLeft: false,
-            ArrowRight: false,
-            e: false,
-            q: false,
-            Backspace: false,
-            Enter: false,
-            Shift: false
-        };
         document.addEventListener('keydown', function (event) {
             return _this.buttonPressed(event);
         }, false);
         document.addEventListener('keyup', function (event) {
             return _this.buttonReleased(event);
         }, false);
-        // this.moveN = new MoveNorthCommand();
+        this.inputMap = this.initInputMap();
         // TODO: This should read in user-defined input mappings, otheriwse load 
         // default settings. (if user has saved control scheme, else load default)
         this.loadControlScheme(ControlSchemes.DEFAULT);
@@ -519,7 +567,7 @@ var InputHandler = exports.InputHandler = function () {
     _createClass(InputHandler, [{
         key: "keyBind",
         value: function keyBind(event, command) {
-            this.buttonMapping[event.key] = command;
+            this.inputMap[event.key].command = command;
         }
         /**
          * Determins if a button was pressed. Callback for when a button is pressed by
@@ -532,8 +580,9 @@ var InputHandler = exports.InputHandler = function () {
         key: "buttonPressed",
         value: function buttonPressed(event) {
             event.preventDefault();
-            // Toggles a boolean.
-            this.buttonStatus[event.key] = !this.buttonStatus[event.key];
+            if (this.inputMap[event.key]) {
+                this.inputMap[event.key].status = ButtonStatus.PRESSED;
+            }
         }
         /**
          * Callback for when a button is released by the user.
@@ -545,8 +594,9 @@ var InputHandler = exports.InputHandler = function () {
         key: "buttonReleased",
         value: function buttonReleased(event) {
             event.preventDefault();
-            // Toggles a boolean.
-            this.buttonStatus[event.key] = !this.buttonStatus[event.key];
+            if (this.inputMap[event.key]) {
+                this.inputMap[event.key].status = ButtonStatus.RAISED;
+            }
         }
         /**
          * Handles user input. Runs once per game loop.
@@ -555,37 +605,50 @@ var InputHandler = exports.InputHandler = function () {
     }, {
         key: "handleInput",
         value: function handleInput() {
-            if (this.buttonStatus[Button.UP]) {
-                this.buttonMapping[Button.UP].execute();
+            if (this.inputMap[Button.UP].status === ButtonStatus.PRESSED) {
+                this.inputMap[Button.UP].command.execute();
             }
-            if (this.buttonStatus[Button.DOWN]) {
-                this.buttonMapping[Button.DOWN].execute();
+            if (this.inputMap[Button.DOWN].status === ButtonStatus.PRESSED) {
+                this.inputMap[Button.DOWN].command.execute();
             }
-            if (this.buttonStatus[Button.LEFT]) {
-                this.buttonMapping[Button.LEFT].execute();
+            if (this.inputMap[Button.LEFT].status === ButtonStatus.PRESSED) {
+                this.inputMap[Button.LEFT].command.execute();
             }
-            if (this.buttonStatus[Button.RIGHT]) {
-                this.buttonMapping[Button.RIGHT].execute();
+            if (this.inputMap[Button.RIGHT].status === ButtonStatus.PRESSED) {
+                this.inputMap[Button.RIGHT].command.execute();
             }
-            if (this.buttonStatus[Button.E]) {
-                this.buttonMapping[Button.E].execute();
+            if (this.inputMap[Button.E].status === ButtonStatus.PRESSED) {
+                this.inputMap[Button.E].command.execute();
             }
-            if (this.buttonStatus[Button.Q]) {
-                this.buttonMapping[Button.Q].execute();
+            if (this.inputMap[Button.Q].status === ButtonStatus.PRESSED) {
+                this.inputMap[Button.Q].command.execute();
             }
-            if (this.buttonStatus[Button.BSPACE]) {
-                this.buttonMapping[Button.BSPACE].execute();
+            if (this.inputMap[Button.BSPACE].status === ButtonStatus.PRESSED) {
+                this.inputMap[Button.BSPACE].command.execute();
             }
-            if (this.buttonStatus[Button.ENTER]) {
-                this.buttonMapping[Button.ENTER].execute();
+            if (this.inputMap[Button.ENTER].status === ButtonStatus.PRESSED) {
+                this.inputMap[Button.ENTER].command.execute();
             }
-            if (this.buttonStatus[Button.SHIFT]) {
-                this.buttonMapping[Button.SHIFT].execute();
+            if (this.inputMap[Button.SHIFT].status === ButtonStatus.PRESSED) {
+                this.inputMap[Button.SHIFT].command.execute();
             }
-            // Nothing pressed, so do nothing.
-            return null;
+        }
+    }, {
+        key: "initInputMap",
+        value: function initInputMap() {
+            var ip = {};
+            for (var buttonKey in Button) {
+                ip[Button[buttonKey]] = {
+                    command: _NullCommand.NullCommand,
+                    status: ButtonStatus.RAISED
+                };
+            }
+            return ip;
         }
         /**
+         * Loads a control scheme when the game first initializes, so the player can
+         * have some input. Supports multiple control schemes so players can re-map
+         * controls without having to re-map each button individually.
          *
          * @param controlScheme
          */
@@ -597,19 +660,16 @@ var InputHandler = exports.InputHandler = function () {
                 case 1:
                     break;
                 default:
-                    this.buttonMapping = {
-                        "ArrowUp": new _MoveNorthCommand.MoveNorthCommand(),
-                        "ArrowDown": new _MoveSouthCommand.MoveSouthCommand()
-                    };
-                // this.buttonMapping[Button.UP] = new MoveNorthCommand;
-                // this.buttonMapping[Button.DOWN] = new MoveSouthCommand;
-                // this.buttonMapping[Button.LEFT] = new MoveNorthCommand;
-                // this.buttonMapping[Button.RIGHT] = new MoveNorthCommand;
-                // this.buttonMapping[Button.E] = new MoveNorthCommand;
-                // this.buttonMapping[Button.Q] = new MoveNorthCommand;
-                // this.buttonMapping[Button.BSPACE] = new MoveNorthCommand;
-                // this.buttonMapping[Button.ENTER] = new MoveNorthCommand;
-                // this.buttonMapping[Button.SHIFT] = new MoveNorthCommand;
+                    // this.inputMap[Button.UP].command = new MoveNorthCommand(player: GameActor);
+                    this.inputMap[Button.UP].command = new _MoveNorthCommand.MoveNorthCommand();
+                    this.inputMap[Button.DOWN].command = new _MoveSouthCommand.MoveSouthCommand();
+                    this.inputMap[Button.LEFT].command = new _NullCommand.NullCommand();
+                    this.inputMap[Button.RIGHT].command = new _NullCommand.NullCommand();
+                    this.inputMap[Button.E].command = new _NullCommand.NullCommand();
+                    this.inputMap[Button.Q].command = new _NullCommand.NullCommand();
+                    this.inputMap[Button.BSPACE].command = new _NullCommand.NullCommand();
+                    this.inputMap[Button.ENTER].command = new _NullCommand.NullCommand();
+                    this.inputMap[Button.SHIFT].command = new _NullCommand.NullCommand();
             }
         }
     }]);
@@ -637,7 +697,7 @@ var InputHandler = exports.InputHandler = function () {
 //   TILDA:    192
 // };
 
-},{"./Commands/MoveNorthCommand":6,"./Commands/MoveSouthCommand":7}],9:[function(require,module,exports){
+},{"./Commands/MoveNorthCommand":6,"./Commands/MoveSouthCommand":7,"./Commands/NullCommand":8}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -748,7 +808,7 @@ var Renderer = exports.Renderer = function () {
     return Renderer;
 }();
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -792,7 +852,7 @@ var Enemy = exports.Enemy = function () {
     return Enemy;
 }();
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 var _FiendGame = require("./engine/FiendGame");
@@ -820,6 +880,6 @@ window.onload = function () {
     }.bind(this));
 };
 
-},{"./engine/AssetLoader":3,"./engine/FiendGame":4}]},{},[11])
+},{"./engine/AssetLoader":3,"./engine/FiendGame":4}]},{},[12])
 
 //# sourceMappingURL=bundle.js.map

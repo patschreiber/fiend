@@ -1,4 +1,5 @@
 import { Command } from "./Commands/Command";
+import { NullCommand } from "./Commands/NullCommand";
 import { MoveNorthCommand } from "./Commands/MoveNorthCommand";
 import { MoveSouthCommand } from "./Commands/MoveSouthCommand";
 
@@ -22,18 +23,16 @@ interface IInputHandler {
 }
 
 /**
- * The ButtonPress Interface.
- * [Keyboard key: pressed] pair
+ * The InputMap interface. 
+ * key: The name of the key pressed, sent by the browser.header
+ * command: The mapped command to be executed.
+ * status: The button's current status
  */
-interface ButtonStatus {
-  [key: string]: boolean
-}
-
-/**
- * The KeyMap interface. 
- */
-interface KeyMap {
-  [key: string]: Command
+interface InputMap {
+  [key: string]: {
+    command: Command,
+    status: ButtonStatus
+  }
 }
 
 /**
@@ -67,6 +66,23 @@ enum Button {
 }
 
 /**
+ * The ButtonStatus enum.
+ * - PRESSED: The button is pressed.
+ * - RAISED: The button is NOT pressed, it is raised. Also can be considered 
+ * "untouched" by the player.
+ * - HELD: The button is held down. 
+ * - RELEASED: The button has been released from a pressed state.
+ * - DISABLED: The button has been disabled and will not fire events. 
+ */
+ enum ButtonStatus {
+  PRESSED,
+  RAISED,
+  HELD,
+  RELEASED,
+  DISABLED,
+}
+
+/**
  * Available actions for game actors.
  */
 enum Action {
@@ -85,26 +101,10 @@ enum Action {
 export class InputHandler implements IInputHandler {
 
   /**
-   * TODO Structure should be ["context"][KeyboardEvent.key][Command]
-   * e.g. "overworld": {"ArrowUp": this.MoveN, "ArrowDown": this.moveS}
+   * TODO Structure should add ["context"] so we can have context-independent 
+   * buttons
    */
-   private buttonMapping: KeyMap;
-
-  /** 
-   * List of buttons that have been pressed.
-   * [Keyboard key: true]
-   */
-  private buttonStatus: ButtonStatus = {
-    ArrowUp: false,
-    ArrowDown: false,
-    ArrowLeft: false,
-    ArrowRight: false,
-    e: false,
-    q: false,
-    Backspace: false,
-    Enter: false,
-    Shift: false,
-  };
+  private inputMap: InputMap;
 
   /**
    * The InputHandler constructor. 
@@ -120,7 +120,7 @@ export class InputHandler implements IInputHandler {
       'keyup', (event) => this.buttonReleased(event), false
     );
 
-    // this.moveN = new MoveNorthCommand();
+    this.inputMap = this.initInputMap();
 
     // TODO: This should read in user-defined input mappings, otheriwse load 
     // default settings. (if user has saved control scheme, else load default)
@@ -133,7 +133,7 @@ export class InputHandler implements IInputHandler {
    * @param {Command} command The command to bind to the button
    */
   public keyBind(event: KeyboardEvent, command: Command): void {
-    this.buttonMapping[event.key] = command;
+    this.inputMap[event.key].command = command;
   }
 
   /**
@@ -145,8 +145,9 @@ export class InputHandler implements IInputHandler {
   public buttonPressed(event: KeyboardEvent): void {
     event.preventDefault();
 
-    // Toggles a boolean.
-    this.buttonStatus[event.key] = !this.buttonStatus[event.key];
+    if (this.inputMap[event.key]) {
+      this.inputMap[event.key].status = ButtonStatus.PRESSED; 
+    }
   }
 
   /**
@@ -157,8 +158,9 @@ export class InputHandler implements IInputHandler {
   private buttonReleased(event: KeyboardEvent): void {
     event.preventDefault();
 
-    // Toggles a boolean.
-    this.buttonStatus[event.key] = !this.buttonStatus[event.key];
+    if (this.inputMap[event.key]) {
+      this.inputMap[event.key].status = ButtonStatus.RAISED; 
+    }
   }
   
   /**
@@ -166,39 +168,52 @@ export class InputHandler implements IInputHandler {
    */
   public handleInput(): void {
 
-    if (this.buttonStatus[Button.UP]) { 
-      this.buttonMapping[Button.UP].execute(); 
+    if (this.inputMap[Button.UP].status === ButtonStatus.PRESSED) { 
+      this.inputMap[Button.UP].command.execute(); 
     }
-    if (this.buttonStatus[Button.DOWN]) { 
-      this.buttonMapping[Button.DOWN].execute(); 
+    if (this.inputMap[Button.DOWN].status === ButtonStatus.PRESSED) { 
+      this.inputMap[Button.DOWN].command.execute(); 
     }
-    if (this.buttonStatus[Button.LEFT]) { 
-      this.buttonMapping[Button.LEFT].execute(); 
+    if (this.inputMap[Button.LEFT].status === ButtonStatus.PRESSED) { 
+      this.inputMap[Button.LEFT].command.execute(); 
     }
-    if (this.buttonStatus[Button.RIGHT]) { 
-      this.buttonMapping[Button.RIGHT].execute(); 
+    if (this.inputMap[Button.RIGHT].status === ButtonStatus.PRESSED) { 
+      this.inputMap[Button.RIGHT].command.execute(); 
     }
-    if (this.buttonStatus[Button.E]) { 
-      this.buttonMapping[Button.E].execute(); 
+    if (this.inputMap[Button.E].status === ButtonStatus.PRESSED) { 
+      this.inputMap[Button.E].command.execute(); 
     }
-    if (this.buttonStatus[Button.Q]) { 
-      this.buttonMapping[Button.Q].execute(); 
+    if (this.inputMap[Button.Q].status === ButtonStatus.PRESSED) { 
+      this.inputMap[Button.Q].command.execute(); 
     }
-    if (this.buttonStatus[Button.BSPACE]) { 
-      this.buttonMapping[Button.BSPACE].execute(); 
+    if (this.inputMap[Button.BSPACE].status === ButtonStatus.PRESSED) { 
+      this.inputMap[Button.BSPACE].command.execute(); 
     }
-    if (this.buttonStatus[Button.ENTER]) { 
-      this.buttonMapping[Button.ENTER].execute(); 
+    if (this.inputMap[Button.ENTER].status === ButtonStatus.PRESSED) { 
+      this.inputMap[Button.ENTER].command.execute(); 
     }
-    if (this.buttonStatus[Button.SHIFT]) { 
-      this.buttonMapping[Button.SHIFT].execute();
+    if (this.inputMap[Button.SHIFT].status === ButtonStatus.PRESSED) { 
+      this.inputMap[Button.SHIFT].command.execute();
+    }
+  }
+
+  private initInputMap(): InputMap {
+    let ip = {};
+    
+    for(let buttonKey in Button) {
+      ip[Button[buttonKey]] = {
+        command: NullCommand,
+        status: ButtonStatus.RAISED  
+      }
     }
 
-    // Nothing pressed, so do nothing.
-    return null;
+    return ip;
   }
 
   /**
+   * Loads a control scheme when the game first initializes, so the player can 
+   * have some input. Supports multiple control schemes so players can re-map 
+   * controls without having to re-map each button individually.
    * 
    * @param controlScheme 
    */
@@ -207,28 +222,16 @@ export class InputHandler implements IInputHandler {
       case 1:
         break;
       default: 
-      this.buttonMapping = {
-        "ArrowUp": new MoveNorthCommand,
-        "ArrowDown": new MoveSouthCommand,
-        // "ArrowRight": this.moveE,
-        // "ArrowLeft": this.moveW,
-        // "e": this.interact,
-        // "q": this.cancel,
-        // "Backspace": this.cancel,
-        // "Enter": this.confirm,
-        // "Shift": this.cancel,
-      }
-
-
-        // this.buttonMapping[Button.UP] = new MoveNorthCommand;
-        // this.buttonMapping[Button.DOWN] = new MoveSouthCommand;
-        // this.buttonMapping[Button.LEFT] = new MoveNorthCommand;
-        // this.buttonMapping[Button.RIGHT] = new MoveNorthCommand;
-        // this.buttonMapping[Button.E] = new MoveNorthCommand;
-        // this.buttonMapping[Button.Q] = new MoveNorthCommand;
-        // this.buttonMapping[Button.BSPACE] = new MoveNorthCommand;
-        // this.buttonMapping[Button.ENTER] = new MoveNorthCommand;
-        // this.buttonMapping[Button.SHIFT] = new MoveNorthCommand;
+        // this.inputMap[Button.UP].command = new MoveNorthCommand(player: GameActor);
+        this.inputMap[Button.UP].command = new MoveNorthCommand();
+        this.inputMap[Button.DOWN].command = new MoveSouthCommand();
+        this.inputMap[Button.LEFT].command = new NullCommand();
+        this.inputMap[Button.RIGHT].command = new NullCommand();
+        this.inputMap[Button.E].command = new NullCommand();
+        this.inputMap[Button.Q].command = new NullCommand();
+        this.inputMap[Button.BSPACE].command = new NullCommand();
+        this.inputMap[Button.ENTER].command = new NullCommand();
+        this.inputMap[Button.SHIFT].command = new NullCommand();
     }
   }
 }
