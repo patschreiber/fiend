@@ -2,12 +2,12 @@ import { FiendGame } from "./engine/FiendGame";
 import { AssetLoader } from "./engine/AssetLoader";
 
 /**
- * We need some global variables so we can load the game and the assets. Let's 
+ * We need some global variables so we can load the game and the assets. Let's
  * consider moving the F_LOADER to it's own class so we don't need a global for
  * the assets.
  */
 declare global {
-  interface Window { 
+  interface Window {
     F_LOADER: AssetLoader;
   }
 }
