@@ -140,7 +140,7 @@ exports.FiendGame = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 // Enemies
-// TODO This might change
+// TODO Might remove
 
 
 var _InputHandler = require("./Input/InputHandler");
@@ -149,7 +149,7 @@ var _Renderer = require("./Renderer");
 
 var _Overworld = require("../atlases/Overworld");
 
-var _Enemy = require("../entities/Enemy");
+var _GameObject = require("./GameObject/");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -199,7 +199,7 @@ var FiendGame = exports.FiendGame = function () {
      */
     this.gameObjects = [
     // TODO This is a test, do should be empty on init.
-    new _Enemy.Enemy()];
+    new _GameObject.Enemy()];
     this._currentMap = new _Overworld.Overworld();
     this.Renderer = new _Renderer.Renderer(this.ctx);
     // We need to attach the input handling to the enclosing div, since you
@@ -309,7 +309,200 @@ var FiendGame = exports.FiendGame = function () {
   return FiendGame;
 }();
 
-},{"../atlases/Overworld":2,"../entities/Enemy":11,"./Input/InputHandler":9,"./Renderer":10}],5:[function(require,module,exports){
+},{"../atlases/Overworld":2,"./GameObject/":8,"./Input/InputHandler":13,"./Renderer":14}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Enemy = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _GameActor2 = require("./GameActor");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The Enemy class.
+ */
+var Enemy = exports.Enemy = function (_GameActor) {
+    _inherits(Enemy, _GameActor);
+
+    function Enemy() {
+        _classCallCheck(this, Enemy);
+
+        var _this = _possibleConstructorReturn(this, (Enemy.__proto__ || Object.getPrototypeOf(Enemy)).call(this));
+
+        _this.name = "Black Bat";
+        _this.HP = 100;
+        _this.ATK = 1;
+        _this.speed = 100;
+        _this.position = {
+            x: 0,
+            y: 0
+        };
+        return _this;
+    }
+
+    _createClass(Enemy, [{
+        key: "update",
+        value: function update(delta) {
+            this.position.x += this.speed * delta;
+            this.position.y += this.speed * delta;
+        }
+    }, {
+        key: "draw",
+        value: function draw(ctx) {
+            ctx.beginPath();
+            ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI * 2);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+    }]);
+
+    return Enemy;
+}(_GameActor2.GameActor);
+
+},{"./GameActor":6}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GameActor = undefined;
+
+var _GameObject2 = require('../GameObject');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * @constructor
+ * @extends [[GameObject]] The GameObject base abstract class.
+ * @implements IGameActor
+ */
+var GameActor = exports.GameActor = function (_GameObject) {
+  _inherits(GameActor, _GameObject);
+
+  /**
+   * @constructor
+   */
+  function GameActor() {
+    _classCallCheck(this, GameActor);
+
+    return _possibleConstructorReturn(this, (GameActor.__proto__ || Object.getPrototypeOf(GameActor)).call(this));
+  }
+
+  return GameActor;
+}(_GameObject2.GameObject);
+
+},{"../GameObject":7}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+  * The GameObject abstract class. All game entities inherit from this class.
+  * On instantiation, the class will generate an auto-incrementing id for use
+  * in identifying the newly-created GameObject.
+  *
+  * @abstract
+  */
+var GameObject = exports.GameObject = function () {
+  /**
+    * The GameObject constructor. Auto-increments the GameOject id for the new
+    * GameObject being created.
+    */
+  function GameObject() {
+    _classCallCheck(this, GameObject);
+
+    this.id = GameObject.idIncrementor++;
+  }
+  /**
+    * Accessor for the private member `id`.
+    *
+    * @returns The id of the GameObject
+    */
+
+
+  _createClass(GameObject, [{
+    key: "getId",
+    value: function getId() {
+      return this.id;
+    }
+  }]);
+
+  return GameObject;
+}();
+/**
+  * Keeps track of the `id` of the last GameObject instantiated.
+  *
+  * @static
+  * @type {number}
+  */
+
+
+GameObject.idIncrementor = 1;
+
+},{}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _GameObject = require('./GameObject');
+
+Object.keys(_GameObject).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _GameObject[key];
+    }
+  });
+});
+
+var _GameActor = require('./GameActor/GameActor');
+
+Object.keys(_GameActor).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _GameActor[key];
+    }
+  });
+});
+
+var _Enemy = require('./GameActor/Enemy');
+
+Object.keys(_Enemy).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _Enemy[key];
+    }
+  });
+});
+
+},{"./GameActor/Enemy":5,"./GameActor/GameActor":6,"./GameObject":7}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -322,7 +515,7 @@ var Command = exports.Command = function Command() {
   _classCallCheck(this, Command);
 };
 
-},{}],6:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -366,7 +559,7 @@ var MoveNorthCommand = exports.MoveNorthCommand = function (_Command) {
   return MoveNorthCommand;
 }(_Command2.Command);
 
-},{"./Command":5}],7:[function(require,module,exports){
+},{"./Command":9}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -410,7 +603,7 @@ var MoveSouthCommand = exports.MoveSouthCommand = function (_Command) {
   return MoveSouthCommand;
 }(_Command2.Command);
 
-},{"./Command":5}],8:[function(require,module,exports){
+},{"./Command":9}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -454,7 +647,7 @@ var NullCommand = exports.NullCommand = function (_Command) {
   return NullCommand;
 }(_Command2.Command);
 
-},{"./Command":5}],9:[function(require,module,exports){
+},{"./Command":9}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -694,7 +887,7 @@ var InputHandler = exports.InputHandler = function () {
 //   TILDA:    192
 // };
 
-},{"./Commands/MoveNorthCommand":6,"./Commands/MoveSouthCommand":7,"./Commands/NullCommand":8}],10:[function(require,module,exports){
+},{"./Commands/MoveNorthCommand":10,"./Commands/MoveSouthCommand":11,"./Commands/NullCommand":12}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -805,51 +998,7 @@ var Renderer = exports.Renderer = function () {
     return Renderer;
 }();
 
-},{}],11:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Enemy = exports.Enemy = function () {
-    function Enemy() {
-        _classCallCheck(this, Enemy);
-
-        this.HP = 100;
-        this.ATK = 1;
-        this.speed = 100;
-        this.position = {
-            x: 0,
-            y: 0
-        };
-    }
-
-    _createClass(Enemy, [{
-        key: "update",
-        value: function update(delta) {
-            this.position.x += this.speed * delta;
-            this.position.y += this.speed * delta;
-        }
-    }, {
-        key: "draw",
-        value: function draw(ctx) {
-            ctx.beginPath();
-            ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI * 2);
-            ctx.fillStyle = "#0095DD";
-            ctx.fill();
-            ctx.closePath();
-        }
-    }]);
-
-    return Enemy;
-}();
-
-},{}],12:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
 var _FiendGame = require("./engine/FiendGame");
@@ -860,8 +1009,6 @@ var _AssetLoader = require("./engine/AssetLoader");
  * Load a new instance of FiendGame, which loads the game.
  */
 function init() {
-    var bat = new Engine.GameObject.Enemy();
-    console.log('bat :', bat);
     // init functionality, for now
     new _FiendGame.FiendGame(640, 480);
 }
@@ -879,6 +1026,6 @@ window.onload = function () {
     });
 };
 
-},{"./engine/AssetLoader":3,"./engine/FiendGame":4}]},{},[12])
+},{"./engine/AssetLoader":3,"./engine/FiendGame":4}]},{},[15])
 
 //# sourceMappingURL=bundle.js.map

@@ -16,9 +16,6 @@ declare global {
  * Load a new instance of FiendGame, which loads the game.
  */
 function init() {
-  let bat = new Engine.GameObject.Enemy();
-  console.log('bat :', bat);
-
 
   // init functionality, for now
   new FiendGame(640, 480);

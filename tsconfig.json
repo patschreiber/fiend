@@ -5,7 +5,8 @@
     "strictNullChecks": false,   // enable strict null checks as a best practice
     "module": "es6",            // specify module code generation
     "target": "es2015",            // specify ECMAScript target version
-    "allowJs": true             // allow a partial TypeScript and JavaScript codebase
+    "allowJs": true,             // allow a partial TypeScript and JavaScript codebase
+    "moduleResolution": "node"  // helps with "barrel" files (index.ts)
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["node_modules", "build", "**/*.spec.ts"]

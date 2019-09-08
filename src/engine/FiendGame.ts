@@ -6,8 +6,8 @@ import { MapBase } from "../atlases/MapBase";
 import { Overworld } from "../atlases/Overworld";
 
 // Enemies
-// TODO This might change
-import { Enemy } from "../entities/Enemy";
+// TODO Might remove
+import { Enemy } from './GameObject/';
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
