@@ -1,4 +1,4 @@
-export class Loader {
+export class AssetLoader {
   private _assetList: Array<any>;
 
   constructor() {

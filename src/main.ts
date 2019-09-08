@@ -1,15 +1,14 @@
 import { FiendGame } from "./engine/FiendGame";
-import { Loader } from "./engine/Loader";
+import { AssetLoader } from "./engine/AssetLoader";
 
 /**
- * We need some global variables so we can load the game and the assets. Let's 
+ * We need some global variables so we can load the game and the assets. Let's
  * consider moving the F_LOADER to it's own class so we don't need a global for
  * the assets.
  */
 declare global {
-  interface Window { 
-    FG: FiendGame,
-    F_LOADER: Loader;
+  interface Window {
+    F_LOADER: AssetLoader;
   }
 }
 
@@ -19,19 +18,19 @@ declare global {
 function init() {
 
   // init functionality, for now
-  window.FG = new FiendGame(640, 480);
+  new FiendGame(640, 480);
 };
 
 /**
  * Ensure the assets are loaded before we initialize the game. We do this with a
  * promise to ensure all the images are loaded and ready to be used.
- * TODO Make this better, maybe in it's own class.
+ * TODO Make this better, more TypeScript-y.
  */
  window.onload = function() {
 
-  window.F_LOADER = new Loader();
+  window.F_LOADER = new AssetLoader();
   var p = window.F_LOADER.initAssets();
-  Promise.all(p).then(function () {
+  Promise.all(p).then( () => {
     init();
-  }.bind(this));
+  });
 }

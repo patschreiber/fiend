@@ -6,8 +6,8 @@ import { MapBase } from "../atlases/MapBase";
 import { Overworld } from "../atlases/Overworld";
 
 // Enemies
-// TODO This might change
-import { Enemy } from "../entities/Enemy";
+// TODO Might remove
+import { Enemy } from './GameObject/';
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -15,8 +15,10 @@ import { Enemy } from "../entities/Enemy";
  */
 export class FiendGame {
 
+  public InputHandler: InputHandler;
+  public Renderer: Renderer;
+
   public canvas: HTMLCanvasElement;
-  public inputHandler: InputHandler;
   public gameObjectCount: number;
   public gameObjects: Array<any>;
   public stopToken: number|null;
@@ -27,15 +29,14 @@ export class FiendGame {
   public tickLength: number;
   public lastFrameTime: number;
   public maxEntities: number;
-  protected _renderer: Renderer;
-  protected _currentMap: MapBase; 
+  protected _currentMap: MapBase;
 
   public ctx: CanvasRenderingContext2D;
 
   constructor(gamePaneWidth: number, gamePaneHeight: number) {
 
     /**
-     * 
+     *
      */
     this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
     this.container = document.getElementById("fiend-game");
@@ -44,7 +45,7 @@ export class FiendGame {
 
     /**t
      * Prevent anti-aliasing in the event a tile gets scaled.
-     * 
+     *
      * @property {CanvasRenderingContext2D.imageSmoothingEnabled}
      */
     this.ctx.imageSmoothingEnabled = false;
@@ -84,19 +85,19 @@ export class FiendGame {
 
     this._currentMap = new Overworld();
 
-    this._renderer = new Renderer(this.ctx);
+    this.Renderer = new Renderer(this.ctx);
 
-    // We need to attach the input handling to the enclosing div, since you 
-    // can't get a handle on `canvas` DOM element since it's not focusable. 
-    this.inputHandler = new InputHandler(this.container);
+    // We need to attach the input handling to the enclosing div, since you
+    // can't get a handle on `canvas` DOM element since it's not focusable.
+    this.InputHandler = new InputHandler();
 
     // Let's kick off the game loop!
     this.main(performance.now());
   }
 
   /**
-   * 
-   * @param {integer} w The width of the canvas, in pixels. 
+   *
+   * @param {integer} w The width of the canvas, in pixels.
    * @param {integer} h The height of the canvas, in pixels.
    */
   genCanvas(w: number, h: number): HTMLCanvasElement {
@@ -117,7 +118,7 @@ export class FiendGame {
    * frame, in seconds.
    */
   update(delta: number): void {
-    // TODO Remove clog. 
+    // TODO Remove clog.
     // console.log('delta :', delta);
     for (let i=0; i<this.gameObjectCount; i++) {
       this.gameObjects[i].update(delta);
@@ -129,16 +130,16 @@ export class FiendGame {
   draw(delta: number): void {
     // Clear the screen
     this.ctx.clearRect(
-      0, 
-      0, 
-      this.canvas.width, 
+      0,
+      0,
+      this.canvas.width,
       this.canvas.height
     );
 
     // Always store the texture in a var so we don't call "new Foo()" multiple
-    // times a second. 
-    this._renderer.drawTileMap(this._currentMap);
-    this._renderer.draw(this.gameObjectCount, this.gameObjects);
+    // times a second.
+    this.Renderer.drawTileMap(this._currentMap);
+    this.Renderer.draw(this.gameObjectCount, this.gameObjects);
   }
 
   /**
@@ -177,13 +178,13 @@ export class FiendGame {
     // Store the ID returned from our main loop's most recent call to
     // requestAnimationFrame().
     this.stopToken = window.requestAnimationFrame(this.main.bind(this));
-  
+
     // Delta should be in seconds, not ms, so we divide by 1000.
     let delta = (tFrame - this.lastFrameTime) / 1000.0;
     // Keep track of when the last frame happened.
     this.lastFrameTime = tFrame;
-  
-    // TODO processInput();
+
+    this.InputHandler.handleInput();
     this.update(delta);
     this.draw(delta);
   }
