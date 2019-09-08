@@ -30,7 +30,7 @@ function init() {
 
   window.F_LOADER = new AssetLoader();
   var p = window.F_LOADER.initAssets();
-  Promise.all(p).then(function () {
+  Promise.all(p).then( () => {
     init();
-  }.bind(this));
+  });
 }
