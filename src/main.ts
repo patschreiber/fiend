@@ -16,6 +16,9 @@ declare global {
  * Load a new instance of FiendGame, which loads the game.
  */
 function init() {
+  let bat = new Engine.GameObject.Enemy();
+  console.log('bat :', bat);
+
 
   // init functionality, for now
   new FiendGame(640, 480);
@@ -30,7 +33,7 @@ function init() {
 
   window.F_LOADER = new AssetLoader();
   var p = window.F_LOADER.initAssets();
-  Promise.all(p).then(function () {
+  Promise.all(p).then( () => {
     init();
-  }.bind(this));
+  });
 }

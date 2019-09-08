@@ -511,6 +511,8 @@ var Button;
  * [HELD]: The button is held down.
  * [RELEASED]: The button has been released from a pressed state.
  * [DISABLED]: The button has been disabled and will not fire events.
+ *
+ * @type {enum} ButtonStatus
  */
 var ButtonStatus;
 (function (ButtonStatus) {
@@ -858,6 +860,8 @@ var _AssetLoader = require("./engine/AssetLoader");
  * Load a new instance of FiendGame, which loads the game.
  */
 function init() {
+    var bat = new Engine.GameObject.Enemy();
+    console.log('bat :', bat);
     // init functionality, for now
     new _FiendGame.FiendGame(640, 480);
 }
@@ -872,7 +876,7 @@ window.onload = function () {
     var p = window.F_LOADER.initAssets();
     Promise.all(p).then(function () {
         init();
-    }.bind(this));
+    });
 };
 
 },{"./engine/AssetLoader":3,"./engine/FiendGame":4}]},{},[12])
