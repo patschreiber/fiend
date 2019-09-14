@@ -56,4 +56,10 @@ export abstract class GameActor extends GameObject implements IGameActor {
    * @see FiendGame.main()
    */
   public abstract update(delta: number): void;
+
+  // TODO: Make a subclass that has movement. Not all actors will, I dont think.
+  public moveN(delta: number): void {}
+  public moveS(delta: number): void {}
+  public moveE(delta: number): void {}
+  public moveW(delta: number): void {}
 }
