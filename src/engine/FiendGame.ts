@@ -5,9 +5,12 @@ import { Renderer } from "./Renderer";
 import { MapBase } from "../atlases/MapBase";
 import { Overworld } from "../atlases/Overworld";
 
+// Player
+import { Player } from './GameObject';
+
 // Enemies
-// TODO Might remove
-import { Enemy } from './GameObject/';
+// TODO: Might remove
+import { Enemy } from './GameObject';
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -15,32 +18,87 @@ import { Enemy } from './GameObject/';
  */
 export class FiendGame {
 
+  /**
+   * The input handler that accepts player input.
+   */
   public InputHandler: InputHandler;
-  public Renderer: Renderer;
-
-  public canvas: HTMLCanvasElement;
-  public gameObjectCount: number;
-  public gameObjects: Array<any>;
-  public stopToken: number|null;
 
   /**
+   * The instance of the Player's character.
+   */
+  public Player: Player;
+
+  /**
+   * The renderer responsible for drawing to the screen.
+   */
+  public Renderer: Renderer;
+
+  /**
+   * The canvas in the DOM. What the game is rendered on.
+   */
+  public canvas: HTMLCanvasElement;
+
+  /**
+   * The canvas context.
+   */
+  public ctx: CanvasRenderingContext2D;
+
+  /**
+   * The number of currently-active game objects.
+   *
+   * @type {number}
+   */
+  public gameObjectCount: number;
+
+  /**
+   * The list of active game objects. Every game object in this list will have
+   * their state updated every frame, if possible.
+   */
+  public gameObjects: Array<any>;
+
+  /**
+   * The max amount of active game objects that can be present in the game.
+   * TODO: Figure out what happens if this limit is reached.
+   * @internal This could be an "importance weight" where less important game
+   * objects are purged.
+   */
+  public maxEntities: number;
+
+  /**
+   * The HTML wrapper for the game. Assume everything in this container is part
+   * of the game.
    */
   public container: HTMLElement;
-  public tickLength: number;
-  public lastFrameTime: number;
-  public maxEntities: number;
-  protected _currentMap: MapBase;
 
-  public ctx: CanvasRenderingContext2D;
+  /**
+   * How frequently the game state updates, ideally. Defaults to 60 Hz, 16.6
+   * frames-per-second.
+   */
+  public tickLength: number;
+
+  /**
+   * The most recently elapsed tick of the game clock.
+   */
+  public lastFrameTime: number;
+
+  /**
+   * The ID returned from our main loop's most recent call to
+   * requestAnimationFrame(). The token can then be used when we call
+   * cancelAnimationFrame() to stop the main loop by telling the browser to
+   * cancel the request that corresponds to our token.
+   */
+  public stopToken: number|null;
+
+  protected _currentMap: MapBase;
 
   constructor(gamePaneWidth: number, gamePaneHeight: number) {
 
-    /**
-     *
-     */
     this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
+
     this.container = document.getElementById("fiend-game");
+
     this.container.insertBefore(this.canvas, this.container.firstChild);
+
     this.ctx = this.canvas.getContext('2d');
 
     /**t
@@ -50,37 +108,22 @@ export class FiendGame {
      */
     this.ctx.imageSmoothingEnabled = false;
 
-    /**
-     * The ID returned from our main loop's most recent call to
-     * requestAnimationFrame(). The token can then be used when we call
-     * cancelAnimationFrame() to stop the main loop by telling the browser to
-     * cancel the request that corresponds to our token.
-     * @type {number}
-     */
     this.stopToken = null;
 
-    /**
-     * How frequently the game state updates. It is 16.66 Hz (60ms)
-     * @type {number}
-     */
     this.tickLength = 60;
 
-    /**
-     * The most recently elapsed tick of the game clock.
-     * @type {double} DOMHighResTimeStamp
-     */
     this.lastFrameTime = 0;
 
     this.maxEntities = 1000;
 
+    this.Player = new Player({x:125,y:125});
+
     this.gameObjectCount = 0;
 
-    /**
-     * The list of active game objects to be updated each frame.
-     */
     this.gameObjects = [
       // TODO This is a test, do should be empty on init.
-      new Enemy(),
+      // new Enemy(),
+      this.Player,
     ];
 
     this._currentMap = new Overworld();
@@ -96,9 +139,11 @@ export class FiendGame {
   }
 
   /**
+   * Generates a new canvas DOM canvas element. The game will run in this
+   * canvas.
    *
-   * @param {integer} w The width of the canvas, in pixels.
-   * @param {integer} h The height of the canvas, in pixels.
+   * @param {number} w The width of the canvas, in pixels.
+   * @param {number} h The height of the canvas, in pixels.
    */
   genCanvas(w: number, h: number): HTMLCanvasElement {
     let canvas = document.createElement('canvas');
@@ -117,7 +162,7 @@ export class FiendGame {
    * @param {float} delta  The difference in time between this frame and last
    * frame, in seconds.
    */
-  update(delta: number): void {
+  private _update(delta: number): void {
     // TODO Remove clog.
     // console.log('delta :', delta);
     for (let i=0; i<this.gameObjectCount; i++) {
@@ -127,8 +172,14 @@ export class FiendGame {
     this.gameObjectCount = this.gameObjects.length;
   }
 
-  draw(delta: number): void {
+  /**
+   * Responsible for drawing the current game state to the screen (we're
+   * assuming it will be run in the main game loop).
+   */
+  _draw(): void {
+
     // Clear the screen
+    // TODO: Pull this out. Put in renderer.
     this.ctx.clearRect(
       0,
       0,
@@ -139,6 +190,8 @@ export class FiendGame {
     // Always store the texture in a var so we don't call "new Foo()" multiple
     // times a second.
     this.Renderer.drawTileMap(this._currentMap);
+
+    // Draw the scene.
     this.Renderer.draw(this.gameObjectCount, this.gameObjects);
   }
 
@@ -184,8 +237,8 @@ export class FiendGame {
     // Keep track of when the last frame happened.
     this.lastFrameTime = tFrame;
 
-    this.InputHandler.handleInput();
-    this.update(delta);
-    this.draw(delta);
+    this.InputHandler.handleInput(this.Player, delta);
+    this._update(delta);
+    this._draw();
   }
 }

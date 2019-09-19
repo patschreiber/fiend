@@ -1,7 +1,11 @@
-import { Command } from "./Commands/Command";
-import { NullCommand } from "./Commands/NullCommand";
-import { MoveNorthCommand } from "./Commands/MoveNorthCommand";
-import { MoveSouthCommand } from "./Commands/MoveSouthCommand";
+import { Command } from "../Command";
+import { GameActor } from '../GameObject';
+
+import { NullCommand } from "../Command";
+import { MoveNorthCommand } from "../Command";
+import { MoveSouthCommand } from "../Command";
+import { MoveEastCommand } from "../Command";
+import { MoveWestCommand } from "../Command";
 
 /**
  * The interface for the InputHandler
@@ -19,8 +23,12 @@ interface IInputHandler {
   /**
    * Handles any input if a mapped button is pressed. Run once per game update
    * tick.
+   *
+   * @param actor The game actor entity to handle input. Most likely will be the
+   * Player(s).
+   * @param delta The
    */
-  handleInput(): void;
+  handleInput(actor: GameActor, delta: number): void;
 }
 
 /**
@@ -160,34 +168,34 @@ export class InputHandler implements IInputHandler {
   /**
    * Handles user input. Runs once per game loop.
    */
-  public handleInput(): void {
+  public handleInput(actor: GameActor, delta: number): void {
 
     if (this.inputMap[Button.UP].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.UP].command.execute();
+      this.inputMap[Button.UP].command.execute(actor, delta);
     }
     if (this.inputMap[Button.DOWN].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.DOWN].command.execute();
+      this.inputMap[Button.DOWN].command.execute(actor, delta);
     }
     if (this.inputMap[Button.LEFT].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.LEFT].command.execute();
+      this.inputMap[Button.LEFT].command.execute(actor, delta);
     }
     if (this.inputMap[Button.RIGHT].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.RIGHT].command.execute();
+      this.inputMap[Button.RIGHT].command.execute(actor, delta);
     }
     if (this.inputMap[Button.E].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.E].command.execute();
+      this.inputMap[Button.E].command.execute(actor, delta);
     }
     if (this.inputMap[Button.Q].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.Q].command.execute();
+      this.inputMap[Button.Q].command.execute(actor, delta);
     }
     if (this.inputMap[Button.BSPACE].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.BSPACE].command.execute();
+      this.inputMap[Button.BSPACE].command.execute(actor, delta);
     }
     if (this.inputMap[Button.ENTER].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.ENTER].command.execute();
+      this.inputMap[Button.ENTER].command.execute(actor, delta);
     }
     if (this.inputMap[Button.SHIFT].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.SHIFT].command.execute();
+      this.inputMap[Button.SHIFT].command.execute(actor, delta);
     }
   }
 
@@ -224,8 +232,8 @@ export class InputHandler implements IInputHandler {
         // this.inputMap[Button.UP].command = new MoveNorthCommand(player: GameActor);
         this.inputMap[Button.UP].command = new MoveNorthCommand();
         this.inputMap[Button.DOWN].command = new MoveSouthCommand();
-        this.inputMap[Button.LEFT].command = new NullCommand();
-        this.inputMap[Button.RIGHT].command = new NullCommand();
+        this.inputMap[Button.LEFT].command = new MoveWestCommand();
+        this.inputMap[Button.RIGHT].command = new MoveEastCommand();
         this.inputMap[Button.E].command = new NullCommand();
         this.inputMap[Button.Q].command = new NullCommand();
         this.inputMap[Button.BSPACE].command = new NullCommand();

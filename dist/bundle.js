@@ -136,378 +136,6 @@ var AssetLoader = exports.AssetLoader = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.FiendGame = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-// Enemies
-// TODO Might remove
-
-
-var _InputHandler = require("./Input/InputHandler");
-
-var _Renderer = require("./Renderer");
-
-var _Overworld = require("../atlases/Overworld");
-
-var _GameObject = require("./GameObject/");
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * The Game superclass. Operations to act upon the main game thread are found
- * here.
- */
-var FiendGame = exports.FiendGame = function () {
-  function FiendGame(gamePaneWidth, gamePaneHeight) {
-    _classCallCheck(this, FiendGame);
-
-    /**
-     *
-     */
-    this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
-    this.container = document.getElementById("fiend-game");
-    this.container.insertBefore(this.canvas, this.container.firstChild);
-    this.ctx = this.canvas.getContext('2d');
-    /**t
-     * Prevent anti-aliasing in the event a tile gets scaled.
-     *
-     * @property {CanvasRenderingContext2D.imageSmoothingEnabled}
-     */
-    this.ctx.imageSmoothingEnabled = false;
-    /**
-     * The ID returned from our main loop's most recent call to
-     * requestAnimationFrame(). The token can then be used when we call
-     * cancelAnimationFrame() to stop the main loop by telling the browser to
-     * cancel the request that corresponds to our token.
-     * @type {number}
-     */
-    this.stopToken = null;
-    /**
-     * How frequently the game state updates. It is 16.66 Hz (60ms)
-     * @type {number}
-     */
-    this.tickLength = 60;
-    /**
-     * The most recently elapsed tick of the game clock.
-     * @type {double} DOMHighResTimeStamp
-     */
-    this.lastFrameTime = 0;
-    this.maxEntities = 1000;
-    this.gameObjectCount = 0;
-    /**
-     * The list of active game objects to be updated each frame.
-     */
-    this.gameObjects = [
-    // TODO This is a test, do should be empty on init.
-    new _GameObject.Enemy()];
-    this._currentMap = new _Overworld.Overworld();
-    this.Renderer = new _Renderer.Renderer(this.ctx);
-    // We need to attach the input handling to the enclosing div, since you
-    // can't get a handle on `canvas` DOM element since it's not focusable.
-    this.InputHandler = new _InputHandler.InputHandler();
-    // Let's kick off the game loop!
-    this.main(performance.now());
-  }
-  /**
-   *
-   * @param {integer} w The width of the canvas, in pixels.
-   * @param {integer} h The height of the canvas, in pixels.
-   */
-
-
-  _createClass(FiendGame, [{
-    key: "genCanvas",
-    value: function genCanvas(w, h) {
-      var canvas = document.createElement('canvas');
-      canvas.id = "game-pane";
-      canvas.width = w;
-      canvas.height = h;
-      return canvas;
-    }
-    /**
-     * Calculates the game state as of a given point in time. It is the authority
-     * for game state. The delta should be used in calculations to make the game
-     * simulation framerate independent.
-     *
-     * @param {float} delta  The difference in time between this frame and last
-     * frame, in seconds.
-     */
-
-  }, {
-    key: "update",
-    value: function update(delta) {
-      // TODO Remove clog.
-      // console.log('delta :', delta);
-      for (var i = 0; i < this.gameObjectCount; i++) {
-        this.gameObjects[i].update(delta);
-      }
-      this.gameObjectCount = this.gameObjects.length;
-    }
-  }, {
-    key: "draw",
-    value: function draw(delta) {
-      // Clear the screen
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      // Always store the texture in a var so we don't call "new Foo()" multiple
-      // times a second.
-      this.Renderer.drawTileMap(this._currentMap);
-      this.Renderer.draw(this.gameObjectCount, this.gameObjects);
-    }
-    /**
-     * Stops the main game loop.
-     */
-
-  }, {
-    key: "stopMainLoop",
-    value: function stopMainLoop() {
-      window.cancelAnimationFrame(this.stopToken);
-      console.log("Goodbye...");
-    }
-    /**
-     * Attempts to gracefully tear down the game.
-     */
-
-  }, {
-    key: "shutdownGame",
-    value: function shutdownGame() {}
-    /**
-      * The main game loop. We use requestAnimationFrame to be thread-safe and not
-      * dominate the browser when the player blurs focus on our tab.
-      *
-      * render() is passed tFrame because it is assumed that the render method will
-      *          calculate how long it has been since the most recently passed
-      *          update tick for extrapolation (purely cosmetic for fast devices).
-      *          It draws the scene.
-      *
-      * update() calculates the game state as of a given point in time.
-      *
-      * init()   Performs whatever tasks are needed before the main loop can run.
-      *
-      *
-      * @param {DOMHighResTimeStamp} tFrame The number of milliseconds since
-      * navigationStart (when the previous document is unloaded.
-      * window.requestAnimationFrame() always provides a DOMHighResTimeStamp to
-      * callbacks as an argument when they are executed.
-      */
-
-  }, {
-    key: "main",
-    value: function main(tFrame) {
-      // Store the ID returned from our main loop's most recent call to
-      // requestAnimationFrame().
-      this.stopToken = window.requestAnimationFrame(this.main.bind(this));
-      // Delta should be in seconds, not ms, so we divide by 1000.
-      var delta = (tFrame - this.lastFrameTime) / 1000.0;
-      // Keep track of when the last frame happened.
-      this.lastFrameTime = tFrame;
-      this.InputHandler.handleInput();
-      this.update(delta);
-      this.draw(delta);
-    }
-  }]);
-
-  return FiendGame;
-}();
-
-},{"../atlases/Overworld":2,"./GameObject/":8,"./Input/InputHandler":13,"./Renderer":14}],5:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Enemy = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _GameActor2 = require("./GameActor");
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * The Enemy class.
- */
-var Enemy = exports.Enemy = function (_GameActor) {
-    _inherits(Enemy, _GameActor);
-
-    function Enemy() {
-        _classCallCheck(this, Enemy);
-
-        var _this = _possibleConstructorReturn(this, (Enemy.__proto__ || Object.getPrototypeOf(Enemy)).call(this));
-
-        _this.name = "Black Bat";
-        _this.HP = 100;
-        _this.ATK = 1;
-        _this.speed = 100;
-        _this.position = {
-            x: 0,
-            y: 0
-        };
-        return _this;
-    }
-
-    _createClass(Enemy, [{
-        key: "update",
-        value: function update(delta) {
-            this.position.x += this.speed * delta;
-            this.position.y += this.speed * delta;
-        }
-    }, {
-        key: "draw",
-        value: function draw(ctx) {
-            ctx.beginPath();
-            ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI * 2);
-            ctx.fillStyle = "#0095DD";
-            ctx.fill();
-            ctx.closePath();
-        }
-    }]);
-
-    return Enemy;
-}(_GameActor2.GameActor);
-
-},{"./GameActor":6}],6:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.GameActor = undefined;
-
-var _GameObject2 = require('../GameObject');
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * @constructor
- * @extends [[GameObject]] The GameObject base abstract class.
- * @implements IGameActor
- */
-var GameActor = exports.GameActor = function (_GameObject) {
-  _inherits(GameActor, _GameObject);
-
-  /**
-   * @constructor
-   */
-  function GameActor() {
-    _classCallCheck(this, GameActor);
-
-    return _possibleConstructorReturn(this, (GameActor.__proto__ || Object.getPrototypeOf(GameActor)).call(this));
-  }
-
-  return GameActor;
-}(_GameObject2.GameObject);
-
-},{"../GameObject":7}],7:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
-  * The GameObject abstract class. All game entities inherit from this class.
-  * On instantiation, the class will generate an auto-incrementing id for use
-  * in identifying the newly-created GameObject.
-  *
-  * @abstract
-  */
-var GameObject = exports.GameObject = function () {
-  /**
-    * The GameObject constructor. Auto-increments the GameOject id for the new
-    * GameObject being created.
-    */
-  function GameObject() {
-    _classCallCheck(this, GameObject);
-
-    this.id = GameObject.idIncrementor++;
-  }
-  /**
-    * Accessor for the private member `id`.
-    *
-    * @returns The id of the GameObject
-    */
-
-
-  _createClass(GameObject, [{
-    key: "getId",
-    value: function getId() {
-      return this.id;
-    }
-  }]);
-
-  return GameObject;
-}();
-/**
-  * Keeps track of the `id` of the last GameObject instantiated.
-  *
-  * @static
-  * @type {number}
-  */
-
-
-GameObject.idIncrementor = 1;
-
-},{}],8:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _GameObject = require('./GameObject');
-
-Object.keys(_GameObject).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _GameObject[key];
-    }
-  });
-});
-
-var _GameActor = require('./GameActor/GameActor');
-
-Object.keys(_GameActor).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _GameActor[key];
-    }
-  });
-});
-
-var _Enemy = require('./GameActor/Enemy');
-
-Object.keys(_Enemy).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _Enemy[key];
-    }
-  });
-});
-
-},{"./GameActor/Enemy":5,"./GameActor/GameActor":6,"./GameObject":7}],9:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -515,7 +143,51 @@ var Command = exports.Command = function Command() {
   _classCallCheck(this, Command);
 };
 
-},{}],10:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MoveEastCommand = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Command2 = require("./Command");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The MoveEastCommand class.
+ */
+var MoveEastCommand = exports.MoveEastCommand = function (_Command) {
+  _inherits(MoveEastCommand, _Command);
+
+  function MoveEastCommand() {
+    _classCallCheck(this, MoveEastCommand);
+
+    return _possibleConstructorReturn(this, (MoveEastCommand.__proto__ || Object.getPrototypeOf(MoveEastCommand)).apply(this, arguments));
+  }
+
+  _createClass(MoveEastCommand, [{
+    key: "execute",
+
+    /**
+     * Executes the command.
+     */
+    value: function execute(actor, delta) {
+      actor.moveE(delta);
+    }
+  }]);
+
+  return MoveEastCommand;
+}(_Command2.Command);
+
+},{"./Command":4}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -551,15 +223,15 @@ var MoveNorthCommand = exports.MoveNorthCommand = function (_Command) {
     /**
      * Executes the command.
      */
-    value: function execute() {
-      console.log("Move North!");
+    value: function execute(actor, delta) {
+      actor.moveN(delta);
     }
   }]);
 
   return MoveNorthCommand;
 }(_Command2.Command);
 
-},{"./Command":9}],11:[function(require,module,exports){
+},{"./Command":4}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -595,15 +267,59 @@ var MoveSouthCommand = exports.MoveSouthCommand = function (_Command) {
     /**
      * Executes the command.
      */
-    value: function execute() {
-      console.log("Move South!");
+    value: function execute(actor, delta) {
+      actor.moveS(delta);
     }
   }]);
 
   return MoveSouthCommand;
 }(_Command2.Command);
 
-},{"./Command":9}],12:[function(require,module,exports){
+},{"./Command":4}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MoveWestCommand = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Command2 = require("./Command");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The MoveWestCommand class.
+ */
+var MoveWestCommand = exports.MoveWestCommand = function (_Command) {
+  _inherits(MoveWestCommand, _Command);
+
+  function MoveWestCommand() {
+    _classCallCheck(this, MoveWestCommand);
+
+    return _possibleConstructorReturn(this, (MoveWestCommand.__proto__ || Object.getPrototypeOf(MoveWestCommand)).apply(this, arguments));
+  }
+
+  _createClass(MoveWestCommand, [{
+    key: "execute",
+
+    /**
+     * Executes the command.
+     */
+    value: function execute(actor, delta) {
+      actor.moveW(delta);
+    }
+  }]);
+
+  return MoveWestCommand;
+}(_Command2.Command);
+
+},{"./Command":4}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -647,7 +363,606 @@ var NullCommand = exports.NullCommand = function (_Command) {
   return NullCommand;
 }(_Command2.Command);
 
-},{"./Command":9}],13:[function(require,module,exports){
+},{"./Command":4}],10:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Command = require('./Command');
+
+Object.keys(_Command).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _Command[key];
+    }
+  });
+});
+
+var _NullCommand = require('./NullCommand');
+
+Object.keys(_NullCommand).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _NullCommand[key];
+    }
+  });
+});
+
+var _MoveNorthCommand = require('./MoveNorthCommand');
+
+Object.keys(_MoveNorthCommand).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _MoveNorthCommand[key];
+    }
+  });
+});
+
+var _MoveSouthCommand = require('./MoveSouthCommand');
+
+Object.keys(_MoveSouthCommand).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _MoveSouthCommand[key];
+    }
+  });
+});
+
+var _MoveEastCommand = require('./MoveEastCommand');
+
+Object.keys(_MoveEastCommand).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _MoveEastCommand[key];
+    }
+  });
+});
+
+var _MoveWestCommand = require('./MoveWestCommand');
+
+Object.keys(_MoveWestCommand).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _MoveWestCommand[key];
+    }
+  });
+});
+
+},{"./Command":4,"./MoveEastCommand":5,"./MoveNorthCommand":6,"./MoveSouthCommand":7,"./MoveWestCommand":8,"./NullCommand":9}],11:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.FiendGame = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+// Player
+
+
+var _InputHandler = require("./Input/InputHandler");
+
+var _Renderer = require("./Renderer");
+
+var _Overworld = require("../atlases/Overworld");
+
+var _GameObject = require("./GameObject");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * The Game superclass. Operations to act upon the main game thread are found
+ * here.
+ */
+var FiendGame = exports.FiendGame = function () {
+    function FiendGame(gamePaneWidth, gamePaneHeight) {
+        _classCallCheck(this, FiendGame);
+
+        this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
+        this.container = document.getElementById("fiend-game");
+        this.container.insertBefore(this.canvas, this.container.firstChild);
+        this.ctx = this.canvas.getContext('2d');
+        /**t
+         * Prevent anti-aliasing in the event a tile gets scaled.
+         *
+         * @property {CanvasRenderingContext2D.imageSmoothingEnabled}
+         */
+        this.ctx.imageSmoothingEnabled = false;
+        this.stopToken = null;
+        this.tickLength = 60;
+        this.lastFrameTime = 0;
+        this.maxEntities = 1000;
+        this.Player = new _GameObject.Player({ x: 125, y: 125 });
+        this.gameObjectCount = 0;
+        this.gameObjects = [
+        // TODO This is a test, do should be empty on init.
+        // new Enemy(),
+        this.Player];
+        this._currentMap = new _Overworld.Overworld();
+        this.Renderer = new _Renderer.Renderer(this.ctx);
+        // We need to attach the input handling to the enclosing div, since you
+        // can't get a handle on `canvas` DOM element since it's not focusable.
+        this.InputHandler = new _InputHandler.InputHandler();
+        // Let's kick off the game loop!
+        this.main(performance.now());
+    }
+    /**
+     * Generates a new canvas DOM canvas element. The game will run in this
+     * canvas.
+     *
+     * @param {number} w The width of the canvas, in pixels.
+     * @param {number} h The height of the canvas, in pixels.
+     */
+
+
+    _createClass(FiendGame, [{
+        key: "genCanvas",
+        value: function genCanvas(w, h) {
+            var canvas = document.createElement('canvas');
+            canvas.id = "game-pane";
+            canvas.width = w;
+            canvas.height = h;
+            return canvas;
+        }
+        /**
+         * Calculates the game state as of a given point in time. It is the authority
+         * for game state. The delta should be used in calculations to make the game
+         * simulation framerate independent.
+         *
+         * @param {float} delta  The difference in time between this frame and last
+         * frame, in seconds.
+         */
+
+    }, {
+        key: "_update",
+        value: function _update(delta) {
+            // TODO Remove clog.
+            // console.log('delta :', delta);
+            for (var i = 0; i < this.gameObjectCount; i++) {
+                this.gameObjects[i].update(delta);
+            }
+            this.gameObjectCount = this.gameObjects.length;
+        }
+        /**
+         * Responsible for drawing the current game state to the screen (we're
+         * assuming it will be run in the main game loop).
+         */
+
+    }, {
+        key: "_draw",
+        value: function _draw() {
+            // Clear the screen
+            // TODO: Pull this out. Put in renderer.
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            // Always store the texture in a var so we don't call "new Foo()" multiple
+            // times a second.
+            this.Renderer.drawTileMap(this._currentMap);
+            // Draw the scene.
+            this.Renderer.draw(this.gameObjectCount, this.gameObjects);
+        }
+        /**
+         * Stops the main game loop.
+         */
+
+    }, {
+        key: "stopMainLoop",
+        value: function stopMainLoop() {
+            window.cancelAnimationFrame(this.stopToken);
+            console.log("Goodbye...");
+        }
+        /**
+         * Attempts to gracefully tear down the game.
+         */
+
+    }, {
+        key: "shutdownGame",
+        value: function shutdownGame() {}
+        /**
+          * The main game loop. We use requestAnimationFrame to be thread-safe and not
+          * dominate the browser when the player blurs focus on our tab.
+          *
+          * render() is passed tFrame because it is assumed that the render method will
+          *          calculate how long it has been since the most recently passed
+          *          update tick for extrapolation (purely cosmetic for fast devices).
+          *          It draws the scene.
+          *
+          * update() calculates the game state as of a given point in time.
+          *
+          * init()   Performs whatever tasks are needed before the main loop can run.
+          *
+          *
+          * @param {DOMHighResTimeStamp} tFrame The number of milliseconds since
+          * navigationStart (when the previous document is unloaded.
+          * window.requestAnimationFrame() always provides a DOMHighResTimeStamp to
+          * callbacks as an argument when they are executed.
+          */
+
+    }, {
+        key: "main",
+        value: function main(tFrame) {
+            // Store the ID returned from our main loop's most recent call to
+            // requestAnimationFrame().
+            this.stopToken = window.requestAnimationFrame(this.main.bind(this));
+            // Delta should be in seconds, not ms, so we divide by 1000.
+            var delta = (tFrame - this.lastFrameTime) / 1000.0;
+            // Keep track of when the last frame happened.
+            this.lastFrameTime = tFrame;
+            this.InputHandler.handleInput(this.Player, delta);
+            this._update(delta);
+            this._draw();
+        }
+    }]);
+
+    return FiendGame;
+}();
+
+},{"../atlases/Overworld":2,"./GameObject":16,"./Input/InputHandler":17,"./Renderer":18}],12:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Enemy = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _GameActor2 = require("./GameActor");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The Enemy base class.
+ */
+var Enemy = exports.Enemy = function (_GameActor) {
+    _inherits(Enemy, _GameActor);
+
+    /**
+     * @constructor
+     */
+    function Enemy() {
+        _classCallCheck(this, Enemy);
+
+        var _this = _possibleConstructorReturn(this, (Enemy.__proto__ || Object.getPrototypeOf(Enemy)).call(this));
+
+        _this.name = "Black Bat";
+        _this.HP = 100;
+        _this.ATK = 1;
+        _this.speed = 100;
+        _this.position = {
+            x: 0,
+            y: 0
+        };
+        return _this;
+    }
+    /**
+     *
+     * {@inheritdoc}
+     */
+
+
+    _createClass(Enemy, [{
+        key: "update",
+        value: function update(delta) {
+            this.position.x += this.speed * delta;
+            this.position.y += this.speed * delta;
+        }
+    }, {
+        key: "draw",
+        value: function draw(ctx) {
+            ctx.beginPath();
+            ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI * 2);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+    }]);
+
+    return Enemy;
+}(_GameActor2.GameActor);
+
+},{"./GameActor":13}],13:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GameActor = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _GameObject2 = require('../GameObject');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The base GameActor class. All GameObjects that can influence things in the
+ * environment will derive from the GameActor class.
+ * @abstract
+ * @extends [[GameObject]] The GameObject base abstract class.
+ * @implements [[IGameActor]]
+ */
+var GameActor = exports.GameActor = function (_GameObject) {
+  _inherits(GameActor, _GameObject);
+
+  /**
+   * @constructor
+   */
+  function GameActor() {
+    _classCallCheck(this, GameActor);
+
+    return _possibleConstructorReturn(this, (GameActor.__proto__ || Object.getPrototypeOf(GameActor)).call(this));
+  }
+  // TODO: Make a subclass that has movement. Not all actors will, I dont think.
+
+
+  _createClass(GameActor, [{
+    key: 'moveN',
+    value: function moveN(delta) {}
+  }, {
+    key: 'moveS',
+    value: function moveS(delta) {}
+  }, {
+    key: 'moveE',
+    value: function moveE(delta) {}
+  }, {
+    key: 'moveW',
+    value: function moveW(delta) {}
+  }]);
+
+  return GameActor;
+}(_GameObject2.GameObject);
+
+},{"../GameObject":15}],14:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Player = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _GameActor2 = require("./GameActor");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The Player class. Keeps track of the state of the player including all
+ * attributes and stats.
+ *
+ * @abstract
+ * @extends [[GameActor]] The GameObject base abstract class.
+ * @implements [[IPlayer]]
+ */
+var Player = exports.Player = function (_GameActor) {
+  _inherits(Player, _GameActor);
+
+  /**
+   * @constructor
+   */
+  function Player(position) {
+    _classCallCheck(this, Player);
+
+    var _this = _possibleConstructorReturn(this, (Player.__proto__ || Object.getPrototypeOf(Player)).call(this));
+
+    _this.position = { x: 100, y: 100 };
+    _this.HP = 100;
+    _this.EXP = 0;
+    _this.speed = 100;
+    return _this;
+  }
+  /**
+   * Updates the Player's state. Intended to be run in the main game loop.
+   *
+   * @param delta The time difference between frames. Provided by the game's
+   * main game loop.
+   * @see FiendGame.main()
+   */
+
+
+  _createClass(Player, [{
+    key: "update",
+    value: function update(delta) {}
+    /**
+     * Draws the Player entity
+     * @param ctx The canvas context.
+     */
+
+  }, {
+    key: "draw",
+    value: function draw(ctx) {
+      ctx.beginPath();
+      ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI * 2);
+      ctx.fillStyle = "#0095DD";
+      ctx.fill();
+      ctx.closePath();
+    }
+    /**
+     *    |               .    ||
+     *   |||      ....  .||.  ...    ...   .. ...    ....
+     *  |  ||   .|   ''  ||    ||  .|  '|.  ||  ||  ||. '
+     *  .''''|.  ||       ||    ||  ||   ||  ||  ||  . '|..
+     * .|.  .||.  '|...'  '|.' .||.  '|..|' .||. ||. |'..|'
+     */
+    /**
+     * Move the Player north.
+     * @param delta The game's delta between frames.
+     */
+
+  }, {
+    key: "moveN",
+    value: function moveN(delta) {
+      // Decrementing {y} makes the actor move south, since we're dealing with a
+      // 2D array and not an actual mathematical grid plane.
+      this.position.y -= this.speed * delta;
+    }
+    /**
+     * Move the Player south.
+     *
+     * @param delta The game's delta between frames.
+     */
+
+  }, {
+    key: "moveS",
+    value: function moveS(delta) {
+      // Increasing {y} makes the actor move south, since we're dealing with a 2D
+      // array and not an actual mathematical grid plane.
+      this.position.y += this.speed * delta;
+    }
+    /**
+     * Move the Player east.
+     *
+     * @param delta The game's delta between frames.
+     */
+
+  }, {
+    key: "moveE",
+    value: function moveE(delta) {
+      this.position.x += this.speed * delta;
+    }
+    /**
+    * Move the Player west.
+    *
+    * @param delta The game's delta between frames.
+    */
+
+  }, {
+    key: "moveW",
+    value: function moveW(delta) {
+      this.position.x -= this.speed * delta;
+    }
+  }]);
+
+  return Player;
+}(_GameActor2.GameActor);
+
+},{"./GameActor":13}],15:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * The GameObject abstract class. All game entities inherit from this class.
+ * On instantiation, the class will generate an auto-incrementing id for use
+ * in identifying the newly-created GameObject.
+ *
+ * @abstract
+ */
+var GameObject = exports.GameObject = function () {
+  /**
+   * The GameObject constructor. Auto-increments the GameOject id for the new
+   * GameObject being created.
+   */
+  function GameObject() {
+    _classCallCheck(this, GameObject);
+
+    this.id = GameObject.idIncrementor++;
+  }
+  /**
+   * Accessor for the private member `id`.
+   *
+   * @returns The id of the GameObject
+   */
+
+
+  _createClass(GameObject, [{
+    key: "getId",
+    value: function getId() {
+      return this.id;
+    }
+  }]);
+
+  return GameObject;
+}();
+
+},{}],16:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _GameObject = require('./GameObject');
+
+Object.keys(_GameObject).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _GameObject[key];
+    }
+  });
+});
+
+var _GameActor = require('./GameActor/GameActor');
+
+Object.keys(_GameActor).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _GameActor[key];
+    }
+  });
+});
+
+var _Player = require('./GameActor/Player');
+
+Object.keys(_Player).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _Player[key];
+    }
+  });
+});
+
+var _Enemy = require('./GameActor/Enemy');
+
+Object.keys(_Enemy).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _Enemy[key];
+    }
+  });
+});
+
+},{"./GameActor/Enemy":12,"./GameActor/GameActor":13,"./GameActor/Player":14,"./GameObject":15}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -657,11 +972,7 @@ exports.InputHandler = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _NullCommand = require("./Commands/NullCommand");
-
-var _MoveNorthCommand = require("./Commands/MoveNorthCommand");
-
-var _MoveSouthCommand = require("./Commands/MoveSouthCommand");
+var _Command = require("../Command");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -788,33 +1099,33 @@ var InputHandler = exports.InputHandler = function () {
 
     }, {
         key: "handleInput",
-        value: function handleInput() {
+        value: function handleInput(actor, delta) {
             if (this.inputMap[Button.UP].status === ButtonStatus.PRESSED) {
-                this.inputMap[Button.UP].command.execute();
+                this.inputMap[Button.UP].command.execute(actor, delta);
             }
             if (this.inputMap[Button.DOWN].status === ButtonStatus.PRESSED) {
-                this.inputMap[Button.DOWN].command.execute();
+                this.inputMap[Button.DOWN].command.execute(actor, delta);
             }
             if (this.inputMap[Button.LEFT].status === ButtonStatus.PRESSED) {
-                this.inputMap[Button.LEFT].command.execute();
+                this.inputMap[Button.LEFT].command.execute(actor, delta);
             }
             if (this.inputMap[Button.RIGHT].status === ButtonStatus.PRESSED) {
-                this.inputMap[Button.RIGHT].command.execute();
+                this.inputMap[Button.RIGHT].command.execute(actor, delta);
             }
             if (this.inputMap[Button.E].status === ButtonStatus.PRESSED) {
-                this.inputMap[Button.E].command.execute();
+                this.inputMap[Button.E].command.execute(actor, delta);
             }
             if (this.inputMap[Button.Q].status === ButtonStatus.PRESSED) {
-                this.inputMap[Button.Q].command.execute();
+                this.inputMap[Button.Q].command.execute(actor, delta);
             }
             if (this.inputMap[Button.BSPACE].status === ButtonStatus.PRESSED) {
-                this.inputMap[Button.BSPACE].command.execute();
+                this.inputMap[Button.BSPACE].command.execute(actor, delta);
             }
             if (this.inputMap[Button.ENTER].status === ButtonStatus.PRESSED) {
-                this.inputMap[Button.ENTER].command.execute();
+                this.inputMap[Button.ENTER].command.execute(actor, delta);
             }
             if (this.inputMap[Button.SHIFT].status === ButtonStatus.PRESSED) {
-                this.inputMap[Button.SHIFT].command.execute();
+                this.inputMap[Button.SHIFT].command.execute(actor, delta);
             }
         }
         /**
@@ -829,7 +1140,7 @@ var InputHandler = exports.InputHandler = function () {
             var ip = {};
             for (var buttonKey in Button) {
                 ip[Button[buttonKey]] = {
-                    command: _NullCommand.NullCommand,
+                    command: _Command.NullCommand,
                     status: ButtonStatus.RAISED
                 };
             }
@@ -851,15 +1162,15 @@ var InputHandler = exports.InputHandler = function () {
                     break;
                 default:
                     // this.inputMap[Button.UP].command = new MoveNorthCommand(player: GameActor);
-                    this.inputMap[Button.UP].command = new _MoveNorthCommand.MoveNorthCommand();
-                    this.inputMap[Button.DOWN].command = new _MoveSouthCommand.MoveSouthCommand();
-                    this.inputMap[Button.LEFT].command = new _NullCommand.NullCommand();
-                    this.inputMap[Button.RIGHT].command = new _NullCommand.NullCommand();
-                    this.inputMap[Button.E].command = new _NullCommand.NullCommand();
-                    this.inputMap[Button.Q].command = new _NullCommand.NullCommand();
-                    this.inputMap[Button.BSPACE].command = new _NullCommand.NullCommand();
-                    this.inputMap[Button.ENTER].command = new _NullCommand.NullCommand();
-                    this.inputMap[Button.SHIFT].command = new _NullCommand.NullCommand();
+                    this.inputMap[Button.UP].command = new _Command.MoveNorthCommand();
+                    this.inputMap[Button.DOWN].command = new _Command.MoveSouthCommand();
+                    this.inputMap[Button.LEFT].command = new _Command.MoveWestCommand();
+                    this.inputMap[Button.RIGHT].command = new _Command.MoveEastCommand();
+                    this.inputMap[Button.E].command = new _Command.NullCommand();
+                    this.inputMap[Button.Q].command = new _Command.NullCommand();
+                    this.inputMap[Button.BSPACE].command = new _Command.NullCommand();
+                    this.inputMap[Button.ENTER].command = new _Command.NullCommand();
+                    this.inputMap[Button.SHIFT].command = new _Command.NullCommand();
             }
         }
     }]);
@@ -887,7 +1198,7 @@ var InputHandler = exports.InputHandler = function () {
 //   TILDA:    192
 // };
 
-},{"./Commands/MoveNorthCommand":10,"./Commands/MoveSouthCommand":11,"./Commands/NullCommand":12}],14:[function(require,module,exports){
+},{"../Command":10}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -998,7 +1309,7 @@ var Renderer = exports.Renderer = function () {
     return Renderer;
 }();
 
-},{}],15:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 var _FiendGame = require("./engine/FiendGame");
@@ -1026,6 +1337,6 @@ window.onload = function () {
     });
 };
 
-},{"./engine/AssetLoader":3,"./engine/FiendGame":4}]},{},[15])
+},{"./engine/AssetLoader":3,"./engine/FiendGame":11}]},{},[19])
 
 //# sourceMappingURL=bundle.js.map
