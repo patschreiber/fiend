@@ -13,12 +13,14 @@ declare global {
 }
 
 /**
- * Load a new instance of FiendGame, which loads the game.
+ * Create a new instance of FiendGame, which loads the game.
  */
 function init() {
 
-  // init functionality, for now
+  // Init functionality, for now.
   new FiendGame(640, 480);
+  // Focus the game pane on page load.
+  document.getElementById('game-pane').focus();
 };
 
 /**

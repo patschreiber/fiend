@@ -150,6 +150,7 @@ export class FiendGame {
     canvas.id = "game-pane";
     canvas.width = w;
     canvas.height = h;
+    canvas.tabIndex = 1;
 
     return canvas;
   }

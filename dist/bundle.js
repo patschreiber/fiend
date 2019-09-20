@@ -516,6 +516,7 @@ var FiendGame = exports.FiendGame = function () {
             canvas.id = "game-pane";
             canvas.width = w;
             canvas.height = h;
+            canvas.tabIndex = 1;
             return canvas;
         }
         /**
@@ -1040,10 +1041,10 @@ var InputHandler = exports.InputHandler = function () {
 
         _classCallCheck(this, InputHandler);
 
-        document.addEventListener('keydown', function (event) {
+        document.getElementById('game-pane').addEventListener('keydown', function (event) {
             return _this.buttonPressed(event);
         }, false);
-        document.addEventListener('keyup', function (event) {
+        document.getElementById('game-pane').addEventListener('keyup', function (event) {
             return _this.buttonReleased(event);
         }, false);
         this.inputMap = this.initInputMap();
@@ -1317,11 +1318,13 @@ var _FiendGame = require("./engine/FiendGame");
 var _AssetLoader = require("./engine/AssetLoader");
 
 /**
- * Load a new instance of FiendGame, which loads the game.
+ * Create a new instance of FiendGame, which loads the game.
  */
 function init() {
-    // init functionality, for now
+    // Init functionality, for now.
     new _FiendGame.FiendGame(640, 480);
+    // Focus the game pane on page load.
+    document.getElementById('game-pane').focus();
 }
 ;
 /**

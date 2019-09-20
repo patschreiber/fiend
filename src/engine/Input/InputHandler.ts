@@ -113,11 +113,11 @@ export class InputHandler implements IInputHandler {
    */
   constructor() {
 
-    document.addEventListener(
+    document.getElementById('game-pane').addEventListener(
       'keydown', (event) => this.buttonPressed(event), false
     );
 
-    document.addEventListener(
+    document.getElementById('game-pane').addEventListener(
       'keyup', (event) => this.buttonReleased(event), false
     );
 
