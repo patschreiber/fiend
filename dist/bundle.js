@@ -456,9 +456,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _InputHandler = require("./Input/InputHandler");
 
-var _Renderer = require("./Renderer");
+var _Camera = require("./Render/Camera/Camera");
 
-var _Overworld = require("../atlases/Overworld");
+var _Renderer = require("./Renderer");
 
 var _GameObject = require("./GameObject");
 
@@ -472,31 +472,25 @@ var FiendGame = exports.FiendGame = function () {
     function FiendGame(gamePaneWidth, gamePaneHeight) {
         _classCallCheck(this, FiendGame);
 
+        /**
+         * Create the game pane and canvas.
+         */
         this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
         this.container = document.getElementById("fiend-game");
         this.container.insertBefore(this.canvas, this.container.firstChild);
-        this.ctx = this.canvas.getContext('2d');
-        /**t
-         * Prevent anti-aliasing in the event a tile gets scaled.
-         *
-         * @property {CanvasRenderingContext2D.imageSmoothingEnabled}
-         */
-        this.ctx.imageSmoothingEnabled = false;
         this.stopToken = null;
         this.tickLength = 60;
         this.lastFrameTime = 0;
         this.maxEntities = 1000;
         this.Player = new _GameObject.Player({ x: 125, y: 125 });
+        this.Renderer = new _Renderer.Renderer(this.canvas);
+        this.InputHandler = new _InputHandler.InputHandler();
+        this.Camera = new _Camera.Camera();
         this.gameObjectCount = 0;
         this.gameObjects = [
         // TODO This is a test, do should be empty on init.
         // new Enemy(),
         this.Player];
-        this._currentMap = new _Overworld.Overworld();
-        this.Renderer = new _Renderer.Renderer(this.ctx);
-        // We need to attach the input handling to the enclosing div, since you
-        // can't get a handle on `canvas` DOM element since it's not focusable.
-        this.InputHandler = new _InputHandler.InputHandler();
         // Let's kick off the game loop!
         this.main(performance.now());
     }
@@ -539,19 +533,12 @@ var FiendGame = exports.FiendGame = function () {
             this.gameObjectCount = this.gameObjects.length;
         }
         /**
-         * Responsible for drawing the current game state to the screen (we're
-         * assuming it will be run in the main game loop).
+         * Responsible for drawing the current game state to the screen.
          */
 
     }, {
         key: "_draw",
         value: function _draw() {
-            // Clear the screen
-            // TODO: Pull this out. Put in renderer.
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            // Always store the texture in a var so we don't call "new Foo()" multiple
-            // times a second.
-            this.Renderer.drawTileMap(this._currentMap);
             // Draw the scene.
             this.Renderer.draw(this.gameObjectCount, this.gameObjects);
         }
@@ -571,7 +558,9 @@ var FiendGame = exports.FiendGame = function () {
 
     }, {
         key: "shutdownGame",
-        value: function shutdownGame() {}
+        value: function shutdownGame() {
+            this.stopMainLoop();
+        }
         /**
           * The main game loop. We use requestAnimationFrame to be thread-safe and not
           * dominate the browser when the player blurs focus on our tab.
@@ -611,7 +600,7 @@ var FiendGame = exports.FiendGame = function () {
     return FiendGame;
 }();
 
-},{"../atlases/Overworld":2,"./GameObject":16,"./Input/InputHandler":17,"./Renderer":18}],12:[function(require,module,exports){
+},{"./GameObject":16,"./Input/InputHandler":17,"./Render/Camera/Camera":18,"./Renderer":19}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -736,7 +725,7 @@ var GameActor = exports.GameActor = function (_GameObject) {
 }(_GameObject2.GameObject);
 
 },{"../GameObject":15}],14:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -745,7 +734,7 @@ exports.Player = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _GameActor2 = require("./GameActor");
+var _GameActor2 = require('./GameActor');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -788,15 +777,17 @@ var Player = exports.Player = function (_GameActor) {
 
 
   _createClass(Player, [{
-    key: "update",
-    value: function update(delta) {}
+    key: 'update',
+    value: function update(delta) {
+      console.log('this.position :', this.position);
+    }
     /**
      * Draws the Player entity
      * @param ctx The canvas context.
      */
 
   }, {
-    key: "draw",
+    key: 'draw',
     value: function draw(ctx) {
       ctx.beginPath();
       ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI * 2);
@@ -817,7 +808,7 @@ var Player = exports.Player = function (_GameActor) {
      */
 
   }, {
-    key: "moveN",
+    key: 'moveN',
     value: function moveN(delta) {
       // Decrementing {y} makes the actor move south, since we're dealing with a
       // 2D array and not an actual mathematical grid plane.
@@ -830,7 +821,7 @@ var Player = exports.Player = function (_GameActor) {
      */
 
   }, {
-    key: "moveS",
+    key: 'moveS',
     value: function moveS(delta) {
       // Increasing {y} makes the actor move south, since we're dealing with a 2D
       // array and not an actual mathematical grid plane.
@@ -843,7 +834,7 @@ var Player = exports.Player = function (_GameActor) {
      */
 
   }, {
-    key: "moveE",
+    key: 'moveE',
     value: function moveE(delta) {
       this.position.x += this.speed * delta;
     }
@@ -854,7 +845,7 @@ var Player = exports.Player = function (_GameActor) {
     */
 
   }, {
-    key: "moveW",
+    key: 'moveW',
     value: function moveW(delta) {
       this.position.x -= this.speed * delta;
     }
@@ -1206,27 +1197,51 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Camera = exports.Camera = function Camera() {
+    _classCallCheck(this, Camera);
+};
+
+},{}],19:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Renderer = undefined;
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Overworld = require("../atlases/Overworld");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Renderer = exports.Renderer = function () {
-    function Renderer(context) {
+    function Renderer(canvas) {
         _classCallCheck(this, Renderer);
 
-        /**
-         * The empty tile value. If this value is set for a position in a map's
-         * array, it will not be rendered.
-         *
-         * @var {integer}
-         */
-        this.EMPTY_TILE = 0;
+        this.canvas = canvas;
         /**
          * The canvas context.
          *
          * @var {CanvasRenderingContext2D}
          */
-        this.ctx = context;
+        this.ctx = this.canvas.getContext('2d');
+        /**
+         * Prevent anti-aliasing in the event a tile gets scaled.
+         *
+         * @property {CanvasRenderingContext2D.imageSmoothingEnabled}
+         */
+        this.ctx.imageSmoothingEnabled = false;
+        /**
+         * The empty tile value. If this value is set for a position in a map's
+         * array, it will not be rendered.
+         * TODO: Move this to the Scene.
+         *
+         * @var {integer}
+         */
+        this.EMPTY_TILE = 0;
         /**
          * Multiplier for x,y position to pixels. What size the tiles for the game
          * will be rendered at. Always use a power of 2 so the scaling prevents
@@ -1242,11 +1257,18 @@ var Renderer = exports.Renderer = function () {
          * @var {integer}
          */
         this.scale = 1;
+        this._currentMap = new _Overworld.Overworld();
     }
 
     _createClass(Renderer, [{
         key: "draw",
         value: function draw(gameObjectCount, gameObjects) {
+            // Clear the screen
+            // TODO: Pull this out. Put in renderer.
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            // Always store the texture in a var so we don't call "new Foo()" multiple
+            // times a second.
+            this.drawTileMap(this._currentMap);
             for (var i = 0; i < gameObjectCount; i++) {
                 gameObjects[i].draw(this.ctx);
             }
@@ -1297,7 +1319,7 @@ var Renderer = exports.Renderer = function () {
                         x * (this.pixels * this.scale),
                         // Target y
                         y * (this.pixels * this.scale),
-                        // Target width 
+                        // Target width
                         this.pixels * this.scale,
                         // Target height
                         this.pixels * this.scale);
@@ -1310,7 +1332,7 @@ var Renderer = exports.Renderer = function () {
     return Renderer;
 }();
 
-},{}],19:[function(require,module,exports){
+},{"../atlases/Overworld":2}],20:[function(require,module,exports){
 "use strict";
 
 var _FiendGame = require("./engine/FiendGame");
@@ -1340,6 +1362,6 @@ window.onload = function () {
     });
 };
 
-},{"./engine/AssetLoader":3,"./engine/FiendGame":11}]},{},[19])
+},{"./engine/AssetLoader":3,"./engine/FiendGame":11}]},{},[20])
 
 //# sourceMappingURL=bundle.js.map
