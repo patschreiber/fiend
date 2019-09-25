@@ -49,7 +49,9 @@ export class Player extends GameActor implements IPlayer {
    * main game loop.
    * @see FiendGame.main()
    */
-  public update(delta: number): void {}
+  public update(delta: number): void {
+    console.log('this.position :', this.position);
+  }
 
 
   /**

@@ -1,9 +1,6 @@
 import { InputHandler } from "./Input/InputHandler";
+import { Camera } from "./Render/Camera/Camera";
 import { Renderer } from "./Renderer";
-
-// Atlases
-import { MapBase } from "../atlases/MapBase";
-import { Overworld } from "../atlases/Overworld";
 
 // Player
 import { Player } from './GameObject';
@@ -34,14 +31,14 @@ export class FiendGame {
   public Renderer: Renderer;
 
   /**
+   * The main camera
+   */
+  public Camera: Camera;
+
+  /**
    * The canvas in the DOM. What the game is rendered on.
    */
   public canvas: HTMLCanvasElement;
-
-  /**
-   * The canvas context.
-   */
-  public ctx: CanvasRenderingContext2D;
 
   /**
    * The number of currently-active game objects.
@@ -89,24 +86,14 @@ export class FiendGame {
    */
   public stopToken: number|null;
 
-  protected _currentMap: MapBase;
-
   constructor(gamePaneWidth: number, gamePaneHeight: number) {
 
-    this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
-
-    this.container = document.getElementById("fiend-game");
-
-    this.container.insertBefore(this.canvas, this.container.firstChild);
-
-    this.ctx = this.canvas.getContext('2d');
-
-    /**t
-     * Prevent anti-aliasing in the event a tile gets scaled.
-     *
-     * @property {CanvasRenderingContext2D.imageSmoothingEnabled}
+    /**
+     * Create the game pane and canvas.
      */
-    this.ctx.imageSmoothingEnabled = false;
+    this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
+    this.container = document.getElementById("fiend-game");
+    this.container.insertBefore(this.canvas, this.container.firstChild);
 
     this.stopToken = null;
 
@@ -118,6 +105,12 @@ export class FiendGame {
 
     this.Player = new Player({x:125,y:125});
 
+    this.Renderer = new Renderer(this.canvas);
+
+    this.InputHandler = new InputHandler();
+
+    this.Camera = new Camera();
+
     this.gameObjectCount = 0;
 
     this.gameObjects = [
@@ -125,14 +118,6 @@ export class FiendGame {
       // new Enemy(),
       this.Player,
     ];
-
-    this._currentMap = new Overworld();
-
-    this.Renderer = new Renderer(this.ctx);
-
-    // We need to attach the input handling to the enclosing div, since you
-    // can't get a handle on `canvas` DOM element since it's not focusable.
-    this.InputHandler = new InputHandler();
 
     // Let's kick off the game loop!
     this.main(performance.now());
@@ -145,7 +130,7 @@ export class FiendGame {
    * @param {number} w The width of the canvas, in pixels.
    * @param {number} h The height of the canvas, in pixels.
    */
-  genCanvas(w: number, h: number): HTMLCanvasElement {
+  private genCanvas(w: number, h: number): HTMLCanvasElement {
     let canvas = document.createElement('canvas');
     canvas.id = "game-pane";
     canvas.width = w;
@@ -174,23 +159,9 @@ export class FiendGame {
   }
 
   /**
-   * Responsible for drawing the current game state to the screen (we're
-   * assuming it will be run in the main game loop).
+   * Responsible for drawing the current game state to the screen.
    */
-  _draw(): void {
-
-    // Clear the screen
-    // TODO: Pull this out. Put in renderer.
-    this.ctx.clearRect(
-      0,
-      0,
-      this.canvas.width,
-      this.canvas.height
-    );
-
-    // Always store the texture in a var so we don't call "new Foo()" multiple
-    // times a second.
-    this.Renderer.drawTileMap(this._currentMap);
+  private _draw(): void {
 
     // Draw the scene.
     this.Renderer.draw(this.gameObjectCount, this.gameObjects);
@@ -199,7 +170,7 @@ export class FiendGame {
   /**
    * Stops the main game loop.
    */
-  stopMainLoop(): void {
+  private stopMainLoop(): void {
     window.cancelAnimationFrame(this.stopToken);
     console.log("Goodbye...");
   }
@@ -207,7 +178,9 @@ export class FiendGame {
   /**
    * Attempts to gracefully tear down the game.
    */
-  shutdownGame(): void {}
+  public shutdownGame(): void {
+    this.stopMainLoop();
+  }
 
 /**
   * The main game loop. We use requestAnimationFrame to be thread-safe and not
@@ -228,7 +201,7 @@ export class FiendGame {
   * window.requestAnimationFrame() always provides a DOMHighResTimeStamp to
   * callbacks as an argument when they are executed.
   */
-  main(tFrame: DOMHighResTimeStamp): void {
+  public main(tFrame: DOMHighResTimeStamp): void {
     // Store the ID returned from our main loop's most recent call to
     // requestAnimationFrame().
     this.stopToken = window.requestAnimationFrame(this.main.bind(this));
