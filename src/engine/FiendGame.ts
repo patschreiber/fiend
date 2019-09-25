@@ -1,6 +1,6 @@
 import { InputHandler } from "./Input/InputHandler";
 import { Camera } from "./Render/Camera/Camera";
-import { Renderer } from "./Renderer";
+import { Renderer } from "./Render/Renderer";
 
 // Player
 import { Player } from './GameObject';
