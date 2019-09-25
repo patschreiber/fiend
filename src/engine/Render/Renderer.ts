@@ -1,5 +1,5 @@
-import { MapBase } from "../atlases/MapBase";
-import { Overworld } from "../atlases/Overworld";
+import { MapBase } from "../../atlases/MapBase";
+import { Overworld } from "../../atlases/Overworld";
 
 export class Renderer {
 

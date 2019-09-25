@@ -458,7 +458,7 @@ var _InputHandler = require("./Input/InputHandler");
 
 var _Camera = require("./Render/Camera/Camera");
 
-var _Renderer = require("./Renderer");
+var _Renderer = require("./Render/Renderer");
 
 var _GameObject = require("./GameObject");
 
@@ -600,7 +600,7 @@ var FiendGame = exports.FiendGame = function () {
     return FiendGame;
 }();
 
-},{"./GameObject":16,"./Input/InputHandler":17,"./Render/Camera/Camera":18,"./Renderer":19}],12:[function(require,module,exports){
+},{"./GameObject":16,"./Input/InputHandler":17,"./Render/Camera/Camera":18,"./Render/Renderer":19}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1213,7 +1213,7 @@ exports.Renderer = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Overworld = require("../atlases/Overworld");
+var _Overworld = require("../../atlases/Overworld");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1332,7 +1332,7 @@ var Renderer = exports.Renderer = function () {
     return Renderer;
 }();
 
-},{"../atlases/Overworld":2}],20:[function(require,module,exports){
+},{"../../atlases/Overworld":2}],20:[function(require,module,exports){
 "use strict";
 
 var _FiendGame = require("./engine/FiendGame");
