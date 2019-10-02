@@ -40,6 +40,10 @@ export class Player extends GameActor implements IPlayer {
     this.HP = 100;
     this.EXP = 0;
     this.speed = 100;
+
+    this.attachEvents([
+      'Player_died',
+    ]);
   }
 
   /**
@@ -50,7 +54,7 @@ export class Player extends GameActor implements IPlayer {
    * @see FiendGame.main()
    */
   public update(delta: number): void {
-    console.log('this.position :', this.position);
+    // TODO: console.log('this.position :', this.position);
   }
 
 

@@ -470,6 +470,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var FiendGame = exports.FiendGame = function () {
     function FiendGame(gamePaneWidth, gamePaneHeight) {
+        var _this = this;
+
         _classCallCheck(this, FiendGame);
 
         /**
@@ -478,6 +480,9 @@ var FiendGame = exports.FiendGame = function () {
         this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
         this.container = document.getElementById("fiend-game");
         this.container.insertBefore(this.canvas, this.container.firstChild);
+        document.getElementById('game-pane').addEventListener('GO_created', function (event) {
+            return _this.respondToPlayerCreation(event);
+        }, false);
         this.stopToken = null;
         this.tickLength = 60;
         this.lastFrameTime = 0;
@@ -491,6 +496,7 @@ var FiendGame = exports.FiendGame = function () {
         // TODO This is a test, do should be empty on init.
         // new Enemy(),
         this.Player];
+        console.log('Player.attachedEvents :', this.Player.attachedEvents);
         // Let's kick off the game loop!
         this.main(performance.now());
     }
@@ -512,6 +518,11 @@ var FiendGame = exports.FiendGame = function () {
             canvas.height = h;
             canvas.tabIndex = 1;
             return canvas;
+        }
+    }, {
+        key: "respondToPlayerCreation",
+        value: function respondToPlayerCreation(event) {
+            console.log("player created!!!!");
         }
         /**
          * Calculates the game state as of a given point in time. It is the authority
@@ -765,6 +776,7 @@ var Player = exports.Player = function (_GameActor) {
     _this.HP = 100;
     _this.EXP = 0;
     _this.speed = 100;
+    _this.attachEvents(['Player_died']);
     return _this;
   }
   /**
@@ -778,9 +790,9 @@ var Player = exports.Player = function (_GameActor) {
 
   _createClass(Player, [{
     key: 'update',
-    value: function update(delta) {
-      console.log('this.position :', this.position);
-    }
+    value: function update(delta) {}
+    // TODO: console.log('this.position :', this.position);
+
     /**
      * Draws the Player entity
      * @param ctx The canvas context.
@@ -855,10 +867,10 @@ var Player = exports.Player = function (_GameActor) {
 }(_GameActor2.GameActor);
 
 },{"./GameActor":13}],15:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -873,30 +885,62 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @abstract
  */
 var GameObject = exports.GameObject = function () {
-  /**
-   * The GameObject constructor. Auto-increments the GameOject id for the new
-   * GameObject being created.
-   */
-  function GameObject() {
-    _classCallCheck(this, GameObject);
+    /**
+     * The GameObject constructor. Auto-increments the GameOject id for the new
+     * GameObject being created.
+     */
+    function GameObject() {
+        _classCallCheck(this, GameObject);
 
-    this.id = GameObject.idIncrementor++;
-  }
-  /**
-   * Accessor for the private member `id`.
-   *
-   * @returns The id of the GameObject
-   */
-
-
-  _createClass(GameObject, [{
-    key: "getId",
-    value: function getId() {
-      return this.id;
+        this.id = GameObject.idIncrementor++;
+        this.attachedEvents = {
+            'GO_created': new Event('GO_created')
+        };
+        document.getElementById('game-pane').dispatchEvent(this.attachedEvents["GO_created"]);
     }
-  }]);
+    /**
+     * Accessor for the private member `id`.
+     *
+     * @returns The id of the GameObject
+     */
 
-  return GameObject;
+
+    _createClass(GameObject, [{
+        key: 'getId',
+        value: function getId() {
+            return this.id;
+        }
+    }, {
+        key: 'attachEvents',
+        value: function attachEvents(events) {
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = events[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var event = _step.value;
+
+                    this.attachedEvents[event] = new Event(event);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+        }
+    }]);
+
+    return GameObject;
 }();
 
 },{}],16:[function(require,module,exports){

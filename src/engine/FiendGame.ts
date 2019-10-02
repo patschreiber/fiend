@@ -95,6 +95,10 @@ export class FiendGame {
     this.container = document.getElementById("fiend-game");
     this.container.insertBefore(this.canvas, this.container.firstChild);
 
+    document.getElementById('game-pane').addEventListener(
+      'GO_created', (event) => this.respondToPlayerCreation(event), false
+    );
+
     this.stopToken = null;
 
     this.tickLength = 60;
@@ -119,6 +123,8 @@ export class FiendGame {
       this.Player,
     ];
 
+    console.log('Player.attachedEvents :', this.Player.attachedEvents);
+
     // Let's kick off the game loop!
     this.main(performance.now());
   }
@@ -138,6 +144,10 @@ export class FiendGame {
     canvas.tabIndex = 1;
 
     return canvas;
+  }
+
+  public respondToPlayerCreation(event: Event) {
+    console.log("player created!!!!");
   }
 
   /**
