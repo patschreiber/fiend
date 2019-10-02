@@ -67,7 +67,7 @@ export abstract class GameObject {
    *
    * @static
    */
-  private static idIncrementor: number;
+  private static idIncrementor: number = 1;
 
   /**
    * @var id The id of the instance of the GameObject.
