@@ -35,6 +35,13 @@ interface IGameObject {
   name: string;
 
   /**
+   * The list of events that can be emitted.
+   *
+   * @type {EventContainer}
+   */
+  attachedEvents: EventContainer;
+
+  /**
    * Defines the signature for the update method for the GameActor.
    *
    * @abstract
@@ -55,17 +62,15 @@ interface IGameObject {
 export abstract class GameObject {
 
   /**
-   * Keeps track of the `id` of the last GameObject instantiated.
+   * @var idIncrementor Keeps track of the `id` of the last GameObject
+   instantiated.
    *
    * @static
-   * @type {number}
    */
   private static idIncrementor: number;
 
   /**
-   * The id of the instance of the GameObject.
-   *
-   * @type {number}
+   * @var id The id of the instance of the GameObject.
    */
   private id: number;
 
@@ -80,11 +85,23 @@ export abstract class GameObject {
   public name: string;
 
   /**
+   * @var attachedEvents The list of events that can be emitted.
+   */
+  public attachedEvents: EventContainer;
+
+  /**
    * The GameObject constructor. Auto-increments the GameOject id for the new
    * GameObject being created.
    */
   public constructor() {
+
     this.id = GameObject.idIncrementor++;
+
+    this.attachedEvents = {
+      'GO_created': new Event('GO_created'),
+    }
+    document.getElementById('game-pane')
+      .dispatchEvent(this.attachedEvents["GO_created"]);
   }
 
   /**
@@ -105,4 +122,12 @@ export abstract class GameObject {
    * @see FiendGame.main()
    */
   protected abstract update(delta: number): void;
+
+  protected attachEvents(events: Array<string>): void {
+
+    for (let event of events) {
+      this.attachedEvents[event] = new Event(event);
+    }
+  }
+
 }
