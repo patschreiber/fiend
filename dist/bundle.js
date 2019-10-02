@@ -481,7 +481,7 @@ var FiendGame = exports.FiendGame = function () {
         this.container = document.getElementById("fiend-game");
         this.container.insertBefore(this.canvas, this.container.firstChild);
         document.getElementById('game-pane').addEventListener('GO_created', function (event) {
-            return _this.respondToPlayerCreation(event);
+            return _this.respondToGameObjectCreation(event);
         }, false);
         this.stopToken = null;
         this.tickLength = 60;
@@ -520,9 +520,9 @@ var FiendGame = exports.FiendGame = function () {
             return canvas;
         }
     }, {
-        key: "respondToPlayerCreation",
-        value: function respondToPlayerCreation(event) {
-            console.log("player created!!!!");
+        key: "respondToGameObjectCreation",
+        value: function respondToGameObjectCreation(event) {
+            console.log('event.detail.go_id :', event.detail.go_id);
         }
         /**
          * Calculates the game state as of a given point in time. It is the authority
@@ -893,8 +893,13 @@ var GameObject = exports.GameObject = function () {
         _classCallCheck(this, GameObject);
 
         this.id = GameObject.idIncrementor++;
+        // Attach events to the Game Object and emit the created event.
         this.attachedEvents = {
-            'GO_created': new Event('GO_created')
+            'GO_created': new CustomEvent('GO_created', {
+                detail: {
+                    go_id: this.getId()
+                }
+            })
         };
         document.getElementById('game-pane').dispatchEvent(this.attachedEvents["GO_created"]);
     }
@@ -942,6 +947,15 @@ var GameObject = exports.GameObject = function () {
 
     return GameObject;
 }();
+/**
+ * @var idIncrementor Keeps track of the `id` of the last GameObject
+ instantiated.
+ *
+ * @static
+ */
+
+
+GameObject.idIncrementor = 1;
 
 },{}],16:[function(require,module,exports){
 'use strict';

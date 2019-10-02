@@ -96,7 +96,9 @@ export class FiendGame {
     this.container.insertBefore(this.canvas, this.container.firstChild);
 
     document.getElementById('game-pane').addEventListener(
-      'GO_created', (event) => this.respondToPlayerCreation(event), false
+      'GO_created',
+      (event: CustomEvent) => this.respondToGameObjectCreation(event),
+      false
     );
 
     this.stopToken = null;
@@ -146,8 +148,8 @@ export class FiendGame {
     return canvas;
   }
 
-  public respondToPlayerCreation(event: Event) {
-    console.log("player created!!!!");
+  public respondToGameObjectCreation(event: CustomEvent) {
+    console.log('event.detail.go_id :', event.detail.go_id);
   }
 
   /**
