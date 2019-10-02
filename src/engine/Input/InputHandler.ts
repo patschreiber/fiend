@@ -157,7 +157,7 @@ export class InputHandler implements IInputHandler {
    *
    * @param {KeyboardEvent} event The user interaction with a keyboard.
    */
-  private buttonReleased(event: KeyboardEvent): void {
+  public buttonReleased(event: KeyboardEvent): void {
     event.preventDefault();
 
     if (this.inputMap[event.key]) {
