@@ -97,8 +97,13 @@ export abstract class GameObject {
 
     this.id = GameObject.idIncrementor++;
 
+    // Attach events to the Game Object and emit the created event.
     this.attachedEvents = {
-      'GO_created': new Event('GO_created'),
+      'GO_created': new CustomEvent('GO_created', {
+        detail: {
+          go_id: this.getId(),
+        }
+      }),
     }
     document.getElementById('game-pane')
       .dispatchEvent(this.attachedEvents["GO_created"]);
