@@ -6,28 +6,6 @@
 interface IGameObject {
 
   /**
-   * Keeps track of the `id` of the last GameObject instantiated.
-   *
-   * @static
-   * @type {number}
-   */
-  idIncrementor: number;
-
-  /**
-   * The `id` of the GameObject.
-   *
-   * @type {number}
-   */
-  id: number;
-
-  /**
-   * The type of the GameObject.
-   *
-   * @type {string}
-   */
-  type: string;
-
-  /**
    * The human-readable name of the GameObject. This will appear in-game.
    *
    * @type {string}
@@ -59,7 +37,7 @@ interface IGameObject {
  *
  * @abstract
  */
-export abstract class GameObject {
+export abstract class GameObject implements IGameObject {
 
   /**
    * @var idIncrementor Keeps track of the `id` of the last GameObject
@@ -106,7 +84,7 @@ export abstract class GameObject {
       }),
     }
     document.getElementById('game-pane')
-      .dispatchEvent(this.attachedEvents["GO_created"]);
+      .dispatchEvent(this.attachedEvents['GO_created']);
   }
 
   /**
@@ -126,7 +104,7 @@ export abstract class GameObject {
    * main game loop.
    * @see FiendGame.main()
    */
-  protected abstract update(delta: number): void;
+  public abstract update(delta: number): void;
 
   protected attachEvents(events: Array<string>): void {
 
