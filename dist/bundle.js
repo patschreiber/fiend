@@ -446,6 +446,255 @@ Object.keys(_MoveWestCommand).forEach(function (key) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Component = exports.Component = function Component() {
+  _classCallCheck(this, Component);
+};
+
+},{}],12:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * The EventComponent class.
+ */
+var EventComponent = exports.EventComponent = function () {
+    /**
+     * @constructor
+     */
+    function EventComponent() {
+        _classCallCheck(this, EventComponent);
+
+        // We need to declare this as an object otherwise we get a reference error
+        // when we try and assign events to it in the `attach` and `attachMultiple`
+        // methods.
+        this.attachedEvents = {};
+    }
+    /**
+     * Attaches a single event to this component. Attached components can be
+     * emitted.
+     *
+     * @param event An `Event` or `CustomEvent` that this EventComponent knows
+     * about.
+     */
+
+
+    _createClass(EventComponent, [{
+        key: 'attach',
+        value: function attach(event) {
+            this.attachedEvents[event.type] = event;
+        }
+        /**
+         * Adds DOM Events to this component via an array of events.
+         *
+         * @param events The array of events to add.
+         */
+
+    }, {
+        key: 'attachMultiple',
+        value: function attachMultiple(eventList) {
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = eventList[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var event = _step.value;
+
+                    this.attach(event);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+        }
+        /**
+         * Emits an event via the `game-pane` DOM element. Uses the string name of the
+         * event to lookup if it's in the attachedEvent member.
+         *
+         * @param eventName The event to emit.
+         */
+
+    }, {
+        key: 'emit',
+        value: function emit(eventName) {
+            document.getElementById('game-pane').dispatchEvent(this.attachedEvents[eventName]);
+        }
+    }]);
+
+    return EventComponent;
+}();
+
+},{}],13:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.LifeforceComponent = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Component2 = require('./Component');
+
+var _EventComponent = require('./EventComponent');
+
+var _PlayerDeathEvent = require('../Event/PlayerDeathEvent');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The Lifeforce component. Adds health to a GameObject. Adds life, health
+ * regeneration, and death.
+ *
+ * This component is required for entities to be alive or dead, as well as take
+ * damage.
+ */
+var LifeforceComponent = exports.LifeforceComponent = function (_Component) {
+  _inherits(LifeforceComponent, _Component);
+
+  /**
+   * @constructor
+   *
+   * @param GO The GameObject this component belongs to.
+   */
+  function LifeforceComponent(GO) {
+    _classCallCheck(this, LifeforceComponent);
+
+    var _this = _possibleConstructorReturn(this, (LifeforceComponent.__proto__ || Object.getPrototypeOf(LifeforceComponent)).call(this));
+
+    _this._eventComponent = new _EventComponent.EventComponent();
+    _this._eventComponent.attach(_PlayerDeathEvent.PlayerDeathEvent.create(GO));
+    return _this;
+  }
+  /**
+   * Update is intended to be run once per frame.
+   */
+
+
+  _createClass(LifeforceComponent, [{
+    key: 'update',
+    value: function update() {
+      // this._eventComponent.emit('player_died');
+    }
+  }]);
+
+  return LifeforceComponent;
+}(_Component2.Component);
+
+},{"../Event/PlayerDeathEvent":15,"./Component":11,"./EventComponent":12}],14:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Component = require('./Component');
+
+Object.keys(_Component).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _Component[key];
+    }
+  });
+});
+
+var _LifeforceComponent = require('./LifeforceComponent');
+
+Object.keys(_LifeforceComponent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _LifeforceComponent[key];
+    }
+  });
+});
+
+var _EventComponent = require('./EventComponent');
+
+Object.keys(_EventComponent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _EventComponent[key];
+    }
+  });
+});
+
+},{"./Component":11,"./EventComponent":12,"./LifeforceComponent":13}],15:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * The PlayerDeathEvent class.
+ */
+var PlayerDeathEvent = exports.PlayerDeathEvent = function () {
+    function PlayerDeathEvent() {
+        _classCallCheck(this, PlayerDeathEvent);
+    }
+
+    _createClass(PlayerDeathEvent, null, [{
+        key: 'create',
+
+        /**
+         * Retrieves the native ES6 CustomEvent. [[CustomEvent]] allows the attachment
+         * of data via the `CustomEventInit` dictionary.
+         *
+         * @param player The player GameObject.
+         */
+        value: function create(player) {
+            var event = new CustomEvent('player_died', {
+                detail: {
+                    'go_id': player.getId()
+                }
+            });
+            return event;
+        }
+    }]);
+
+    return PlayerDeathEvent;
+}();
+
+},{}],16:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.FiendGame = undefined;
@@ -480,7 +729,7 @@ var FiendGame = exports.FiendGame = function () {
         this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
         this.container = document.getElementById("fiend-game");
         this.container.insertBefore(this.canvas, this.container.firstChild);
-        document.getElementById('game-pane').addEventListener('GO_created', function (event) {
+        document.getElementById('game-pane').addEventListener('test_event', function (event) {
             return _this.respondToGameObjectCreation(event);
         }, false);
         this.stopToken = null;
@@ -496,7 +745,6 @@ var FiendGame = exports.FiendGame = function () {
         // TODO This is a test, do should be empty on init.
         // new Enemy(),
         this.Player];
-        console.log('Player.attachedEvents :', this.Player.attachedEvents);
         // Let's kick off the game loop!
         this.main(performance.now());
     }
@@ -611,7 +859,7 @@ var FiendGame = exports.FiendGame = function () {
     return FiendGame;
 }();
 
-},{"./GameObject":16,"./Input/InputHandler":17,"./Render/Camera/Camera":18,"./Render/Renderer":19}],12:[function(require,module,exports){
+},{"./GameObject":21,"./Input/InputHandler":22,"./Render/Camera/Camera":23,"./Render/Renderer":24}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -679,7 +927,7 @@ var Enemy = exports.Enemy = function (_GameActor) {
     return Enemy;
 }(_GameActor2.GameActor);
 
-},{"./GameActor":13}],13:[function(require,module,exports){
+},{"./GameActor":18}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -735,7 +983,7 @@ var GameActor = exports.GameActor = function (_GameObject) {
   return GameActor;
 }(_GameObject2.GameObject);
 
-},{"../GameObject":15}],14:[function(require,module,exports){
+},{"../GameObject":20}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -746,6 +994,8 @@ exports.Player = undefined;
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _GameActor2 = require('./GameActor');
+
+var _Component = require('../../Component');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -773,10 +1023,8 @@ var Player = exports.Player = function (_GameActor) {
     var _this = _possibleConstructorReturn(this, (Player.__proto__ || Object.getPrototypeOf(Player)).call(this));
 
     _this.position = { x: 100, y: 100 };
-    _this.HP = 100;
-    _this.EXP = 0;
     _this.speed = 100;
-    _this.attachEvents(['Player_died']);
+    _this._lifeforce = new _Component.LifeforceComponent(_this);
     return _this;
   }
   /**
@@ -790,9 +1038,10 @@ var Player = exports.Player = function (_GameActor) {
 
   _createClass(Player, [{
     key: 'update',
-    value: function update(delta) {}
-    // TODO: console.log('this.position :', this.position);
-
+    value: function update(delta) {
+      this._lifeforce.update();
+      // TODO: console.log('this.position :', this.position);
+    }
     /**
      * Draws the Player entity
      * @param ctx The canvas context.
@@ -866,7 +1115,7 @@ var Player = exports.Player = function (_GameActor) {
   return Player;
 }(_GameActor2.GameActor);
 
-},{"./GameActor":13}],15:[function(require,module,exports){
+},{"../../Component":14,"./GameActor":18}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -901,7 +1150,7 @@ var GameObject = exports.GameObject = function () {
                 }
             })
         };
-        document.getElementById('game-pane').dispatchEvent(this.attachedEvents["GO_created"]);
+        document.getElementById('game-pane').dispatchEvent(this.attachedEvents['GO_created']);
     }
     /**
      * Accessor for the private member `id`.
@@ -957,7 +1206,7 @@ var GameObject = exports.GameObject = function () {
 
 GameObject.idIncrementor = 1;
 
-},{}],16:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1012,7 +1261,7 @@ Object.keys(_Enemy).forEach(function (key) {
   });
 });
 
-},{"./GameActor/Enemy":12,"./GameActor/GameActor":13,"./GameActor/Player":14,"./GameObject":15}],17:[function(require,module,exports){
+},{"./GameActor/Enemy":17,"./GameActor/GameActor":18,"./GameActor/Player":19,"./GameObject":20}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1248,7 +1497,7 @@ var InputHandler = exports.InputHandler = function () {
 //   TILDA:    192
 // };
 
-},{"../Command":10}],18:[function(require,module,exports){
+},{"../Command":10}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1261,7 +1510,7 @@ var Camera = exports.Camera = function Camera() {
     _classCallCheck(this, Camera);
 };
 
-},{}],19:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1390,7 +1639,7 @@ var Renderer = exports.Renderer = function () {
     return Renderer;
 }();
 
-},{"../../atlases/Overworld":2}],20:[function(require,module,exports){
+},{"../../atlases/Overworld":2}],25:[function(require,module,exports){
 "use strict";
 
 var _FiendGame = require("./engine/FiendGame");
@@ -1420,6 +1669,6 @@ window.onload = function () {
     });
 };
 
-},{"./engine/AssetLoader":3,"./engine/FiendGame":11}]},{},[20])
+},{"./engine/AssetLoader":3,"./engine/FiendGame":16}]},{},[25])
 
 //# sourceMappingURL=bundle.js.map
