@@ -1,4 +1,5 @@
 import { GameActor } from './GameActor';
+import { LifeforceComponent } from '../../Component';
 
 /**
  * The interface for the [[Player]] class.
@@ -23,11 +24,9 @@ interface IPlayer {
  */
 export class Player extends GameActor implements IPlayer {
 
-  public HP: number;
-
-  public EXP: number;
-
   public speed: number;
+
+  private _lifeforce: LifeforceComponent;
 
   /**
    * @constructor
@@ -37,13 +36,9 @@ export class Player extends GameActor implements IPlayer {
 
     this.position = {x:100,y:100};
 
-    this.HP = 100;
-    this.EXP = 0;
     this.speed = 100;
 
-    this.attachEvents([
-      'Player_died',
-    ]);
+    this._lifeforce = new LifeforceComponent(this);
   }
 
   /**
@@ -54,6 +49,7 @@ export class Player extends GameActor implements IPlayer {
    * @see FiendGame.main()
    */
   public update(delta: number): void {
+    this._lifeforce.update();
     // TODO: console.log('this.position :', this.position);
   }
 
