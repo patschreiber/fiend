@@ -1,6 +1,10 @@
-interface IComponent {
-}
+/**
+ * The Component interface.
+ */
+interface IComponent {}
 
-export abstract class Component {
-
-}
+/**
+ * The Component class
+ * @abstract
+ */
+export abstract class Component {}

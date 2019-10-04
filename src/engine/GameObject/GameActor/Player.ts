@@ -8,9 +8,32 @@ import { LifeforceComponent } from '../../Component';
  */
 interface IPlayer {
 
+  /**
+   * Move the Player north.
+   *
+   * @param delta The game's delta between frames.
+   */
   moveN(delta: number): void;
+
+  /**
+   * Move the Player south.
+   *
+   * @param delta The game's delta between frames.
+   */
   moveS(delta: number): void;
+
+  /**
+   * Move the Player east.
+   *
+   * @param delta The game's delta between frames.
+   */
   moveE(delta: number): void;
+
+  /**
+   * Move the Player west.
+   *
+   * @param delta The game's delta between frames.
+   */
   moveW(delta: number): void;
 }
 
@@ -105,7 +128,7 @@ export class Player extends GameActor implements IPlayer {
     this.position.x += this.speed * delta;
   }
 
-    /**
+  /**
    * Move the Player west.
    *
    * @param delta The game's delta between frames.
