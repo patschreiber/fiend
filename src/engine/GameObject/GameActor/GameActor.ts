@@ -9,8 +9,6 @@ interface IGameActor {
 
   /**
    * The position member. Signifies the location of the of the GameObject.
-   *
-   * @type {Coordinate}
    */
   position: Coordinate;
 
@@ -35,8 +33,6 @@ export abstract class GameActor extends GameObject implements IGameActor {
 
   /**
    * The position of the GameObject.
-   *
-   * @type {Coordinate}
    */
   public position: Coordinate;
 

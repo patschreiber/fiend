@@ -10,6 +10,8 @@ import { PlayerDeathEvent } from '../Event/PlayerDeathEvent';
  *
  * This component is required for entities to be alive or dead, as well as take
  * damage.
+ *
+ * @extends [[Component]]
  */
 export class LifeforceComponent extends Component {
 
