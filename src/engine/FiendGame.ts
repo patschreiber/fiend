@@ -96,7 +96,7 @@ export class FiendGame {
     this.container.insertBefore(this.canvas, this.container.firstChild);
 
     document.getElementById('game-pane').addEventListener(
-      'GO_created',
+      'test_event',
       (event: CustomEvent) => this.respondToGameObjectCreation(event),
       false
     );
@@ -124,8 +124,6 @@ export class FiendGame {
       // new Enemy(),
       this.Player,
     ];
-
-    console.log('Player.attachedEvents :', this.Player.attachedEvents);
 
     // Let's kick off the game loop!
     this.main(performance.now());

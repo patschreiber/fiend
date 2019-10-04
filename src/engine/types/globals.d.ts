@@ -31,5 +31,5 @@ type Coordinate = {
  * }
  */
 type EventContainer = {
-  [eventName: string]: Event,
+  [eventName: string]: Event|CustomEvent,
 };
