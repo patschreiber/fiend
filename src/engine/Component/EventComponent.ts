@@ -5,8 +5,6 @@
 
   /**
    * The list of ES6 Events or CustomEvents that can be emitted.
-   *
-   * @type {EventContainer}
    */
   attachedEvents: EventContainer;
 
@@ -37,6 +35,7 @@
 
 /**
  * The EventComponent class.
+ * @implements [[IEventComponent]]
  */
 export class EventComponent implements IEventComponent {
 

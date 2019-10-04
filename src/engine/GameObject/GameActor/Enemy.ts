@@ -10,8 +10,6 @@ export class Enemy extends GameActor {
 
   /**
    * The position of the GameObject
-   *
-   * @type {Coordinate}
    */
   public position: Coordinate;
 
@@ -23,8 +21,6 @@ export class Enemy extends GameActor {
 
     this.name = "Black Bat";
 
-    this.HP = 100;
-    this.ATK = 1;
     this.speed = 100;
     this.position = {
       x: 0,

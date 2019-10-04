@@ -7,22 +7,17 @@ interface IGameObject {
 
   /**
    * The human-readable name of the GameObject. This will appear in-game.
-   *
-   * @type {string}
    */
   name: string;
 
   /**
    * The list of events that can be emitted.
-   *
-   * @type {EventContainer}
    */
   attachedEvents: EventContainer;
 
   /**
    * Defines the signature for the update method for the GameActor.
    *
-   * @abstract
    * @param delta The time difference between frames. Provided by the game's
    * main game loop.
    * @see FiendGame.main()
@@ -68,8 +63,8 @@ export abstract class GameObject implements IGameObject {
   public attachedEvents: EventContainer;
 
   /**
-   * The GameObject constructor. Auto-increments the GameOject id for the new
-   * GameObject being created.
+   * @constructor
+   * Auto-increments the GameOject id for the new GameObject being created.
    */
   public constructor() {
 
@@ -105,12 +100,5 @@ export abstract class GameObject implements IGameObject {
    * @see FiendGame.main()
    */
   public abstract update(delta: number): void;
-
-  protected attachEvents(events: Array<string>): void {
-
-    for (let event of events) {
-      this.attachedEvents[event] = new Event(event);
-    }
-  }
 
 }
