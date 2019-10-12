@@ -16,11 +16,26 @@ export * from './GameObject';
 export * from './GameActor/GameActor';
 
 /**
+ * The base Npc class.
+ */
+export * from './GameActor/Npc';
+
+/**
+ * The ordinary folk npc class.
+ */
+export * from './GameActor/OrdinaryFolk';
+
+/**
  * The player character class.
  */
 export * from './GameActor/Player';
 
 /**
- * The base enemy class. TODO: Might be deprecated in the future.
+ * The base Actor factory class.
  */
-export * from './GameActor/Enemy';
+export * from './GameActor/ActorFactory/ActorFactory';
+
+/**
+ * The OrdinaryFolk factory class.
+ */
+export * from './GameActor/ActorFactory/OrdinaryFolkFactory';

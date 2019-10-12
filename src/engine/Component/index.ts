@@ -10,12 +10,17 @@
 export * from './Component';
 
 /**
+ * The Event component. Allows an entiy to emit and/or listen for events.
+ */
+ export * from './EventComponent';
+
+/**
  * The Lifeforce component. Adds health and all that comes with it when attached
  * to an entity.
  */
 export * from './LifeforceComponent';
 
 /**
- * The Event component. Allows an entiy to emit and/or listen for events.
+ * The Movement component. Adds movement to a GameObject.
  */
-export * from './EventComponent';
+ export * from './MovementComponent';
