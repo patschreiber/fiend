@@ -139,6 +139,10 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * The Command class.
+ * @abstract
+ */
 var Command = exports.Command = function Command() {
   _classCallCheck(this, Command);
 };
@@ -178,6 +182,9 @@ var MoveEastCommand = exports.MoveEastCommand = function (_Command) {
 
     /**
      * Executes the command.
+     *
+     * @param actor The GameActor to command.
+     * @param delta The game's delta between frames.
      */
     value: function execute(actor, delta) {
       actor.moveE(delta);
@@ -222,6 +229,9 @@ var MoveNorthCommand = exports.MoveNorthCommand = function (_Command) {
 
     /**
      * Executes the command.
+     *
+     * @param actor The GameActor to command.
+     * @param delta The game's delta between frames.
      */
     value: function execute(actor, delta) {
       actor.moveN(delta);
@@ -266,6 +276,9 @@ var MoveSouthCommand = exports.MoveSouthCommand = function (_Command) {
 
     /**
      * Executes the command.
+     *
+     * @param actor The GameActor to command.
+     * @param delta The game's delta between frames.
      */
     value: function execute(actor, delta) {
       actor.moveS(delta);
@@ -310,6 +323,9 @@ var MoveWestCommand = exports.MoveWestCommand = function (_Command) {
 
     /**
      * Executes the command.
+     *
+     * @param actor The GameActor to command.
+     * @param delta The game's delta between frames.
      */
     value: function execute(actor, delta) {
       actor.moveW(delta);
@@ -451,6 +467,10 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * The Component class
+ * @abstract
+ */
 var Component = exports.Component = function Component() {
   _classCallCheck(this, Component);
 };
@@ -468,6 +488,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * The EventComponent class.
+ * @implements [[IEventComponent]]
  */
 var EventComponent = exports.EventComponent = function () {
     /**
@@ -558,10 +579,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _Component2 = require('./Component');
 
-var _EventComponent = require('./EventComponent');
-
-var _PlayerDeathEvent = require('../Event/PlayerDeathEvent');
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -574,40 +591,128 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *
  * This component is required for entities to be alive or dead, as well as take
  * damage.
+ *
+ * @extends [[Component]]
  */
 var LifeforceComponent = exports.LifeforceComponent = function (_Component) {
   _inherits(LifeforceComponent, _Component);
 
   /**
    * @constructor
-   *
-   * @param GO The GameObject this component belongs to.
    */
-  function LifeforceComponent(GO) {
+  function LifeforceComponent() {
     _classCallCheck(this, LifeforceComponent);
 
-    var _this = _possibleConstructorReturn(this, (LifeforceComponent.__proto__ || Object.getPrototypeOf(LifeforceComponent)).call(this));
-
-    _this._eventComponent = new _EventComponent.EventComponent();
-    _this._eventComponent.attach(_PlayerDeathEvent.PlayerDeathEvent.create(GO));
-    return _this;
+    return _possibleConstructorReturn(this, (LifeforceComponent.__proto__ || Object.getPrototypeOf(LifeforceComponent)).call(this));
   }
   /**
    * Update is intended to be run once per frame.
+   *
+   * @param GO The GameObject this component belongs to.
    */
 
 
   _createClass(LifeforceComponent, [{
     key: 'update',
-    value: function update() {
-      // this._eventComponent.emit('player_died');
-    }
+    value: function update(GO) {}
   }]);
 
   return LifeforceComponent;
 }(_Component2.Component);
 
-},{"../Event/PlayerDeathEvent":15,"./Component":11,"./EventComponent":12}],14:[function(require,module,exports){
+},{"./Component":11}],14:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MovementComponent = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Component2 = require("./Component");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The Movement component. Adds movement to a GameObject.
+ *
+ * This component is required for entities to be able to move around the world.
+ *
+ * @extends [[Component]]
+ */
+var MovementComponent = exports.MovementComponent = function (_Component) {
+  _inherits(MovementComponent, _Component);
+
+  /**
+   * @constructor
+   */
+  function MovementComponent() {
+    _classCallCheck(this, MovementComponent);
+
+    var _this = _possibleConstructorReturn(this, (MovementComponent.__proto__ || Object.getPrototypeOf(MovementComponent)).call(this));
+
+    _this.speed = 100;
+    return _this;
+  }
+  /**
+   * Move the Actor north.
+   * @param delta The game's delta between frames.
+   */
+
+
+  _createClass(MovementComponent, [{
+    key: "moveN",
+    value: function moveN(actor, delta) {
+      // Decrementing {y} makes the actor move south, since we're dealing with a
+      // 2D array and not an actual mathematical grid plane.
+      actor.position.y -= this.speed * delta;
+    }
+    /**
+     * Move the Actor south.
+     *
+     * @param delta The game's delta between frames.
+     */
+
+  }, {
+    key: "moveS",
+    value: function moveS(actor, delta) {
+      // Increasing {y} makes the actor move south, since we're dealing with a 2D
+      // array and not an actual mathematical grid plane.
+      actor.position.y += this.speed * delta;
+    }
+    /**
+     * Move the Actor east.
+     *
+     * @param delta The game's delta between frames.
+     */
+
+  }, {
+    key: "moveE",
+    value: function moveE(actor, delta) {
+      actor.position.x += this.speed * delta;
+    }
+    /**
+     * Move the Actor west.
+     *
+     * @param delta The game's delta between frames.
+     */
+
+  }, {
+    key: "moveW",
+    value: function moveW(actor, delta) {
+      actor.position.x -= this.speed * delta;
+    }
+  }]);
+
+  return MovementComponent;
+}(_Component2.Component);
+
+},{"./Component":11}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -626,18 +731,6 @@ Object.keys(_Component).forEach(function (key) {
   });
 });
 
-var _LifeforceComponent = require('./LifeforceComponent');
-
-Object.keys(_LifeforceComponent).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function get() {
-      return _LifeforceComponent[key];
-    }
-  });
-});
-
 var _EventComponent = require('./EventComponent');
 
 Object.keys(_EventComponent).forEach(function (key) {
@@ -650,7 +743,31 @@ Object.keys(_EventComponent).forEach(function (key) {
   });
 });
 
-},{"./Component":11,"./EventComponent":12,"./LifeforceComponent":13}],15:[function(require,module,exports){
+var _LifeforceComponent = require('./LifeforceComponent');
+
+Object.keys(_LifeforceComponent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _LifeforceComponent[key];
+    }
+  });
+});
+
+var _MovementComponent = require('./MovementComponent');
+
+Object.keys(_MovementComponent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _MovementComponent[key];
+    }
+  });
+});
+
+},{"./Component":11,"./EventComponent":12,"./LifeforceComponent":13,"./MovementComponent":14}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -677,6 +794,8 @@ var PlayerDeathEvent = exports.PlayerDeathEvent = function () {
          * of data via the `CustomEventInit` dictionary.
          *
          * @param player The player GameObject.
+         *
+         * @emits `player_died`
          */
         value: function create(player) {
             var event = new CustomEvent('player_died', {
@@ -691,7 +810,26 @@ var PlayerDeathEvent = exports.PlayerDeathEvent = function () {
     return PlayerDeathEvent;
 }();
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _PlayerDeathEvent = require('./PlayerDeathEvent');
+
+Object.keys(_PlayerDeathEvent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _PlayerDeathEvent[key];
+    }
+  });
+});
+
+},{"./PlayerDeathEvent":16}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -701,6 +839,10 @@ exports.FiendGame = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 // Player
+
+// Factories
+// TODO: Actor factories should be loaded per Scene, once the scene
+// functionality is created!
 
 
 var _InputHandler = require("./Input/InputHandler");
@@ -713,6 +855,7 @@ var _GameObject = require("./GameObject");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+// Factories
 /**
  * The Game superclass. Operations to act upon the main game thread are found
  * here.
@@ -729,7 +872,8 @@ var FiendGame = exports.FiendGame = function () {
         this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
         this.container = document.getElementById("fiend-game");
         this.container.insertBefore(this.canvas, this.container.firstChild);
-        document.getElementById('game-pane').addEventListener('test_event', function (event) {
+        // TODO: This is a test to test event emission.
+        document.getElementById('game-pane').addEventListener('player_died', function (event) {
             return _this.respondToGameObjectCreation(event);
         }, false);
         this.stopToken = null;
@@ -741,10 +885,14 @@ var FiendGame = exports.FiendGame = function () {
         this.InputHandler = new _InputHandler.InputHandler();
         this.Camera = new _Camera.Camera();
         this.gameObjectCount = 0;
+        // Instantiate Actor factories here as a test. We want to instantiate the
+        // factory so the memory is allocated when the Scene is loaded.
+        // TODO: Actor factories should be loaded per Scene, once the scene
+        // functionality is created!
+        this.ordinaryFolk = new _GameObject.OrdinaryFolkFactory();
         this.gameObjects = [
         // TODO This is a test, do should be empty on init.
-        // new Enemy(),
-        this.Player];
+        this.Player, this.ordinaryFolk.spawn({ x: 200, y: 100 })];
         // Let's kick off the game loop!
         this.main(performance.now());
     }
@@ -859,17 +1007,42 @@ var FiendGame = exports.FiendGame = function () {
     return FiendGame;
 }();
 
-},{"./GameObject":21,"./Input/InputHandler":22,"./Render/Camera/Camera":23,"./Render/Renderer":24}],17:[function(require,module,exports){
+},{"./GameObject":26,"./Input/InputHandler":27,"./Render/Camera/Camera":28,"./Render/Renderer":29}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
-exports.Enemy = undefined;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * The ActorFactory class. Used for common actors such as common enemies,
+ * wildlife, generic NPCs, etc. Allows us to implement the "Type Object"
+ * pattern.
+ *
+ * The benefit here is twofold:
+ * 1) We can define the Actor's properties in an external file, say, JSON, then
+ * create a new Actor with those properties when a Scene is loaded.
+ * 2) We can change the type of the Actor on the fly without recreating it.
+ */
+var ActorFactory = exports.ActorFactory = function ActorFactory() {
+  _classCallCheck(this, ActorFactory);
+};
+
+},{}],20:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.OrdinaryFolkFactory = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _GameActor2 = require("./GameActor");
+var _GameObject = require("../../../GameObject");
+
+var _Component = require("../../../Component");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -878,56 +1051,45 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
- * The Enemy base class.
+ * The OrdinaryFolkFactory class. This is used to spawn non-unique,
+ * humanoid-like GameActors aka "Folks."
  */
-var Enemy = exports.Enemy = function (_GameActor) {
-    _inherits(Enemy, _GameActor);
+var OrdinaryFolkFactory = exports.OrdinaryFolkFactory = function (_ActorFactory) {
+  _inherits(OrdinaryFolkFactory, _ActorFactory);
 
-    /**
-     * @constructor
-     */
-    function Enemy() {
-        _classCallCheck(this, Enemy);
+  /**
+   * @constructor
+   */
+  function OrdinaryFolkFactory() {
+    _classCallCheck(this, OrdinaryFolkFactory);
 
-        var _this = _possibleConstructorReturn(this, (Enemy.__proto__ || Object.getPrototypeOf(Enemy)).call(this));
+    var _this = _possibleConstructorReturn(this, (OrdinaryFolkFactory.__proto__ || Object.getPrototypeOf(OrdinaryFolkFactory)).call(this));
 
-        _this.name = "Black Bat";
-        _this.HP = 100;
-        _this.ATK = 1;
-        _this.speed = 100;
-        _this.position = {
-            x: 0,
-            y: 0
-        };
-        return _this;
+    _this.label = "ordinary_folk";
+    return _this;
+  }
+  /**
+   * Factory method for creating a new Npc of type OrdinaryFolk.
+   * For reference, check out the Type Object (factory) pattern.
+   *
+   * @param position The starting position of the spawned Actor.
+   *
+   * @return The spawned GameActor.
+   */
+
+
+  _createClass(OrdinaryFolkFactory, [{
+    key: "spawn",
+    value: function spawn(position) {
+      var npc = new _GameObject.OrdinaryFolk(this, position, new _Component.MovementComponent(), new _Component.LifeforceComponent());
+      return npc;
     }
-    /**
-     *
-     * {@inheritdoc}
-     */
+  }]);
 
+  return OrdinaryFolkFactory;
+}(_GameObject.ActorFactory);
 
-    _createClass(Enemy, [{
-        key: "update",
-        value: function update(delta) {
-            this.position.x += this.speed * delta;
-            this.position.y += this.speed * delta;
-        }
-    }, {
-        key: "draw",
-        value: function draw(ctx) {
-            ctx.beginPath();
-            ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI * 2);
-            ctx.fillStyle = "#0095DD";
-            ctx.fill();
-            ctx.closePath();
-        }
-    }]);
-
-    return Enemy;
-}(_GameActor2.GameActor);
-
-},{"./GameActor":18}],18:[function(require,module,exports){
+},{"../../../Component":15,"../../../GameObject":26}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -937,7 +1099,7 @@ exports.GameActor = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _GameObject2 = require('../GameObject');
+var _GameObject2 = require('../../GameObject');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -957,11 +1119,16 @@ var GameActor = exports.GameActor = function (_GameObject) {
 
   /**
    * @constructor
+   *
+   * @param position The starting position of the spawned Actor.
    */
-  function GameActor() {
+  function GameActor(position) {
     _classCallCheck(this, GameActor);
 
-    return _possibleConstructorReturn(this, (GameActor.__proto__ || Object.getPrototypeOf(GameActor)).call(this));
+    var _this = _possibleConstructorReturn(this, (GameActor.__proto__ || Object.getPrototypeOf(GameActor)).call(this));
+
+    _this.position = position;
+    return _this;
   }
   // TODO: Make a subclass that has movement. Not all actors will, I dont think.
 
@@ -983,7 +1150,140 @@ var GameActor = exports.GameActor = function (_GameObject) {
   return GameActor;
 }(_GameObject2.GameObject);
 
-},{"../GameObject":20}],19:[function(require,module,exports){
+},{"../../GameObject":26}],22:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Npc = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _GameActor2 = require('./GameActor');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The Npc class. All non-player characters are Npcs, unlike some games where
+ * there is a `Monster` class for all hostile actors.The reasoning is that in
+ * Fiend, any non-player character can be a friend or foe, depending on how the
+ * player acts.
+ */
+var Npc = exports.Npc = function (_GameActor) {
+  _inherits(Npc, _GameActor);
+
+  /**
+   * @constructor
+   *
+   * @param actorType The Actor's type.
+   * @param position The starting position of the spawned Actor.
+   */
+  function Npc(actorType, position) {
+    _classCallCheck(this, Npc);
+
+    var _this = _possibleConstructorReturn(this, (Npc.__proto__ || Object.getPrototypeOf(Npc)).call(this, position));
+
+    _this._type = actorType;
+    return _this;
+  }
+  /**
+   * The update method for the Npc class.
+   *
+   * @param delta The time difference between frames. Provided by the game's
+   * main game loop.
+   * @see FiendGame.main()
+   */
+
+
+  _createClass(Npc, [{
+    key: 'update',
+    value: function update(delta) {}
+  }]);
+
+  return Npc;
+}(_GameActor2.GameActor);
+
+},{"./GameActor":21}],23:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.OrdinaryFolk = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _GameObject = require("../../GameObject");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The OrdinaryFolk class. Ordinary Folks are generally benign NPCs to populate
+ * the world.
+ */
+var OrdinaryFolk = exports.OrdinaryFolk = function (_Npc) {
+  _inherits(OrdinaryFolk, _Npc);
+
+  /**
+   * @constructor
+   *
+   * @param actorType The Actor's type.
+   * @param position The starting position of the spawned Actor.
+   * @param mc The movement component.
+   * @param lc The lifeforce component.
+   */
+  function OrdinaryFolk(actorType, position, mc, lc) {
+    _classCallCheck(this, OrdinaryFolk);
+
+    var _this = _possibleConstructorReturn(this, (OrdinaryFolk.__proto__ || Object.getPrototypeOf(OrdinaryFolk)).call(this, actorType, position));
+
+    _this._movementComponent = mc;
+    _this._lifeforceComponent = lc;
+    return _this;
+  }
+  /**
+   * The update method for the Npc class.
+   *
+   * @param delta The time difference between frames. Provided by the game's
+   * main game loop.
+   * @see FiendGame.main()
+   */
+
+
+  _createClass(OrdinaryFolk, [{
+    key: "update",
+    value: function update(delta) {}
+    /**
+     * Draws the NPC entity.
+     * TODO: This should be moved to the Render component once it's done.
+     *
+     * @param ctx The canvas context.
+     */
+
+  }, {
+    key: "draw",
+    value: function draw(ctx) {
+      ctx.beginPath();
+      ctx.rect(this.position.x, this.position.y, 20, 20);
+      ctx.fillStyle = "#FF0000";
+      ctx.fill();
+      ctx.closePath();
+    }
+  }]);
+
+  return OrdinaryFolk;
+}(_GameObject.Npc);
+
+},{"../../GameObject":26}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -996,6 +1296,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _GameActor2 = require('./GameActor');
 
 var _Component = require('../../Component');
+
+var _Event = require('../../Event');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1016,15 +1318,18 @@ var Player = exports.Player = function (_GameActor) {
 
   /**
    * @constructor
+   *
+   * @param position The starting position of the Player.
    */
   function Player(position) {
     _classCallCheck(this, Player);
 
-    var _this = _possibleConstructorReturn(this, (Player.__proto__ || Object.getPrototypeOf(Player)).call(this));
+    var _this = _possibleConstructorReturn(this, (Player.__proto__ || Object.getPrototypeOf(Player)).call(this, position));
 
-    _this.position = { x: 100, y: 100 };
-    _this.speed = 100;
-    _this._lifeforce = new _Component.LifeforceComponent(_this);
+    _this._lifeforceComponent = new _Component.LifeforceComponent();
+    _this._movementComponent = new _Component.MovementComponent();
+    _this._eventComponent = new _Component.EventComponent();
+    _this._eventComponent.attach(_Event.PlayerDeathEvent.create(_this));
     return _this;
   }
   /**
@@ -1039,11 +1344,13 @@ var Player = exports.Player = function (_GameActor) {
   _createClass(Player, [{
     key: 'update',
     value: function update(delta) {
-      this._lifeforce.update();
+      this._lifeforceComponent.update(this);
+      // this._eventComponent.emit('player_died');
       // TODO: console.log('this.position :', this.position);
     }
     /**
      * Draws the Player entity
+     *
      * @param ctx The canvas context.
      */
 
@@ -1065,18 +1372,17 @@ var Player = exports.Player = function (_GameActor) {
      */
     /**
      * Move the Player north.
+     *
      * @param delta The game's delta between frames.
      */
 
   }, {
     key: 'moveN',
     value: function moveN(delta) {
-      // Decrementing {y} makes the actor move south, since we're dealing with a
-      // 2D array and not an actual mathematical grid plane.
-      this.position.y -= this.speed * delta;
+      this._movementComponent.moveN(this, delta);
     }
     /**
-     * Move the Player south.
+     * Public API for the MovementComponent
      *
      * @param delta The game's delta between frames.
      */
@@ -1084,9 +1390,7 @@ var Player = exports.Player = function (_GameActor) {
   }, {
     key: 'moveS',
     value: function moveS(delta) {
-      // Increasing {y} makes the actor move south, since we're dealing with a 2D
-      // array and not an actual mathematical grid plane.
-      this.position.y += this.speed * delta;
+      this._movementComponent.moveS(this, delta);
     }
     /**
      * Move the Player east.
@@ -1097,29 +1401,29 @@ var Player = exports.Player = function (_GameActor) {
   }, {
     key: 'moveE',
     value: function moveE(delta) {
-      this.position.x += this.speed * delta;
+      this._movementComponent.moveE(this, delta);
     }
     /**
-    * Move the Player west.
-    *
-    * @param delta The game's delta between frames.
-    */
+     * Move the Player west.
+     *
+     * @param delta The game's delta between frames.
+     */
 
   }, {
     key: 'moveW',
     value: function moveW(delta) {
-      this.position.x -= this.speed * delta;
+      this._movementComponent.moveW(this, delta);
     }
   }]);
 
   return Player;
 }(_GameActor2.GameActor);
 
-},{"../../Component":14,"./GameActor":18}],20:[function(require,module,exports){
-'use strict';
+},{"../../Component":15,"../../Event":17,"./GameActor":21}],25:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1134,67 +1438,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @abstract
  */
 var GameObject = exports.GameObject = function () {
-    /**
-     * The GameObject constructor. Auto-increments the GameOject id for the new
-     * GameObject being created.
-     */
-    function GameObject() {
-        _classCallCheck(this, GameObject);
+  /**
+   * @constructor
+   * Auto-increments the GameOject id for the new GameObject being created.
+   */
+  function GameObject() {
+    _classCallCheck(this, GameObject);
 
-        this.id = GameObject.idIncrementor++;
-        // Attach events to the Game Object and emit the created event.
-        this.attachedEvents = {
-            'GO_created': new CustomEvent('GO_created', {
-                detail: {
-                    go_id: this.getId()
-                }
-            })
-        };
-        document.getElementById('game-pane').dispatchEvent(this.attachedEvents['GO_created']);
+    this.id = GameObject.idIncrementor++;
+  }
+  /**
+   * Accessor for the private member `id`.
+   *
+   * @returns The id of the GameObject
+   */
+
+
+  _createClass(GameObject, [{
+    key: "getId",
+    value: function getId() {
+      return this.id;
     }
-    /**
-     * Accessor for the private member `id`.
-     *
-     * @returns The id of the GameObject
-     */
+  }]);
 
-
-    _createClass(GameObject, [{
-        key: 'getId',
-        value: function getId() {
-            return this.id;
-        }
-    }, {
-        key: 'attachEvents',
-        value: function attachEvents(events) {
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = events[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var event = _step.value;
-
-                    this.attachedEvents[event] = new Event(event);
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-        }
-    }]);
-
-    return GameObject;
+  return GameObject;
 }();
 /**
  * @var idIncrementor Keeps track of the `id` of the last GameObject
@@ -1206,7 +1473,7 @@ var GameObject = exports.GameObject = function () {
 
 GameObject.idIncrementor = 1;
 
-},{}],21:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1237,6 +1504,30 @@ Object.keys(_GameActor).forEach(function (key) {
   });
 });
 
+var _Npc = require('./GameActor/Npc');
+
+Object.keys(_Npc).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _Npc[key];
+    }
+  });
+});
+
+var _OrdinaryFolk = require('./GameActor/OrdinaryFolk');
+
+Object.keys(_OrdinaryFolk).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _OrdinaryFolk[key];
+    }
+  });
+});
+
 var _Player = require('./GameActor/Player');
 
 Object.keys(_Player).forEach(function (key) {
@@ -1249,19 +1540,31 @@ Object.keys(_Player).forEach(function (key) {
   });
 });
 
-var _Enemy = require('./GameActor/Enemy');
+var _ActorFactory = require('./GameActor/ActorFactory/ActorFactory');
 
-Object.keys(_Enemy).forEach(function (key) {
+Object.keys(_ActorFactory).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   Object.defineProperty(exports, key, {
     enumerable: true,
     get: function get() {
-      return _Enemy[key];
+      return _ActorFactory[key];
     }
   });
 });
 
-},{"./GameActor/Enemy":17,"./GameActor/GameActor":18,"./GameActor/Player":19,"./GameObject":20}],22:[function(require,module,exports){
+var _OrdinaryFolkFactory = require('./GameActor/ActorFactory/OrdinaryFolkFactory');
+
+Object.keys(_OrdinaryFolkFactory).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _OrdinaryFolkFactory[key];
+    }
+  });
+});
+
+},{"./GameActor/ActorFactory/ActorFactory":19,"./GameActor/ActorFactory/OrdinaryFolkFactory":20,"./GameActor/GameActor":21,"./GameActor/Npc":22,"./GameActor/OrdinaryFolk":23,"./GameActor/Player":24,"./GameObject":25}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1497,7 +1800,7 @@ var InputHandler = exports.InputHandler = function () {
 //   TILDA:    192
 // };
 
-},{"../Command":10}],23:[function(require,module,exports){
+},{"../Command":10}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1510,7 +1813,7 @@ var Camera = exports.Camera = function Camera() {
     _classCallCheck(this, Camera);
 };
 
-},{}],24:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1639,7 +1942,7 @@ var Renderer = exports.Renderer = function () {
     return Renderer;
 }();
 
-},{"../../atlases/Overworld":2}],25:[function(require,module,exports){
+},{"../../atlases/Overworld":2}],30:[function(require,module,exports){
 "use strict";
 
 var _FiendGame = require("./engine/FiendGame");
@@ -1669,6 +1972,6 @@ window.onload = function () {
     });
 };
 
-},{"./engine/AssetLoader":3,"./engine/FiendGame":16}]},{},[25])
+},{"./engine/AssetLoader":3,"./engine/FiendGame":18}]},{},[30])
 
 //# sourceMappingURL=bundle.js.map

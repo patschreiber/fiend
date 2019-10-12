@@ -1,19 +1,16 @@
 /**
- * The interface for the [[GameActor]] class.
+ * The interface for the [[GameObject]] class.
  *
- * @interface IGameActor
+ * @interface IGameObject
  */
 interface IGameObject {
 
   /**
-   * The human-readable name of the GameObject. This will appear in-game.
+   * Accessor for the private member `id`.
+   *
+   * @returns The id of the GameObject
    */
-  name: string;
-
-  /**
-   * The list of events that can be emitted.
-   */
-  attachedEvents: EventContainer;
+   getId(): number;
 
   /**
    * Defines the signature for the update method for the GameActor.
@@ -48,38 +45,11 @@ export abstract class GameObject implements IGameObject {
   private id: number;
 
   /**
-    * @var type The name of the type of the GameObject.
-    */
-  protected type: string;
-
-  /**
-   * @var name The humanized name of the GameObject.
-   */
-  public name: string;
-
-  /**
-   * @var attachedEvents The list of events that can be emitted.
-   */
-  public attachedEvents: EventContainer;
-
-  /**
    * @constructor
    * Auto-increments the GameOject id for the new GameObject being created.
    */
   public constructor() {
-
     this.id = GameObject.idIncrementor++;
-
-    // Attach events to the Game Object and emit the created event.
-    this.attachedEvents = {
-      'GO_created': new CustomEvent('GO_created', {
-        detail: {
-          go_id: this.getId(),
-        }
-      }),
-    }
-    document.getElementById('game-pane')
-      .dispatchEvent(this.attachedEvents['GO_created']);
   }
 
   /**
