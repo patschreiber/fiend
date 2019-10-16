@@ -1,8 +1,5 @@
 import { GameObject } from '../GameObject/GameObject';
 import { Component } from './Component';
-import { EventComponent } from './EventComponent';
-
-import { PlayerDeathEvent } from '../Event/PlayerDeathEvent';
 
 /**
  * The Lifeforce component. Adds health to a GameObject. Adds life, health
@@ -15,29 +12,28 @@ import { PlayerDeathEvent } from '../Event/PlayerDeathEvent';
  */
 export class LifeforceComponent extends Component {
 
+  /**
+   * The current HP of the GameObject.
+   */
   private currentHP: number;
 
+  /**
+   * The maximum HP of the GameObject.
+   */
   private maxHP: number;
-
-  private _eventComponent: EventComponent;
 
   /**
    * @constructor
-   *
-   * @param GO The GameObject this component belongs to.
    */
-  public constructor(GO: GameObject) {
+  public constructor() {
     super();
-
-    this._eventComponent = new EventComponent();
-    this._eventComponent.attach(PlayerDeathEvent.create(GO));
   }
 
   /**
    * Update is intended to be run once per frame.
+   *
+   * @param GO The GameObject this component belongs to.
    */
-  public update(): void {
-    // this._eventComponent.emit('player_died');
-  }
+  public update(GO: GameObject): void {}
 
 }

@@ -5,9 +5,14 @@ import { Renderer } from "./Render/Renderer";
 // Player
 import { Player } from './GameObject';
 
-// Enemies
-// TODO: Might remove
-import { Enemy } from './GameObject';
+// Factories
+// TODO: Actor factories should be loaded per Scene, once the scene
+// functionality is created!
+import {
+  OrdinaryFolkFactory
+} from './GameObject';
+
+// Factories
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -53,6 +58,10 @@ export class FiendGame {
    */
   public gameObjects: Array<any>;
 
+  // TODO: This is a test! Actor factories should be loaded per Scene, once the
+  // scene functionality is created!
+  public ordinaryFolk: OrdinaryFolkFactory;
+
   /**
    * The max amount of active game objects that can be present in the game.
    * TODO: Figure out what happens if this limit is reached.
@@ -95,8 +104,9 @@ export class FiendGame {
     this.container = document.getElementById("fiend-game");
     this.container.insertBefore(this.canvas, this.container.firstChild);
 
+    // TODO: This is a test to test event emission.
     document.getElementById('game-pane').addEventListener(
-      'test_event',
+      'player_died',
       (event: CustomEvent) => this.respondToGameObjectCreation(event),
       false
     );
@@ -119,10 +129,16 @@ export class FiendGame {
 
     this.gameObjectCount = 0;
 
+    // Instantiate Actor factories here as a test. We want to instantiate the
+    // factory so the memory is allocated when the Scene is loaded.
+    // TODO: Actor factories should be loaded per Scene, once the scene
+    // functionality is created!
+    this.ordinaryFolk = new OrdinaryFolkFactory();
+
     this.gameObjects = [
       // TODO This is a test, do should be empty on init.
-      // new Enemy(),
       this.Player,
+      this.ordinaryFolk.spawn({x:200,y:100}),
     ];
 
     // Let's kick off the game loop!

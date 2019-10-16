@@ -10,6 +10,8 @@ export class PlayerDeathEvent {
    * of data via the `CustomEventInit` dictionary.
    *
    * @param player The player GameObject.
+   *
+   * @emits `player_died`
    */
   public static create(player: GameObject): CustomEvent {
 

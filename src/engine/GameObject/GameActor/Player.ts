@@ -1,5 +1,11 @@
 import { GameActor } from './GameActor';
-import { LifeforceComponent } from '../../Component';
+import {
+  EventComponent,
+  LifeforceComponent,
+  MovementComponent
+} from '../../Component';
+
+import { PlayerDeathEvent } from '../../Event';
 
 /**
  * The interface for the [[Player]] class.
@@ -47,21 +53,23 @@ interface IPlayer {
  */
 export class Player extends GameActor implements IPlayer {
 
-  public speed: number;
-
-  private _lifeforce: LifeforceComponent;
+  private _eventComponent: EventComponent;
+  private _lifeforceComponent: LifeforceComponent;
+  private _movementComponent: MovementComponent;
 
   /**
    * @constructor
+   *
+   * @param position The starting position of the Player.
    */
    constructor(position: Coordinate) {
-    super();
+    super(position);
 
-    this.position = {x:100,y:100};
+    this._lifeforceComponent = new LifeforceComponent();
+    this._movementComponent = new MovementComponent();
 
-    this.speed = 100;
-
-    this._lifeforce = new LifeforceComponent(this);
+    this._eventComponent = new EventComponent();
+    this._eventComponent.attach(PlayerDeathEvent.create(this));
   }
 
   /**
@@ -72,13 +80,15 @@ export class Player extends GameActor implements IPlayer {
    * @see FiendGame.main()
    */
   public update(delta: number): void {
-    this._lifeforce.update();
+    this._lifeforceComponent.update(this);
+    // this._eventComponent.emit('player_died');
     // TODO: console.log('this.position :', this.position);
   }
 
 
   /**
    * Draws the Player entity
+   *
    * @param ctx The canvas context.
    */
    public draw(ctx: CanvasRenderingContext2D) {
@@ -100,23 +110,20 @@ export class Player extends GameActor implements IPlayer {
 
   /**
    * Move the Player north.
+   *
    * @param delta The game's delta between frames.
    */
   public moveN(delta: number): void {
-    // Decrementing {y} makes the actor move south, since we're dealing with a
-    // 2D array and not an actual mathematical grid plane.
-    this.position.y -= this.speed * delta;
+    this._movementComponent.moveN(this, delta);
   }
 
   /**
-   * Move the Player south.
+   * Public API for the MovementComponent
    *
    * @param delta The game's delta between frames.
    */
   public moveS(delta: number): void {
-    // Increasing {y} makes the actor move south, since we're dealing with a 2D
-    // array and not an actual mathematical grid plane.
-    this.position.y += this.speed * delta;
+    this._movementComponent.moveS(this, delta);
   }
 
   /**
@@ -125,7 +132,7 @@ export class Player extends GameActor implements IPlayer {
    * @param delta The game's delta between frames.
    */
   public moveE(delta: number): void {
-    this.position.x += this.speed * delta;
+    this._movementComponent.moveE(this, delta);
   }
 
   /**
@@ -134,7 +141,7 @@ export class Player extends GameActor implements IPlayer {
    * @param delta The game's delta between frames.
    */
   public moveW(delta: number): void {
-    this.position.x -= this.speed * delta;
+    this._movementComponent.moveW(this, delta);
   }
 
 }

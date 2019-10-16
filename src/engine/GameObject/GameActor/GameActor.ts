@@ -1,4 +1,4 @@
-import { GameObject } from '../GameObject';
+import { GameObject } from '../../GameObject';
 
 /**
  * The interface for the [[GameActor]] class.
@@ -38,9 +38,13 @@ export abstract class GameActor extends GameObject implements IGameActor {
 
   /**
    * @constructor
+   *
+   * @param position The starting position of the spawned Actor.
    */
-  constructor() {
+  constructor(position: Coordinate) {
     super();
+
+    this.position = position;
   }
 
   /**
