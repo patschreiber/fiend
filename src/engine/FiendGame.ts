@@ -241,4 +241,5 @@ export class FiendGame {
     this._update(delta);
     this._draw();
   }
+
 }
