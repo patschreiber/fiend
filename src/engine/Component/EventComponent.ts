@@ -1,3 +1,6 @@
+import { EventContainer } from "../types/globals";
+import { Component } from './Component';
+
 /**
  * The EventComponent interface.
  */
@@ -37,7 +40,7 @@
  * The EventComponent class.
  * @implements [[IEventComponent]]
  */
-export class EventComponent implements IEventComponent {
+export class EventComponent extends Component implements IEventComponent {
 
   /**
    * @var attachedEvents The list of events that can be emitted.
@@ -48,6 +51,10 @@ export class EventComponent implements IEventComponent {
    * @constructor
    */
   public constructor() {
+    super();
+
+    this.typeId = "EventComponent";
+
     // We need to declare this as an object otherwise we get a reference error
     // when we try and assign events to it in the `attach` and `attachMultiple`
     // methods.

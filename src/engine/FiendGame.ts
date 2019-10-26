@@ -11,6 +11,7 @@ import { Player } from './GameObject';
 import {
   OrdinaryFolkFactory
 } from './GameObject';
+import { LifeforceComponent, MovementComponent } from "./Component";
 
 // Factories
 
@@ -119,7 +120,17 @@ export class FiendGame {
 
     this.maxEntities = 1000;
 
+
     this.Player = new Player({x:125,y:125});
+    console.log('this.Player.listComponents() :', this.Player.listComponents());
+    this.Player.addComponent(new LifeforceComponent());
+    this.Player.addComponent(new MovementComponent());
+    let comp = this.Player.getComponent("MovementComponent");
+    console.log('comp :', comp);
+
+    this.Player.removeComponent("LifeforceComponent");
+    this.Player.removeComponent("LifeforceComponent");
+    console.log('this.Player.listComponents() :', this.Player.listComponents());
 
     this.Renderer = new Renderer(this.canvas);
 

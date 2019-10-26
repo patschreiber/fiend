@@ -1,3 +1,5 @@
+import { Coordinate } from "../../types/globals";
+
 interface ICamera {
 
   /**
