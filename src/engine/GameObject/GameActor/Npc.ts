@@ -1,5 +1,6 @@
 import { GameActor } from './GameActor';
 import { ActorFactory } from '../../GameObject';
+import { Coordinate } from '../../types/globals';
 
 /**
  * The Npc class. All non-player characters are Npcs, unlike some games where

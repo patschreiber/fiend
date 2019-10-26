@@ -6,6 +6,7 @@ import {
 } from '../../Component';
 
 import { PlayerDeathEvent } from '../../Event';
+import { Coordinate } from '../../types/globals';
 
 /**
  * The interface for the [[Player]] class.
@@ -145,4 +146,3 @@ export class Player extends GameActor implements IPlayer {
   }
 
 }
-

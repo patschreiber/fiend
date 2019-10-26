@@ -1,3 +1,5 @@
+import { Component } from "../Component";
+
 /**
  * Provides an x,y coordinate tuple.
  * [x,y]: The coordinate tuple.
@@ -33,3 +35,18 @@ type Coordinate = {
 type EventContainer = {
   [eventName: string]: Event|CustomEvent,
 };
+
+/**
+ * Provides a container to house an entity's attached Components. Modifying the
+ * contents of this container should be done through an interface provided by
+ * the entity; it should not be modified directly.
+ *
+ * @example
+ * Player.components = {
+ *   "MovementComponent": new MovementComponent(),
+ *   "LifeforceComponent": new LifeforceComponent(),
+ * }
+ */
+type ComponentContainer = {
+  [componentName: string]: Component;
+}
