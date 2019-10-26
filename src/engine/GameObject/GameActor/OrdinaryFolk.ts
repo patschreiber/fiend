@@ -8,6 +8,8 @@ import {
   LifeforceComponent
 } from '../../Component';
 
+import { Coordinate } from '../../types/globals';
+
 /**
  * The OrdinaryFolk class. Ordinary Folks are generally benign NPCs to populate
  * the world.
