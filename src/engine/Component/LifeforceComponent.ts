@@ -10,7 +10,7 @@ import { Component } from './Component';
  *
  * @extends [[Component]]
  */
-export class LifeforceComponent extends Component {
+export class LifeforceComponent extends Component implements Component {
 
   /**
    * The current HP of the GameObject.
@@ -27,6 +27,8 @@ export class LifeforceComponent extends Component {
    */
   public constructor() {
     super();
+
+    this.typeId = "LifeforceComponent";
   }
 
   /**

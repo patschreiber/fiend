@@ -21,6 +21,8 @@ export class MovementComponent extends Component {
   public constructor() {
     super();
 
+    this.typeId = "MovementComponent";
+
     this.speed = 100;
   }
 
