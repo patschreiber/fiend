@@ -571,13 +571,36 @@ exports.Component = void 0;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 /**
  * The Component class
  * @abstract
  */
-var Component = function Component() {
-  _classCallCheck(this, Component);
-};
+var Component =
+/*#__PURE__*/
+function () {
+  function Component() {
+    _classCallCheck(this, Component);
+  }
+
+  _createClass(Component, [{
+    key: "getTypeId",
+
+    /**
+     * Accessor for the private member `typeId`.
+     *
+     * @returns The type id the Component.
+     */
+    value: function getTypeId() {
+      return this.typeId;
+    }
+  }]);
+
+  return Component;
+}();
 
 exports.Component = Component;
 
@@ -589,11 +612,25 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.EventComponent = void 0;
 
+var _Component2 = require("./Component");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 /**
  * The EventComponent class.
@@ -601,17 +638,24 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  */
 var EventComponent =
 /*#__PURE__*/
-function () {
+function (_Component) {
+  _inherits(EventComponent, _Component);
+
   /**
    * @constructor
    */
   function EventComponent() {
+    var _this;
+
     _classCallCheck(this, EventComponent);
 
-    // We need to declare this as an object otherwise we get a reference error
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(EventComponent).call(this));
+    _this.typeId = "EventComponent"; // We need to declare this as an object otherwise we get a reference error
     // when we try and assign events to it in the `attach` and `attachMultiple`
     // methods.
-    this.attachedEvents = {};
+
+    _this.attachedEvents = {};
+    return _this;
   }
   /**
    * Attaches a single event to this component. Attached components can be
@@ -675,11 +719,11 @@ function () {
   }]);
 
   return EventComponent;
-}();
+}(_Component2.Component);
 
 exports.EventComponent = EventComponent;
 
-},{}],13:[function(require,module,exports){
+},{"./Component":11}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -725,9 +769,13 @@ function (_Component) {
    * @constructor
    */
   function LifeforceComponent() {
+    var _this;
+
     _classCallCheck(this, LifeforceComponent);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(LifeforceComponent).call(this));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(LifeforceComponent).call(this));
+    _this.typeId = "LifeforceComponent";
+    return _this;
   }
   /**
    * Update is intended to be run once per frame.
@@ -795,6 +843,7 @@ function (_Component) {
     _classCallCheck(this, MovementComponent);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(MovementComponent).call(this));
+    _this.typeId = "MovementComponent";
     _this.speed = 100;
     return _this;
   }
@@ -993,6 +1042,8 @@ var _Renderer = require("./Render/Renderer");
 
 var _GameObject = require("./GameObject");
 
+var _Component = require("./Component");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1031,6 +1082,14 @@ function () {
       x: 125,
       y: 125
     });
+    console.log('this.Player.listComponents() :', this.Player.listComponents());
+    this.Player.addComponent(new _Component.LifeforceComponent());
+    this.Player.addComponent(new _Component.MovementComponent());
+    var comp = this.Player.getComponent("MovementComponent");
+    console.log('comp :', comp);
+    this.Player.removeComponent("LifeforceComponent");
+    this.Player.removeComponent("LifeforceComponent");
+    console.log('this.Player.listComponents() :', this.Player.listComponents());
     this.Renderer = new _Renderer.Renderer(this.canvas);
     this.InputHandler = new _InputHandler.InputHandler();
     this.Camera = new _Camera.Camera();
@@ -1164,7 +1223,7 @@ function () {
 
 exports.FiendGame = FiendGame;
 
-},{"./GameObject":26,"./Input/InputHandler":27,"./Render/Camera/Camera":28,"./Render/Renderer":29}],19:[function(require,module,exports){
+},{"./Component":15,"./GameObject":26,"./Input/InputHandler":27,"./Render/Camera/Camera":28,"./Render/Renderer":29}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1315,12 +1374,103 @@ function (_GameObject) {
     _classCallCheck(this, GameActor);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(GameActor).call(this));
-    _this.position = position;
+    _this.position = position; // We need to declare this as an object otherwise we get a reference error
+    // when we try and assign Components to it with addComponent().
+
+    _this.components = {};
     return _this;
-  } // TODO: Make a subclass that has movement. Not all actors will, I dont think.
+  }
+  /**
+   * Adds a Component to the GameActor's `ComponentContainer`, if it's not
+   * already attached.
+   *
+   * @param component The Component to be attached.
+   *
+   * @return If the Component was successfully attached or not.
+   */
 
 
   _createClass(GameActor, [{
+    key: "addComponent",
+    value: function addComponent(component) {
+      var typeId = component.getTypeId();
+
+      if (this.hasComponent(typeId)) {
+        // TODO: Make this a real exception.
+        console.log('addComponentError :', "A ".concat(typeId, " Component is already attached to this GameActor(id:").concat(this.getId(), ")"));
+        return false;
+      }
+
+      this.components[typeId] = component;
+      return true;
+    }
+    /**
+     * Removes a Component from the GameActor's `ComponentContainer`, if it's
+     * attached.
+     *
+     * @param key The lookup key for the Component to be removed from this
+     * GameActor. Usually this is the Component's `typeId` as a string.
+     *
+     * @return If the Component was successfully removed or not.
+     */
+
+  }, {
+    key: "removeComponent",
+    value: function removeComponent(key) {
+      if (this.hasComponent(key)) {
+        delete this.components[key];
+        return true;
+      } // TODO: Make this a real exception.
+
+
+      console.log('removeComponentError :', "Cannot remove Component ".concat(key, " since one's not attached to this GameActor(id:").concat(this.getId(), ")"));
+    }
+    /**
+     * Checks to see if a Component is attached to this GameActor via the
+     * `ComponentContainer` list.
+     *
+     * @param key The key to use as a look up. Usually this is the Component's
+     * `typeId` as a string.
+     *
+     * @return If the Component is attached to this GameActor.
+     */
+
+  }, {
+    key: "hasComponent",
+    value: function hasComponent(key) {
+      return this.components[key] === undefined ? false : true;
+    }
+    /**
+     *  Gets a Component attached to this GameActor.
+     *
+     * @param key The key to use as a look up. Usually this is the Component's
+     * `typeId` as a string.
+     *
+     * @return The desired attached Component, or null if it's not attached.
+     */
+
+  }, {
+    key: "getComponent",
+    value: function getComponent(key) {
+      if (this.hasComponent(key)) {
+        return this.components[key];
+      }
+
+      return null;
+    }
+    /**
+     * Retrieves the list of Components attached to this GameActor.
+     *
+     * @return The list of attached Components.
+     */
+
+  }, {
+    key: "listComponents",
+    value: function listComponents() {
+      return Object.keys(this.components);
+    } // TODO: Make a subclass that has movement. Not all actors will, I dont think.
+
+  }, {
     key: "moveN",
     value: function moveN(delta) {}
   }, {
