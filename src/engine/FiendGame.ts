@@ -9,9 +9,9 @@ import { Player } from './GameObject';
 // TODO: Actor factories should be loaded per Scene, once the scene
 // functionality is created!
 import {
+  PlayerFactory,
   OrdinaryFolkFactory
 } from './GameObject';
-import { LifeforceComponent, MovementComponent } from "./Component";
 
 // Factories
 
@@ -25,11 +25,6 @@ export class FiendGame {
    * The input handler that accepts player input.
    */
   public InputHandler: InputHandler;
-
-  /**
-   * The instance of the Player's character.
-   */
-  public Player: Player;
 
   /**
    * The renderer responsible for drawing to the screen.
@@ -61,7 +56,13 @@ export class FiendGame {
 
   // TODO: This is a test! Actor factories should be loaded per Scene, once the
   // scene functionality is created!
-  public ordinaryFolk: OrdinaryFolkFactory;
+  public OrdinaryFolkFactory: OrdinaryFolkFactory;
+  public PlayerFactory: PlayerFactory;
+
+  /**
+   * The instance of the Player's character.
+   */
+  public Player: Player;
 
   /**
    * The max amount of active game objects that can be present in the game.
@@ -120,18 +121,6 @@ export class FiendGame {
 
     this.maxEntities = 1000;
 
-
-    this.Player = new Player({x:125,y:125});
-    console.log('this.Player.listComponents() :', this.Player.listComponents());
-    this.Player.addComponent(new LifeforceComponent());
-    this.Player.addComponent(new MovementComponent());
-    let comp = this.Player.getComponent("MovementComponent");
-    console.log('comp :', comp);
-
-    this.Player.removeComponent("LifeforceComponent");
-    this.Player.removeComponent("LifeforceComponent");
-    console.log('this.Player.listComponents() :', this.Player.listComponents());
-
     this.Renderer = new Renderer(this.canvas);
 
     this.InputHandler = new InputHandler();
@@ -144,13 +133,17 @@ export class FiendGame {
     // factory so the memory is allocated when the Scene is loaded.
     // TODO: Actor factories should be loaded per Scene, once the scene
     // functionality is created!
-    this.ordinaryFolk = new OrdinaryFolkFactory();
+    this.OrdinaryFolkFactory = new OrdinaryFolkFactory();
+    this.PlayerFactory = new PlayerFactory();
+    this.Player = this.PlayerFactory.spawn({x:125,y:125});
 
     this.gameObjects = [
       // TODO This is a test, do should be empty on init.
       this.Player,
-      this.ordinaryFolk.spawn({x:200,y:100}),
+      this.OrdinaryFolkFactory.spawn({x:200,y:100}),
     ];
+
+    console.log('this.gameObjects :', this.gameObjects);
 
     // Let's kick off the game loop!
     this.main(performance.now());

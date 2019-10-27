@@ -113,7 +113,7 @@ export abstract class GameActor extends GameObject implements IGameActor {
    *
    * @return If the Component was successfully attached or not.
    */
-  public addComponent(component: Component): boolean {
+  public addComponent<K extends keyof ComponentContainer>(component: ComponentContainer[K]): boolean {
     let typeId = component.getTypeId();
 
     if (this.hasComponent(typeId)) {
@@ -160,14 +160,19 @@ export abstract class GameActor extends GameObject implements IGameActor {
   }
 
   /**
-   *  Gets a Component attached to this GameActor.
+   * Gets a Component attached to this GameActor.
+   *
+   * @see https://stackoverflow.com/questions/58573975
    *
    * @param key The key to use as a look up. Usually this is the Component's
-   * `typeId` as a string.
+   * `typeId` as a string. It must be a key defined in the `ComponentContainer`
+   * type.
    *
    * @return The desired attached Component, or null if it's not attached.
    */
-  public getComponent(key: string): Component|null {
+  public getComponent<K extends keyof ComponentContainer>(
+    key: K
+  ): ComponentContainer[K] {
     if (this.hasComponent(key)) {
       return this.components[key];
     }

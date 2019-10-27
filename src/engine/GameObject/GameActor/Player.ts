@@ -1,11 +1,8 @@
-import { GameActor } from './GameActor';
 import {
-  EventComponent,
-  LifeforceComponent,
-  MovementComponent
-} from '../../Component';
+  GameActor,
+  ActorFactory
+} from '../../GameObject';
 
-import { PlayerDeathEvent } from '../../Event';
 import { Coordinate } from '../../types/globals';
 
 /**
@@ -54,23 +51,21 @@ interface IPlayer {
  */
 export class Player extends GameActor implements IPlayer {
 
-  private _eventComponent: EventComponent;
-  private _lifeforceComponent: LifeforceComponent;
-  private _movementComponent: MovementComponent;
+  /**
+   * The actor's type.
+   */
+  protected _type: ActorFactory;
 
   /**
    * @constructor
    *
+   * @param actorType The Actor's type.
    * @param position The starting position of the Player.
    */
-   constructor(position: Coordinate) {
+   constructor(actorType: ActorFactory, position: Coordinate) {
     super(position);
 
-    this._lifeforceComponent = new LifeforceComponent();
-    this._movementComponent = new MovementComponent();
-
-    this._eventComponent = new EventComponent();
-    this._eventComponent.attach(PlayerDeathEvent.create(this));
+    this._type = actorType;
   }
 
   /**
@@ -81,11 +76,9 @@ export class Player extends GameActor implements IPlayer {
    * @see FiendGame.main()
    */
   public update(delta: number): void {
-    this._lifeforceComponent.update(this);
     // this._eventComponent.emit('player_died');
     // TODO: console.log('this.position :', this.position);
   }
-
 
   /**
    * Draws the Player entity
@@ -115,7 +108,9 @@ export class Player extends GameActor implements IPlayer {
    * @param delta The game's delta between frames.
    */
   public moveN(delta: number): void {
-    this._movementComponent.moveN(this, delta);
+    if (this.hasComponent("MovementComponent")) {
+      this.getComponent("MovementComponent").moveN(this, delta);
+    }
   }
 
   /**
@@ -124,7 +119,9 @@ export class Player extends GameActor implements IPlayer {
    * @param delta The game's delta between frames.
    */
   public moveS(delta: number): void {
-    this._movementComponent.moveS(this, delta);
+    if (this.hasComponent("MovementComponent")) {
+      this.getComponent("MovementComponent").moveS(this, delta);
+    }
   }
 
   /**
@@ -133,7 +130,9 @@ export class Player extends GameActor implements IPlayer {
    * @param delta The game's delta between frames.
    */
   public moveE(delta: number): void {
-    this._movementComponent.moveE(this, delta);
+    if (this.hasComponent("MovementComponent")) {
+      this.getComponent("MovementComponent").moveE(this, delta);
+    }
   }
 
   /**
@@ -142,7 +141,9 @@ export class Player extends GameActor implements IPlayer {
    * @param delta The game's delta between frames.
    */
   public moveW(delta: number): void {
-    this._movementComponent.moveW(this, delta);
+    if (this.hasComponent("MovementComponent")) {
+      this.getComponent("MovementComponent").moveW(this, delta);
+    }
   }
 
 }

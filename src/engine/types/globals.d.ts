@@ -1,4 +1,9 @@
-import { Component } from "../Component";
+import {
+  Component,
+  EventComponent,
+  LifeforceComponent,
+  MovementComponent
+} from "../Component";
 
 /**
  * Provides an x,y coordinate tuple.
@@ -39,14 +44,22 @@ type EventContainer = {
 /**
  * Provides a container to house an entity's attached Components. Modifying the
  * contents of this container should be done through an interface provided by
- * the entity; it should not be modified directly.
+ * the entity; it should not be modified directly. An entity may not have any
+ * Components, so we mark every one optional.
  *
  * @example
  * Player.components = {
- *   "MovementComponent": new MovementComponent(),
- *   "LifeforceComponent": new LifeforceComponent(),
+ *   MovementComponent: new MovementComponent(),
+ *   LifeforceComponent: new LifeforceComponent(),
  * }
+ * // Gets the event component attached to the player, then attached a new event
+ * // "SomeEvent" to the EventComponent.
+ * player.getComponent("EventComponent").attach(SomeEvent.create(player));
+ *
+ * @see https://stackoverflow.com/questions/58573975
  */
 type ComponentContainer = {
-  [componentName: string]: Component;
+  EventComponent?: EventComponent;
+  LifeforceComponent?: LifeforceComponent;
+  MovementComponent?: MovementComponent;
 }
