@@ -3,11 +3,6 @@ import {
   Npc
 } from '../../GameObject';
 
-import {
-  MovementComponent,
-  LifeforceComponent
-} from '../../Component';
-
 import { Coordinate } from '../../types/globals';
 
 /**
@@ -16,27 +11,14 @@ import { Coordinate } from '../../types/globals';
  */
 export class OrdinaryFolk extends Npc {
 
-  private _lifeforceComponent: LifeforceComponent;
-  private _movementComponent: MovementComponent;
-
   /**
    * @constructor
    *
    * @param actorType The Actor's type.
    * @param position The starting position of the spawned Actor.
-   * @param mc The movement component.
-   * @param lc The lifeforce component.
    */
-  public constructor(
-    actorType: ActorFactory,
-    position: Coordinate,
-    mc: MovementComponent,
-    lc: LifeforceComponent
-  ) {
+  public constructor(actorType: ActorFactory, position: Coordinate) {
     super(actorType, position);
-
-    this._movementComponent = mc;
-    this._lifeforceComponent = lc;
   }
 
   /**
@@ -54,7 +36,7 @@ export class OrdinaryFolk extends Npc {
    *
    * @param ctx The canvas context.
    */
-  public draw(ctx: CanvasRenderingContext2D) {
+  public draw(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath();
     ctx.rect(this.position.x, this.position.y, 20, 20);
     ctx.fillStyle = "#FF0000";

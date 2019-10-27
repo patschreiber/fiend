@@ -39,3 +39,8 @@ export * from './GameActor/ActorFactory/ActorFactory';
  * The OrdinaryFolk factory class.
  */
 export * from './GameActor/ActorFactory/OrdinaryFolkFactory';
+
+/**
+ * The Player factory class.
+ */
+export * from './GameActor/ActorFactory/PlayerFactory';

@@ -34,12 +34,10 @@ export class OrdinaryFolkFactory extends ActorFactory {
    * @return The spawned GameActor.
    */
   public spawn(position: Coordinate): OrdinaryFolk {
-    let npc = new OrdinaryFolk(
-      this,
-      position,
-      new MovementComponent(),
-      new LifeforceComponent()
-    );
+    let npc = new OrdinaryFolk(this, position);
+
+    npc.addComponent(new MovementComponent());
+    npc.addComponent(new LifeforceComponent());
 
     return npc;
   }
