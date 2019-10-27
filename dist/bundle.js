@@ -1042,8 +1042,6 @@ var _Renderer = require("./Render/Renderer");
 
 var _GameObject = require("./GameObject");
 
-var _Component = require("./Component");
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1078,18 +1076,6 @@ function () {
     this.tickLength = 60;
     this.lastFrameTime = 0;
     this.maxEntities = 1000;
-    this.Player = new _GameObject.Player({
-      x: 125,
-      y: 125
-    });
-    console.log('this.Player.listComponents() :', this.Player.listComponents());
-    this.Player.addComponent(new _Component.LifeforceComponent());
-    this.Player.addComponent(new _Component.MovementComponent());
-    var comp = this.Player.getComponent("MovementComponent");
-    console.log('comp :', comp);
-    this.Player.removeComponent("LifeforceComponent");
-    this.Player.removeComponent("LifeforceComponent");
-    console.log('this.Player.listComponents() :', this.Player.listComponents());
     this.Renderer = new _Renderer.Renderer(this.canvas);
     this.InputHandler = new _InputHandler.InputHandler();
     this.Camera = new _Camera.Camera();
@@ -1098,12 +1084,18 @@ function () {
     // TODO: Actor factories should be loaded per Scene, once the scene
     // functionality is created!
 
-    this.ordinaryFolk = new _GameObject.OrdinaryFolkFactory();
+    this.OrdinaryFolkFactory = new _GameObject.OrdinaryFolkFactory();
+    this.PlayerFactory = new _GameObject.PlayerFactory();
+    this.Player = this.PlayerFactory.spawn({
+      x: 125,
+      y: 125
+    });
     this.gameObjects = [// TODO This is a test, do should be empty on init.
-    this.Player, this.ordinaryFolk.spawn({
+    this.Player, this.OrdinaryFolkFactory.spawn({
       x: 200,
       y: 100
-    })]; // Let's kick off the game loop!
+    })];
+    console.log('this.gameObjects :', this.gameObjects); // Let's kick off the game loop!
 
     this.main(performance.now());
   }
@@ -1223,7 +1215,7 @@ function () {
 
 exports.FiendGame = FiendGame;
 
-},{"./Component":15,"./GameObject":26,"./Input/InputHandler":27,"./Render/Camera/Camera":28,"./Render/Renderer":29}],19:[function(require,module,exports){
+},{"./GameObject":27,"./Input/InputHandler":28,"./Render/Camera/Camera":29,"./Render/Renderer":30}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1313,7 +1305,9 @@ function (_ActorFactory) {
   _createClass(OrdinaryFolkFactory, [{
     key: "spawn",
     value: function spawn(position) {
-      var npc = new _GameObject.OrdinaryFolk(this, position, new _Component.MovementComponent(), new _Component.LifeforceComponent());
+      var npc = new _GameObject.OrdinaryFolk(this, position);
+      npc.addComponent(new _Component.MovementComponent());
+      npc.addComponent(new _Component.LifeforceComponent());
       return npc;
     }
   }]);
@@ -1323,7 +1317,87 @@ function (_ActorFactory) {
 
 exports.OrdinaryFolkFactory = OrdinaryFolkFactory;
 
-},{"../../../Component":15,"../../../GameObject":26}],21:[function(require,module,exports){
+},{"../../../Component":15,"../../../GameObject":27}],21:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PlayerFactory = void 0;
+
+var _GameObject = require("../../../GameObject");
+
+var _Component = require("../../../Component");
+
+var _Event = require("../../../Event");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+/**
+ * The Player class. This is used to spawn a Player character.
+ */
+var PlayerFactory =
+/*#__PURE__*/
+function (_ActorFactory) {
+  _inherits(PlayerFactory, _ActorFactory);
+
+  /**
+   * @constructor
+   */
+  function PlayerFactory() {
+    var _this;
+
+    _classCallCheck(this, PlayerFactory);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(PlayerFactory).call(this));
+    _this.label = "player_1";
+    return _this;
+  }
+  /**
+   * Factory method for creating a new Npc of type OrdinaryFolk.
+   * For reference, check out the Type Object (factory) pattern.
+   *
+   * @param position The starting position of the spawned Actor.
+   *
+   * @return The spawned GameActor.
+   */
+
+
+  _createClass(PlayerFactory, [{
+    key: "spawn",
+    value: function spawn(position) {
+      var player = new _GameObject.Player(this, position);
+      player.addComponent(new _Component.EventComponent());
+      player.addComponent(new _Component.LifeforceComponent());
+      player.addComponent(new _Component.MovementComponent()); // Attach some Player-specific events.
+
+      player.getComponent("EventComponent").attach(_Event.PlayerDeathEvent.create(player));
+      return player;
+    }
+  }]);
+
+  return PlayerFactory;
+}(_GameObject.ActorFactory);
+
+exports.PlayerFactory = PlayerFactory;
+
+},{"../../../Component":15,"../../../Event":17,"../../../GameObject":27}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1441,10 +1515,13 @@ function (_GameObject) {
       return this.components[key] === undefined ? false : true;
     }
     /**
-     *  Gets a Component attached to this GameActor.
+     * Gets a Component attached to this GameActor.
+     *
+     * @see https://stackoverflow.com/questions/58573975
      *
      * @param key The key to use as a look up. Usually this is the Component's
-     * `typeId` as a string.
+     * `typeId` as a string. It must be a key defined in the `ComponentContainer`
+     * type.
      *
      * @return The desired attached Component, or null if it's not attached.
      */
@@ -1489,7 +1566,7 @@ function (_GameObject) {
 
 exports.GameActor = GameActor;
 
-},{"../../GameObject":26}],22:[function(require,module,exports){
+},{"../../GameObject":27}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1562,7 +1639,7 @@ function (_GameActor) {
 
 exports.Npc = Npc;
 
-},{"./GameActor":21}],23:[function(require,module,exports){
+},{"./GameActor":22}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1604,18 +1681,11 @@ function (_Npc) {
    *
    * @param actorType The Actor's type.
    * @param position The starting position of the spawned Actor.
-   * @param mc The movement component.
-   * @param lc The lifeforce component.
    */
-  function OrdinaryFolk(actorType, position, mc, lc) {
-    var _this;
-
+  function OrdinaryFolk(actorType, position) {
     _classCallCheck(this, OrdinaryFolk);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(OrdinaryFolk).call(this, actorType, position));
-    _this._movementComponent = mc;
-    _this._lifeforceComponent = lc;
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(OrdinaryFolk).call(this, actorType, position));
   }
   /**
    * The update method for the Npc class.
@@ -1652,7 +1722,7 @@ function (_Npc) {
 
 exports.OrdinaryFolk = OrdinaryFolk;
 
-},{"../../GameObject":26}],24:[function(require,module,exports){
+},{"../../GameObject":27}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1660,11 +1730,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Player = void 0;
 
-var _GameActor2 = require("./GameActor");
-
-var _Component = require("../../Component");
-
-var _Event = require("../../Event");
+var _GameObject = require("../../GameObject");
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -1676,9 +1742,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -1700,20 +1766,16 @@ function (_GameActor) {
   /**
    * @constructor
    *
+   * @param actorType The Actor's type.
    * @param position The starting position of the Player.
    */
-  function Player(position) {
+  function Player(actorType, position) {
     var _this;
 
     _classCallCheck(this, Player);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Player).call(this, position));
-    _this._lifeforceComponent = new _Component.LifeforceComponent();
-    _this._movementComponent = new _Component.MovementComponent();
-    _this._eventComponent = new _Component.EventComponent();
-
-    _this._eventComponent.attach(_Event.PlayerDeathEvent.create(_assertThisInitialized(_this)));
-
+    _this._type = actorType;
     return _this;
   }
   /**
@@ -1727,11 +1789,9 @@ function (_GameActor) {
 
   _createClass(Player, [{
     key: "update",
-    value: function update(delta) {
-      this._lifeforceComponent.update(this); // this._eventComponent.emit('player_died');
-      // TODO: console.log('this.position :', this.position);
+    value: function update(delta) {} // this._eventComponent.emit('player_died');
+    // TODO: console.log('this.position :', this.position);
 
-    }
     /**
      * Draws the Player entity
      *
@@ -1764,7 +1824,9 @@ function (_GameActor) {
   }, {
     key: "moveN",
     value: function moveN(delta) {
-      this._movementComponent.moveN(this, delta);
+      if (this.hasComponent("MovementComponent")) {
+        this.getComponent("MovementComponent").moveN(this, delta);
+      }
     }
     /**
      * Public API for the MovementComponent
@@ -1775,7 +1837,9 @@ function (_GameActor) {
   }, {
     key: "moveS",
     value: function moveS(delta) {
-      this._movementComponent.moveS(this, delta);
+      if (this.hasComponent("MovementComponent")) {
+        this.getComponent("MovementComponent").moveS(this, delta);
+      }
     }
     /**
      * Move the Player east.
@@ -1786,7 +1850,9 @@ function (_GameActor) {
   }, {
     key: "moveE",
     value: function moveE(delta) {
-      this._movementComponent.moveE(this, delta);
+      if (this.hasComponent("MovementComponent")) {
+        this.getComponent("MovementComponent").moveE(this, delta);
+      }
     }
     /**
      * Move the Player west.
@@ -1797,16 +1863,18 @@ function (_GameActor) {
   }, {
     key: "moveW",
     value: function moveW(delta) {
-      this._movementComponent.moveW(this, delta);
+      if (this.hasComponent("MovementComponent")) {
+        this.getComponent("MovementComponent").moveW(this, delta);
+      }
     }
   }]);
 
   return Player;
-}(_GameActor2.GameActor);
+}(_GameObject.GameActor);
 
 exports.Player = Player;
 
-},{"../../Component":15,"../../Event":17,"./GameActor":21}],25:[function(require,module,exports){
+},{"../../GameObject":27}],26:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1866,7 +1934,7 @@ function () {
 exports.GameObject = GameObject;
 GameObject.idIncrementor = 1;
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1957,7 +2025,19 @@ Object.keys(_OrdinaryFolkFactory).forEach(function (key) {
   });
 });
 
-},{"./GameActor/ActorFactory/ActorFactory":19,"./GameActor/ActorFactory/OrdinaryFolkFactory":20,"./GameActor/GameActor":21,"./GameActor/Npc":22,"./GameActor/OrdinaryFolk":23,"./GameActor/Player":24,"./GameObject":25}],27:[function(require,module,exports){
+var _PlayerFactory = require("./GameActor/ActorFactory/PlayerFactory");
+
+Object.keys(_PlayerFactory).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _PlayerFactory[key];
+    }
+  });
+});
+
+},{"./GameActor/ActorFactory/ActorFactory":19,"./GameActor/ActorFactory/OrdinaryFolkFactory":20,"./GameActor/ActorFactory/PlayerFactory":21,"./GameActor/GameActor":22,"./GameActor/Npc":23,"./GameActor/OrdinaryFolk":24,"./GameActor/Player":25,"./GameObject":26}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2220,7 +2300,7 @@ function () {
 
 exports.InputHandler = InputHandler;
 
-},{"../Command":10}],28:[function(require,module,exports){
+},{"../Command":10}],29:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2236,7 +2316,7 @@ var Camera = function Camera() {
 
 exports.Camera = Camera;
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2368,7 +2448,7 @@ function () {
 
 exports.Renderer = Renderer;
 
-},{"../../atlases/Overworld":2}],30:[function(require,module,exports){
+},{"../../atlases/Overworld":2}],31:[function(require,module,exports){
 "use strict";
 
 var _FiendGame = require("./engine/FiendGame");
@@ -2400,6 +2480,6 @@ window.onload = function () {
   });
 };
 
-},{"./engine/AssetLoader":3,"./engine/FiendGame":18}]},{},[30])
+},{"./engine/AssetLoader":3,"./engine/FiendGame":18}]},{},[31])
 
 //# sourceMappingURL=bundle.js.map
