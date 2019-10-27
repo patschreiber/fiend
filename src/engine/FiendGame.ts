@@ -2,18 +2,8 @@ import { InputHandler } from "./Input/InputHandler";
 import { Camera } from "./Render/Camera/Camera";
 import { Renderer } from "./Render/Renderer";
 
-// Player
-import { Player } from './GameObject';
-
-// Factories
-// TODO: Actor factories should be loaded per Scene, once the scene
-// functionality is created!
-import {
-  PlayerFactory,
-  OrdinaryFolkFactory
-} from './GameObject';
-
-// Factories
+import { Sandbox } from "./development/sandbox";
+import { Player } from "./GameObject";
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -54,11 +44,6 @@ export class FiendGame {
    */
   public gameObjects: Array<any>;
 
-  // TODO: This is a test! Actor factories should be loaded per Scene, once the
-  // scene functionality is created!
-  public OrdinaryFolkFactory: OrdinaryFolkFactory;
-  public PlayerFactory: PlayerFactory;
-
   /**
    * The instance of the Player's character.
    */
@@ -97,6 +82,11 @@ export class FiendGame {
    */
   public stopToken: number|null;
 
+  /**
+   * Testing ground for new ideas.
+   */
+  public sandbox: Sandbox;
+
   constructor(gamePaneWidth: number, gamePaneHeight: number) {
 
     /**
@@ -105,13 +95,6 @@ export class FiendGame {
     this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
     this.container = document.getElementById("fiend-game");
     this.container.insertBefore(this.canvas, this.container.firstChild);
-
-    // TODO: This is a test to test event emission.
-    document.getElementById('game-pane').addEventListener(
-      'player_died',
-      (event: CustomEvent) => this.respondToGameObjectCreation(event),
-      false
-    );
 
     this.stopToken = null;
 
@@ -129,21 +112,12 @@ export class FiendGame {
 
     this.gameObjectCount = 0;
 
-    // Instantiate Actor factories here as a test. We want to instantiate the
-    // factory so the memory is allocated when the Scene is loaded.
-    // TODO: Actor factories should be loaded per Scene, once the scene
-    // functionality is created!
-    this.OrdinaryFolkFactory = new OrdinaryFolkFactory();
-    this.PlayerFactory = new PlayerFactory();
-    this.Player = this.PlayerFactory.spawn({x:125,y:125});
+    this.sandbox = new Sandbox();
+    this.Player = this.sandbox.Player;
 
-    this.gameObjects = [
-      // TODO This is a test, do should be empty on init.
-      this.Player,
-      this.OrdinaryFolkFactory.spawn({x:200,y:100}),
-    ];
-
-    console.log('this.gameObjects :', this.gameObjects);
+    // TODO: gameObjects should be empty on init.
+    // this.gameObjects = [];
+    this.gameObjects = this.sandbox.testGameObjects; // LOad the test game objects
 
     // Let's kick off the game loop!
     this.main(performance.now());
@@ -164,10 +138,6 @@ export class FiendGame {
     canvas.tabIndex = 1;
 
     return canvas;
-  }
-
-  public respondToGameObjectCreation(event: CustomEvent) {
-    console.log('event.detail.go_id :', event.detail.go_id);
   }
 
   /**

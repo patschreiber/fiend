@@ -1040,15 +1040,13 @@ var _Camera = require("./Render/Camera/Camera");
 
 var _Renderer = require("./Render/Renderer");
 
-var _GameObject = require("./GameObject");
+var _sandbox = require("./development/sandbox");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-// Factories
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -1058,8 +1056,6 @@ var FiendGame =
 /*#__PURE__*/
 function () {
   function FiendGame(gamePaneWidth, gamePaneHeight) {
-    var _this = this;
-
     _classCallCheck(this, FiendGame);
 
     /**
@@ -1067,11 +1063,7 @@ function () {
      */
     this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
     this.container = document.getElementById("fiend-game");
-    this.container.insertBefore(this.canvas, this.container.firstChild); // TODO: This is a test to test event emission.
-
-    document.getElementById('game-pane').addEventListener('player_died', function (event) {
-      return _this.respondToGameObjectCreation(event);
-    }, false);
+    this.container.insertBefore(this.canvas, this.container.firstChild);
     this.stopToken = null;
     this.tickLength = 60;
     this.lastFrameTime = 0;
@@ -1079,23 +1071,13 @@ function () {
     this.Renderer = new _Renderer.Renderer(this.canvas);
     this.InputHandler = new _InputHandler.InputHandler();
     this.Camera = new _Camera.Camera();
-    this.gameObjectCount = 0; // Instantiate Actor factories here as a test. We want to instantiate the
-    // factory so the memory is allocated when the Scene is loaded.
-    // TODO: Actor factories should be loaded per Scene, once the scene
-    // functionality is created!
+    this.gameObjectCount = 0;
+    this.sandbox = new _sandbox.Sandbox();
+    this.Player = this.sandbox.Player; // TODO: gameObjects should be empty on init.
+    // this.gameObjects = [];
 
-    this.OrdinaryFolkFactory = new _GameObject.OrdinaryFolkFactory();
-    this.PlayerFactory = new _GameObject.PlayerFactory();
-    this.Player = this.PlayerFactory.spawn({
-      x: 125,
-      y: 125
-    });
-    this.gameObjects = [// TODO This is a test, do should be empty on init.
-    this.Player, this.OrdinaryFolkFactory.spawn({
-      x: 200,
-      y: 100
-    })];
-    console.log('this.gameObjects :', this.gameObjects); // Let's kick off the game loop!
+    this.gameObjects = this.sandbox.testGameObjects; // LOad the test game objects
+    // Let's kick off the game loop!
 
     this.main(performance.now());
   }
@@ -1117,11 +1099,6 @@ function () {
       canvas.height = h;
       canvas.tabIndex = 1;
       return canvas;
-    }
-  }, {
-    key: "respondToGameObjectCreation",
-    value: function respondToGameObjectCreation(event) {
-      console.log('event.detail.go_id :', event.detail.go_id);
     }
     /**
      * Calculates the game state as of a given point in time. It is the authority
@@ -1215,7 +1192,7 @@ function () {
 
 exports.FiendGame = FiendGame;
 
-},{"./GameObject":27,"./Input/InputHandler":28,"./Render/Camera/Camera":29,"./Render/Renderer":30}],19:[function(require,module,exports){
+},{"./Input/InputHandler":28,"./Render/Camera/Camera":29,"./Render/Renderer":30,"./development/sandbox":31}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2451,6 +2428,70 @@ exports.Renderer = Renderer;
 },{"../../atlases/Overworld":2}],31:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Sandbox = void 0;
+
+var _GameObject = require("../GameObject");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * The Sandbox class. Play around!
+ * This is a debug file and should not be used in production.
+ */
+var Sandbox =
+/*#__PURE__*/
+function () {
+  function Sandbox() {
+    var _this = this;
+
+    _classCallCheck(this, Sandbox);
+
+    // Instantiate Actor factories here as a test. We want to instantiate the
+    // factory so the memory is allocated when the Scene is loaded.
+    // TODO: Actor factories should be loaded per Scene, once the scene
+    // functionality is created!
+    this.OrdinaryFolkFactory = new _GameObject.OrdinaryFolkFactory();
+    this.PlayerFactory = new _GameObject.PlayerFactory();
+    this.Player = this.PlayerFactory.spawn({
+      x: 125,
+      y: 125
+    });
+    this.testGameObjects = [// TODO This is a test, do should be empty on init.
+    this.Player, this.OrdinaryFolkFactory.spawn({
+      x: 200,
+      y: 100
+    })]; // TODO: This is a test to test event emission.
+
+    document.getElementById('game-pane').addEventListener('player_died', function (event) {
+      return _this.respondToGameObjectCreation(event);
+    }, false);
+  }
+
+  _createClass(Sandbox, [{
+    key: "update",
+    value: function update(delta) {}
+  }, {
+    key: "respondToGameObjectCreation",
+    value: function respondToGameObjectCreation(event) {
+      console.log('event.detail.go_id :', event.detail.go_id);
+    }
+  }]);
+
+  return Sandbox;
+}();
+
+exports.Sandbox = Sandbox;
+
+},{"../GameObject":27}],32:[function(require,module,exports){
+"use strict";
+
 var _FiendGame = require("./engine/FiendGame");
 
 var _AssetLoader = require("./engine/AssetLoader");
@@ -2480,6 +2521,6 @@ window.onload = function () {
   });
 };
 
-},{"./engine/AssetLoader":3,"./engine/FiendGame":18}]},{},[31])
+},{"./engine/AssetLoader":3,"./engine/FiendGame":18}]},{},[32])
 
 //# sourceMappingURL=bundle.js.map
