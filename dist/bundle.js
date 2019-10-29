@@ -836,15 +836,16 @@ function (_Component) {
 
   /**
    * @constructor
+   * @param initialSpeed The initial speed the attached entity will move at.
    */
-  function MovementComponent() {
+  function MovementComponent(initialSpeed) {
     var _this;
 
     _classCallCheck(this, MovementComponent);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(MovementComponent).call(this));
     _this.typeId = "MovementComponent";
-    _this.speed = 100;
+    _this.speed = initialSpeed;
     return _this;
   }
   /**
@@ -1283,7 +1284,7 @@ function (_ActorFactory) {
     key: "spawn",
     value: function spawn(position) {
       var npc = new _GameObject.OrdinaryFolk(this, position);
-      npc.addComponent(new _Component.MovementComponent());
+      npc.addComponent(new _Component.MovementComponent(50));
       npc.addComponent(new _Component.LifeforceComponent());
       return npc;
     }
@@ -1362,7 +1363,7 @@ function (_ActorFactory) {
       var player = new _GameObject.Player(this, position);
       player.addComponent(new _Component.EventComponent());
       player.addComponent(new _Component.LifeforceComponent());
-      player.addComponent(new _Component.MovementComponent()); // Attach some Player-specific events.
+      player.addComponent(new _Component.MovementComponent(100)); // Attach some Player-specific events.
 
       player.getComponent("EventComponent").attach(_Event.PlayerDeathEvent.create(player));
       return player;
@@ -1675,7 +1676,30 @@ function (_Npc) {
 
   _createClass(OrdinaryFolk, [{
     key: "update",
-    value: function update(delta) {}
+    value: function update(delta) {
+      // let drunkWalkDir = Math.floor(Math.random() * 4) + 1;
+      var drunkWalkDir = 1;
+
+      switch (drunkWalkDir) {
+        case 1:
+          this.getComponent("MovementComponent").moveN(this, delta);
+          break;
+
+        case 2:
+          this.getComponent("MovementComponent").moveS(this, delta);
+          break;
+
+        case 3:
+          this.getComponent("MovementComponent").moveE(this, delta);
+          break;
+
+        case 4:
+          this.getComponent("MovementComponent").moveW(this, delta);
+
+        default: // Intentially left blank
+
+      }
+    }
     /**
      * Draws the NPC entity.
      * TODO: This should be moved to the Render component once it's done.
