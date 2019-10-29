@@ -4,9 +4,23 @@ var source = require('vinyl-source-stream');
 var tsify = require('tsify');
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
+var typedoc = require("gulp-typedoc");
+
 var paths = {
     pages: ['src/*.html']
 };
+
+gulp.task("docgen", function() {
+    return gulp
+        .src(["src/**/*.ts"])
+        .pipe(typedoc({
+            module: "commonjs",
+            target: "es2015",
+            out: "docs/",
+            name: "Fiend API Documentation"
+        }))
+    ;
+});
 
 gulp.task('copy-html', function () {
     return gulp.src(paths.pages)
