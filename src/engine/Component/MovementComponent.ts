@@ -17,13 +17,14 @@ export class MovementComponent extends Component {
 
   /**
    * @constructor
+   * @param initialSpeed The initial speed the attached entity will move at.
    */
-  public constructor() {
+  public constructor(initialSpeed: number) {
     super();
 
     this.typeId = "MovementComponent";
 
-    this.speed = 100;
+    this.speed = initialSpeed;
   }
 
   /**
