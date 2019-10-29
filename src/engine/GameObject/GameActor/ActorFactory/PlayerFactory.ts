@@ -40,7 +40,7 @@ export class PlayerFactory extends ActorFactory {
 
     player.addComponent(new EventComponent());
     player.addComponent(new LifeforceComponent());
-    player.addComponent(new MovementComponent());
+    player.addComponent(new MovementComponent(100));
 
     // Attach some Player-specific events.
     player.getComponent("EventComponent")

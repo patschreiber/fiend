@@ -28,7 +28,26 @@ export class OrdinaryFolk extends Npc {
    * main game loop.
    * @see FiendGame.main()
    */
-  public update(delta: number): void {}
+  public update(delta: number): void {
+    // let drunkWalkDir = Math.floor(Math.random() * 4) + 1;
+    let drunkWalkDir = 1;
+
+    switch (drunkWalkDir) {
+      case 1:
+        this.getComponent("MovementComponent").moveN(this, delta);
+        break;
+      case 2:
+        this.getComponent("MovementComponent").moveS(this, delta);
+        break;
+      case 3:
+        this.getComponent("MovementComponent").moveE(this, delta);
+        break;
+      case 4:
+        this.getComponent("MovementComponent").moveW(this, delta);
+      default:
+        // Intentially left blank
+    }
+  }
 
   /**
    * Draws the NPC entity.
