@@ -66,14 +66,8 @@ export class Renderer {
 
   draw(gameObjectCount: number, gameObjects: Array<any>) {
 
-    // Clear the screen
-    // TODO: Pull this out. Put in renderer.
-    this.ctx.clearRect(
-      0,
-      0,
-      this.canvas.width,
-      this.canvas.height
-    );
+    // Clear the screen on every frame so our entities don't have trails.
+    this._clrScreen();
 
     // Always store the texture in a var so we don't call "new Foo()" multiple
     // times a second.
@@ -137,4 +131,18 @@ export class Renderer {
       }
     }
   }
+
+  /**
+   * Clears the game screen.
+   * TODO: We probably don't want to clear and redraw items outside of view.
+   */
+  private _clrScreen(): void {
+    this.ctx.clearRect(
+      0,
+      0,
+      this.canvas.width,
+      this.canvas.height
+    );
+  }
+
 }
