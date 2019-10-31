@@ -1,5 +1,8 @@
 import { MapBase } from "../../atlases/MapBase";
 import { Overworld } from "../../atlases/Overworld";
+import { BaseScene } from "../Scene/scenes/BaseScene";
+import { IScene } from "../Scene/scenes/IScene";
+import { TestScene } from "../Scene/scenes/TestScene";
 
 export class Renderer {
 
@@ -64,17 +67,25 @@ export class Renderer {
     this._currentMap = new Overworld();
   }
 
-  draw(gameObjectCount: number, gameObjects: Array<any>) {
-
+  /**
+   * Draws every [[GameObject]] currently active in the scene.
+   *
+   * @param delta The time difference between frames. Provided by the game's
+   * main game loop.
+   * @see FiendGame.main()
+   */
+  public draw(scene: BaseScene|TestScene): void {
     // Clear the screen on every frame so our entities don't have trails.
+    // TODO: Internet says clearing the screen on every draw might be a bad idea.
     this._clrScreen();
 
-    // Always store the texture in a var so we don't call "new Foo()" multiple
-    // times a second.
-    this.drawTileMap(this._currentMap);
+    // Draws the Scene's background.
+    this.drawTileMap(scene.tileMap);
 
-    for (let i=0; i<gameObjectCount; i++) {
-      gameObjects[i].draw(this.ctx);
+    // Iterate through the scene's gameObjects and render them.
+    // TODO: Find a better way. Not all GameObjects will be renderable.
+    for (let gameObject of scene.gameObjects) {
+      gameObject.draw(this.ctx);
     }
   }
 

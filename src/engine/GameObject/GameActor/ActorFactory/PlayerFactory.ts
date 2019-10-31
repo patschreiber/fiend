@@ -34,6 +34,7 @@ export class PlayerFactory extends ActorFactory {
    * @param position The starting position of the spawned Actor.
    *
    * @return The spawned GameActor.
+   * // TODO: This might work better as a static class. E.g. PlayerFactory::spawn()
    */
   public spawn(position: Coordinate): Player {
     let player = new Player(this, position);
