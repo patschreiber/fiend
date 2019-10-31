@@ -1,9 +1,9 @@
-import { InputHandler } from "./Input/InputHandler";
-import { Camera } from "./Render/Camera/Camera";
-import { Renderer } from "./Render/Renderer";
+import { InputHandler } from './Input/InputHandler';
+import { Camera } from './Render/Camera/Camera';
+import { Renderer } from './Render/Renderer';
 
-import { Sandbox } from "./development/sandbox";
-import { Player } from "./GameObject";
+import { Player } from './GameObject';
+import { SceneManager } from './Scene/SceneManager';
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -22,27 +22,14 @@ export class FiendGame {
   public Renderer: Renderer;
 
   /**
-   * The main camera
+   * The manager responsible for orchestrating Scenes.
+   */
+  public SceneManager: SceneManager;
+
+  /**
+   * The main camera.
    */
   public Camera: Camera;
-
-  /**
-   * The canvas in the DOM. What the game is rendered on.
-   */
-  public canvas: HTMLCanvasElement;
-
-  /**
-   * The number of currently-active game objects.
-   *
-   * @type {number}
-   */
-  public gameObjectCount: number;
-
-  /**
-   * The list of active game objects. Every game object in this list will have
-   * their state updated every frame, if possible.
-   */
-  public gameObjects: Array<any>;
 
   /**
    * The instance of the Player's character.
@@ -50,12 +37,9 @@ export class FiendGame {
   public Player: Player;
 
   /**
-   * The max amount of active game objects that can be present in the game.
-   * TODO: Figure out what happens if this limit is reached.
-   * @internal This could be an "importance weight" where less important game
-   * objects are purged.
+   * The canvas in the DOM. What the game is rendered on.
    */
-  public maxEntities: number;
+  public canvas: HTMLCanvasElement;
 
   /**
    * The HTML wrapper for the game. Assume everything in this container is part
@@ -83,10 +67,13 @@ export class FiendGame {
   public stopToken: number|null;
 
   /**
-   * Testing ground for new ideas.
+   * @constructor
+   * Generates the instance of the game.
+   *
+   * @param gamePaneWidth The width of the game pane.
+   * @param gamePaneHeight The height of the game pane.
+   * TODO: gamePlayWidth and height should probably be handled by tbe Camera.
    */
-  public sandbox: Sandbox;
-
   constructor(gamePaneWidth: number, gamePaneHeight: number) {
 
     /**
@@ -102,22 +89,17 @@ export class FiendGame {
 
     this.lastFrameTime = 0;
 
-    this.maxEntities = 1000;
-
     this.Renderer = new Renderer(this.canvas);
 
     this.InputHandler = new InputHandler();
 
     this.Camera = new Camera();
 
-    this.gameObjectCount = 0;
+    this.SceneManager = new SceneManager();
 
-    this.sandbox = new Sandbox();
-    this.Player = this.sandbox.Player;
-
-    // TODO: gameObjects should be empty on init.
-    // this.gameObjects = [];
-    this.gameObjects = this.sandbox.testGameObjects; // LOad the test game objects
+    // TODO: Try and remove the player from this class. They should exist as an
+    // entity in a scene, same as everything else. Pain points: InputHandler.
+    this.Player = this.SceneManager.currentScene.getPlayer();
 
     // Let's kick off the game loop!
     this.main(performance.now());
@@ -129,6 +111,7 @@ export class FiendGame {
    *
    * @param {number} w The width of the canvas, in pixels.
    * @param {number} h The height of the canvas, in pixels.
+   * TODO: We might want to have the browser viewport be the width and height of the canvas.
    */
   private genCanvas(w: number, h: number): HTMLCanvasElement {
     let canvas = document.createElement('canvas');
@@ -141,21 +124,34 @@ export class FiendGame {
   }
 
   /**
+   * Handles input from a player's I/O device. Currently only supports keyboard.
+   *
+   * @param delta The difference in time between this frame and last frame, in
+   * seconds.
+   * TODO: Handle input should be InputComponent and be attached to GameActors.
+   */
+  private _handleInput(delta: number): void {
+    this.InputHandler.handleInput(this.Player, delta);
+  }
+
+  /**
    * Calculates the game state as of a given point in time. It is the authority
    * for game state. The delta should be used in calculations to make the game
    * simulation framerate independent.
    *
-   * @param {float} delta  The difference in time between this frame and last
-   * frame, in seconds.
+   * @param delta The difference in time between this frame and last frame, in
+   * seconds.
+   *
+   * @example
+   * ```js
+   * delta: 0.016682999999999993
+   * ```
    */
   private _update(delta: number): void {
+
     // TODO Remove clog.
     // console.log('delta :', delta);
-    for (let i=0; i<this.gameObjectCount; i++) {
-      this.gameObjects[i].update(delta);
-    }
-
-    this.gameObjectCount = this.gameObjects.length;
+    this.SceneManager.currentScene.update(delta);
   }
 
   /**
@@ -164,7 +160,8 @@ export class FiendGame {
   private _draw(): void {
 
     // Draw the scene.
-    this.Renderer.draw(this.gameObjectCount, this.gameObjects);
+    // this.Renderer.draw(this.gameObjectCount, this.gameObjects);
+    this.Renderer.draw(this.SceneManager.currentScene);
   }
 
   /**
@@ -180,6 +177,7 @@ export class FiendGame {
    */
   public shutdownGame(): void {
     this.stopMainLoop();
+    // TODO: Flesh out.
   }
 
 /**
@@ -211,7 +209,7 @@ export class FiendGame {
     // Keep track of when the last frame happened.
     this.lastFrameTime = tFrame;
 
-    this.InputHandler.handleInput(this.Player, delta);
+    this._handleInput(delta);
     this._update(delta);
     this._draw();
   }
