@@ -26,7 +26,9 @@ interface IInputHandler {
    *
    * @param actor The game actor entity to handle input. Most likely will be the
    * Player(s).
-   * @param delta The
+   * @param delta The time difference between frames. Provided by the game's
+   * main game loop.
+   * @see FiendGame.main()
    */
   handleInput(actor: GameActor, delta: number): void;
 }
