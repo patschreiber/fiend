@@ -1,26 +1,27 @@
-import { MapBase } from "./MapBase";
+import { BaseAtlas } from "./BaseAtlas";
 
-export class Overworld extends MapBase {
-  SM: HTMLImageElement;
-  tiles: Array<any>;
-  layers: Array<any>;
-  cols: number;
-  rows: number;
-  tsize: number;
-  
+export class OverworldAtlas extends BaseAtlas {
+
+  /**
+   * How large each grid element is, in pixels. This corresponds to how large
+   * a grid element is in it's asset file. The [[Renderer]] will handle
+   * scaling/manipulation.
+   */
+  public gridElemPixelSize: number;
+
+  /**
+   * @constructor
+   */
   constructor() {
     super();
 
-    /**
-     * The spritemap to be used.
-     * @var {HTMLImageElement}
-     */
-    this.SM = window.F_LOADER.getImage('TESTNUMBERED');
+    this.tileMapImg = window.F_LOADER.getImage('TESTNUMBERED');
 
-    this.cols = 20;
-    this.rows = 15;
+    this.gridElemPixelSize = 32;
+    this.gridCols = 20;
+    this.gridRows = 15;
     this.tsize = 300;
-    this.tiles = [
+    this.mapGrid = [
         1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
        21,  2,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
         8,  8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,

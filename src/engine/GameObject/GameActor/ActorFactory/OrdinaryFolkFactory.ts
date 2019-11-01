@@ -5,7 +5,8 @@ import {
 
 import {
   LifeforceComponent,
-  MovementComponent
+  MovementComponent,
+  BrainComponent
 } from "../../../Component";
 
 import { Coordinate } from '../../../types/globals';
@@ -36,6 +37,7 @@ export class OrdinaryFolkFactory extends ActorFactory {
   public spawn(position: Coordinate): OrdinaryFolk {
     let npc = new OrdinaryFolk(this, position);
 
+    npc.addComponent(new BrainComponent());
     npc.addComponent(new MovementComponent(50));
     npc.addComponent(new LifeforceComponent());
 

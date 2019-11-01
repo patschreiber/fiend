@@ -1,5 +1,6 @@
 import { Player } from '../../GameObject';
 import { IScene } from './IScene';
+import { BaseAtlas } from '../../../atlases/BaseAtlas';
 
 /**
  * The BaseScene class.
@@ -29,9 +30,12 @@ export abstract class BaseScene implements IScene {
 
   /**
    * The tilemap associated with this Scene.
-   * TODO: Make this of type TileMap when it's created.
+   * TODO: Make this of type TileMap when it's created. Edit: Change this to be
+   * "atlas"
    */
-  public tileMap: any;
+  public tileMap: BaseAtlas;
+
+  public sceneBoundaries: Array<number>;
 
   /**
    * @constructor
@@ -50,10 +54,32 @@ export abstract class BaseScene implements IScene {
    * @see FiendGame.main()
    */
   public update(delta: number): void {
-
+    // TODO:
+    // for (let gameObject of this.gameObjects) {
+    //   if (gameObject.hasComponent("MovementComponent")) {
+    //     gameObject.update(delta, this.sceneBoundaries);
+    //   } else {
+    //     gameObject.update(delta);
+    //   }
+    // }
     for (let gameObject of this.gameObjects) {
       gameObject.update(delta);
     }
+  }
+
+  /**
+   * Calculates the scene boundaries in pixels.
+   * TODO: This is probably a stop gap solution until colliders come into play.
+   *
+   * @return An array of game boundaries in `[top, right, bottom, left]` order.
+   */
+  public calculateSceneBoundaries(): Array<number> {
+    let pxSize = this.tileMap.gridElemPixelSize;
+
+    let bottom = this.tileMap.getGridHeight() * pxSize;
+    let right = this.tileMap.getGridWidth() * pxSize;
+
+    return [0,right,bottom,0];
   }
 
   /**

@@ -1,7 +1,7 @@
 import { IScene } from './IScene';
 import { BaseScene } from './BaseScene';
 import { PlayerFactory, OrdinaryFolkFactory, Player } from '../../GameObject';
-import { Overworld } from '../../../atlases/Overworld';
+import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
 
 /**
  * The TestScene class.
@@ -16,12 +16,14 @@ export class TestScene extends BaseScene implements IScene {
     super();
 
     this.maxActiveEntities = 1000;
-    this.tileMap = new Overworld();
+    this.tileMap = new OverworldAtlas();
 
     let pf = new PlayerFactory();
-    this.gameObjects.push(pf.spawn({x:125,y:125}));
-
     let off = new OrdinaryFolkFactory();
+
+    this.sceneBoundaries = this.calculateSceneBoundaries();
+
+    this.gameObjects.push(pf.spawn({x:125,y:125}));
     this.gameObjects.push(off.spawn({x:200,y:100}));
 
     // TODO: This is a test to test event emission.
@@ -40,6 +42,9 @@ export class TestScene extends BaseScene implements IScene {
    * @return The instance of the Player from the scene.
    */
   public getPlayer(): Player {
+
+    // The Player should always be the first gameObject loaded in the Test
+    // Scene.
     return this.gameObjects[0];
   }
 

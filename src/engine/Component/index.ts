@@ -10,17 +10,22 @@
 export * from './Component';
 
 /**
- * The Event component. Allows an entiy to emit and/or listen for events.
+ * The Event component. Allows a GameObject to emit and/or listen for events.
  */
  export * from './EventComponent';
 
 /**
  * The Lifeforce component. Adds health and all that comes with it when attached
- * to an entity.
+ * to a GameActor.
  */
 export * from './LifeforceComponent';
 
 /**
- * The Movement component. Adds movement to a GameObject.
+ * The Movement component. Adds movement to a GameActor.
  */
  export * from './MovementComponent';
+
+/**
+ * The Brain component. Adds AI and behavior to a GameActor.
+ */
+export * from './BrainComponent';
