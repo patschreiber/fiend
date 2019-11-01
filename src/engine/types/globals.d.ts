@@ -2,7 +2,8 @@ import {
   Component,
   EventComponent,
   LifeforceComponent,
-  MovementComponent
+  MovementComponent,
+  BrainComponent
 } from "../Component";
 
 /**
@@ -62,4 +63,5 @@ type ComponentContainer = {
   EventComponent?: EventComponent;
   LifeforceComponent?: LifeforceComponent;
   MovementComponent?: MovementComponent;
+  BrainComponent?: BrainComponent;
 }
