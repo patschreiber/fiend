@@ -1,24 +1,25 @@
-import { MapBase } from "../../atlases/MapBase";
-import { Overworld } from "../../atlases/Overworld";
+// TODO: Remove all this scene-specific shit out of here. Ex. EMPTY_TILE.
+
+import { OverworldAtlas } from "../../atlases/OverworldAtlas";
 import { BaseScene } from "../Scene/scenes/BaseScene";
-import { IScene } from "../Scene/scenes/IScene";
 import { TestScene } from "../Scene/scenes/TestScene";
+import { BaseAtlas } from "../../atlases/BaseAtlas";
 
 export class Renderer {
+  // TODO: Add object culling to not render items which can't be seen
+  // TODO: This class probably needs to be rewritten/refactored
 
   EMPTY_TILE: number;
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   pixels: number;
   scale: number;
-  sceneWidth: number;
-  sceneHeight: number;
 
   /**
    * TODO: Change this to be the scene. Recreate the Renderer when a new scene
-   * is loaded.
+   * is loaded. Edit: Maybe keep the renderer independent of the Scene.
    */
-  protected _currentMap: MapBase;
+  protected _currentMap: BaseAtlas;
 
   constructor(canvas: HTMLCanvasElement) {
 
@@ -64,7 +65,7 @@ export class Renderer {
      */
     this.scale = 1;
 
-    this._currentMap = new Overworld();
+    this._currentMap = new OverworldAtlas();
   }
 
   /**
@@ -73,6 +74,8 @@ export class Renderer {
    * @param delta The time difference between frames. Provided by the game's
    * main game loop.
    * @see FiendGame.main()
+   * //TODO: Pass in a dumb list of GameObjects to be rendered. Render shouldn't know about Scenes.
+   * // https://gamedev.stackexchange.com/questions/153879/scene-components-and-renderer
    */
   public draw(scene: BaseScene|TestScene): void {
     // Clear the screen on every frame so our entities don't have trails.
@@ -111,20 +114,23 @@ export class Renderer {
    *
    * @param {Object} map  The map object that extends MapBase.
    */
-  drawTileMap(map: MapBase): void {
-    for (let x=0; x<map.cols; x++) {
-      for (let y=0; y<map.rows; y++) {
+  drawTileMap(map: BaseAtlas): void {
+    let mapWidth = map.getGridWidth();
+    let mapHeight = map.getGridHeight();
+
+    for (let x=0; x<mapWidth; x++) {
+      for (let y=0; y<mapHeight; y++) {
         let tile = map.getTile(x, y);
 
         // Let's skip rendering empty tiles.
         if (tile !== this.EMPTY_TILE) {
           this.ctx.drawImage(
             // Image Source
-            map.SM,
+            map.getTileMapImg(),
             // Source x (See example in comment block)
-            ((tile - 1) % map.cols) * this.pixels,
+            ((tile - 1) % mapWidth) * this.pixels,
             // Source y (See example in comment block)
-            Math.floor(((tile - 1) / map.rows)) * this.pixels,
+            Math.floor(((tile - 1) / mapHeight)) * this.pixels,
             // Source width
             this.pixels,
             // Source height

@@ -1,5 +1,6 @@
 import { Component } from "./Component";
 import { GameActor } from "../GameObject";
+import { FiendMath } from "../utilities/FiendMath";
 
 /**
  * The Movement component. Adds movement to a GameObject.
@@ -33,8 +34,11 @@ export class MovementComponent extends Component {
    */
    public moveN(actor: GameActor, delta: number): void {
     // Decrementing {y} makes the actor move south, since we're dealing with a
-    // 2D array and not an actual mathematical grid plane.
+    // 2D array and not an actual mathematical quadrants.
     actor.position.y -= this.speed * delta;
+
+    // Dont allow the position to exceed the bounds of the Scene.
+    // FiendMath.clamp(actor.position.y -= this.speed * delta, );
   }
 
   /**
@@ -44,7 +48,7 @@ export class MovementComponent extends Component {
    */
   public moveS(actor: GameActor, delta: number): void {
     // Increasing {y} makes the actor move south, since we're dealing with a 2D
-    // array and not an actual mathematical grid plane.
+    // array and not mathematical quadrants.
     actor.position.y += this.speed * delta;
   }
 

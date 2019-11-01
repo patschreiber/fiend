@@ -89,13 +89,13 @@ export class FiendGame {
 
     this.lastFrameTime = 0;
 
+    this.SceneManager = new SceneManager();
+
     this.Renderer = new Renderer(this.canvas);
 
     this.InputHandler = new InputHandler();
 
     this.Camera = new Camera();
-
-    this.SceneManager = new SceneManager();
 
     // TODO: Try and remove the player from this class. They should exist as an
     // entity in a scene, same as everything else. Pain points: InputHandler.
@@ -160,7 +160,9 @@ export class FiendGame {
   private _draw(): void {
 
     // Draw the scene.
-    // this.Renderer.draw(this.gameObjectCount, this.gameObjects);
+    // TODO: Renderer might have to be attached/related to SceneManager in some
+    // way since we might need to know the world coordinates. Or not. The update()
+    // method provides the transform for game objects
     this.Renderer.draw(this.SceneManager.currentScene);
   }
 
