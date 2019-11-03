@@ -1,6 +1,10 @@
 import { IScene } from '../interfaces/IScene';
 import { BaseScene } from './BaseScene';
-import { PlayerFactory, OrdinaryFolkFactory, Player } from '../../GameObject';
+import {
+  PlayerFactory,
+  OrdinaryFolkFactory,
+  Player,
+  GameActor } from '../../GameObject';
 import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
 
 /**
@@ -8,6 +12,9 @@ import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
  * This will be the Scene to test out new things.
  */
 export class TestScene extends BaseScene implements IScene {
+
+  private _PF: PlayerFactory;
+  private _OFF: OrdinaryFolkFactory
 
   /**
    * @constructor
@@ -18,13 +25,22 @@ export class TestScene extends BaseScene implements IScene {
     this.maxActiveEntities = 1000;
     this.tileMap  = new OverworldAtlas();
 
-    let pf = new PlayerFactory();
-    let off = new OrdinaryFolkFactory();
+    this._PF = new PlayerFactory();
+    this._OFF = new OrdinaryFolkFactory();
 
     this.sceneBoundaries = this.calculateSceneBoundaries();
 
-    this.gameObjects.push(pf.spawn({x:125,y:125}));
-    this.gameObjects.push(off.spawn({x:200,y:100}));
+    this.gameObjects.push(this._PF.spawn({x:125,y:125}));
+    this.gameObjects.push(this._OFF.spawn({x:200,y:100}));
+
+    // this.gameObjects.push(this.loadDummies(900));
+
+    this.gameObjects.push(this._PF.spawn({x:200,y:200}));
+
+    // Stress test w/20,000 entities.
+    for(let i=0; i<20000; i++) {
+      this.gameObjects.push(this._OFF.spawn({x:200,y:100}));
+    }
 
     // TODO: This is a test to test event emission.
     document.getElementById('game-pane').addEventListener(

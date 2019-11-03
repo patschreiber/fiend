@@ -29,8 +29,7 @@ export class OrdinaryFolk extends Npc {
    * @see FiendGame.main()
    */
   public update(delta: number): void {
-    // let drunkWalkDir = Math.floor(Math.random() * 4) + 1;
-    let drunkWalkDir = 1;
+    let drunkWalkDir = Math.floor(Math.random() * 4) + 1;
 
     switch (drunkWalkDir) {
       case 1:

@@ -32,7 +32,9 @@ type ComponentContainer = {
 }
 
 /**
- * A container for all Components that exist in a scene.
+ * A container for all Components that exist in a scene. There will be a
+ * different Component queue for each type of Component.
+ * @example
  */
 type ComponentQueue = {
   [gameObjectId: number]: Event|CustomEvent,
