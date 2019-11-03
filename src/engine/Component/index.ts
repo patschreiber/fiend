@@ -12,7 +12,7 @@ export * from './Component';
 /**
  * The Event component. Allows a GameObject to emit and/or listen for events.
  */
- export * from './EventComponent';
+export * from './EventComponent';
 
 /**
  * The Lifeforce component. Adds health and all that comes with it when attached
@@ -23,9 +23,14 @@ export * from './LifeforceComponent';
 /**
  * The Movement component. Adds movement to a GameActor.
  */
- export * from './MovementComponent';
+export * from './MovementComponent';
 
 /**
  * The Brain component. Adds AI and behavior to a GameActor.
  */
 export * from './BrainComponent';
+
+/**
+ * The Collider component. Adds collision detection to a GameActor.
+ */
+ export * from './ColliderComponent';

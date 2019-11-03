@@ -43,25 +43,8 @@ type EventContainer = {
 };
 
 /**
- * Provides a container to house an entity's attached Components. Modifying the
- * contents of this container should be done through an interface provided by
- * the entity; it should not be modified directly. An entity may not have any
- * Components, so we mark every one optional.
- *
- * @example
- * Player.components = {
- *   MovementComponent: new MovementComponent(),
- *   LifeforceComponent: new LifeforceComponent(),
- * }
- * // Gets the event component attached to the player, then attached a new event
- * // "SomeEvent" to the EventComponent.
- * player.getComponent("EventComponent").attach(SomeEvent.create(player));
- *
- * @see https://stackoverflow.com/questions/58573975
+ * Provides a type for use with GameObject ids.
+ * Essentially GameObjectId is an alias of the `number` type, however, it is so
+ * important that we want to emphasize its use.
  */
-type ComponentContainer = {
-  EventComponent?: EventComponent;
-  LifeforceComponent?: LifeforceComponent;
-  MovementComponent?: MovementComponent;
-  BrainComponent?: BrainComponent;
-}
+type GameObjectId = number;

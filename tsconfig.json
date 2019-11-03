@@ -1,4 +1,5 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
     "outDir": "./dist/",        // path to output directory
     "sourceMap": true,          // allow sourcemap support
@@ -6,8 +7,14 @@
     "module": "es6",            // specify module code generation
     "target": "es2015",            // specify ECMAScript target version
     "allowJs": true,             // allow a partial TypeScript and JavaScript codebase
-    "moduleResolution": "node"  // helps with "barrel" files (index.ts)
+    "moduleResolution": "node",  // helps with "barrel" files (index.ts)
+    "extendedDiagnostics": true,   // Show verbose diagnostic information
+    "forceConsistentCasingInFileNames": true   // Disallow inconsistently-cased references to the same file
   },
+  "files": [
+    "./src/engine/types/components.d.ts",
+    "./src/engine/types/globals.d.ts"
+  ],
   "include": ["./src/**/*.ts"],
   "exclude": ["node_modules", "build", "**/*.spec.ts"]
 }

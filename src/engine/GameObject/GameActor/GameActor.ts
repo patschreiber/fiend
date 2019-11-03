@@ -1,75 +1,8 @@
+import { Coordinate } from '../../types/globals';
+import { ComponentContainer } from '../../types/components';
 import { GameObject } from '../../GameObject';
-import { Component } from '../../Component';
-import { ComponentContainer, Coordinate } from '../../types/globals';
+import { IGameActor } from '../interfaces/IGameActor';
 
-/**
- * The interface for the [[GameActor]] class.
- *
- * @interface IGameActor
- */
-interface IGameActor {
-
-  /**
-   * The position member. Signifies the location of the of the GameObject.
-   */
-  position: Coordinate;
-
-  /**
-   * Defines the signature for the update method for the GameActor.
-   *
-   * @param delta The time difference between frames. Provided by the game's
-   * main game loop.
-   * @see FiendGame.main()
-   */
-  update(delta: number): void;
-
-  /**
-   * Attaches a Component to a `GameActor` instance.
-   *
-   * @param component The Component to be attached.
-   *
-   * @return If the Component was successfully attached or not.
-   */
-  addComponent(component: Component): boolean;
-
-  /**
-   * Removes a Component from a `GameActor` instance.
-   *
-   * @param key The lookup key for the Component to be removed from this
-   * GameActor. Usually this is the Component's `typeId` as a string.
-   *
-   * @return If the Component was successfully removed or not.
-   */
-  removeComponent(key: string): boolean;
-
-  /**
-   * Checks to see if a Component is attached to a `GameActor` instance.
-   *
-   * @param key The key to use as a look up. Usually this is the Component's
-   * `typeId` as a string.
-   *
-   * @return If the Component is attached to this GameActor.
-   */
-  hasComponent(key: string): boolean;
-
-  /**
-   *  Gets a Component attached to a `GameActor` instance.
-   *
-   * @param key The key to use as a look up. Usually this is the Component's
-   * `typeId` as a string.
-   *
-   * @return The desired attached Component, or null if it's not attached.
-   */
-  getComponent(key: string): Component|null;
-
-  /**
-   * Retrieves the list of Components attached to a `GameActor` instance.
-   *
-   * @return The list of attached Components.
-   */
-  listComponents(): Array<string>;
-
-}
 
 /**
  * The base GameActor class. All GameObjects that can influence things in the
@@ -109,20 +42,23 @@ export abstract class GameActor extends GameObject implements IGameActor {
    * Adds a Component to the GameActor's `ComponentContainer`, if it's not
    * already attached.
    *
-   * @param component The Component to be attached.
+   * @param component The Component instance to be attached.
    *
-   * @return If the Component was successfully attached or not.
+   * @return The component instance if it was successfully attached, or false if
+   * it wasn't.
    */
-  public addComponent<K extends keyof ComponentContainer>(component: ComponentContainer[K]): boolean {
-    let typeId = component.getTypeId();
+  public addComponent<K extends keyof ComponentContainer>(
+    component: ComponentContainer[K]
+  ): boolean {
 
+    let typeId = component.getTypeId();
     if (this.hasComponent(typeId)) {
       // TODO: Make this a real exception.
       console.log('addComponentError :', `A ${typeId} Component is already attached to this GameActor(id:${this.getId()})`);
       return false;
     }
-
     this.components[typeId] = component;
+
     return true;
   }
 
@@ -150,13 +86,13 @@ export abstract class GameActor extends GameObject implements IGameActor {
    * Checks to see if a Component is attached to this GameActor via the
    * `ComponentContainer` list.
    *
-   * @param key The key to use as a look up. Usually this is the Component's
-   * `typeId` as a string.
+   * @param typeId The key to use as a look up. This is the Component's static
+   * id.
    *
    * @return If the Component is attached to this GameActor.
    */
-  public hasComponent(key: string): boolean {
-    return this.components[key] === undefined ? false : true;
+  public hasComponent(typeId: string): boolean {
+    return this.components[typeId] === undefined ? false : true;
   }
 
   /**
@@ -164,17 +100,16 @@ export abstract class GameActor extends GameObject implements IGameActor {
    *
    * @see https://stackoverflow.com/questions/58573975
    *
-   * @param key The key to use as a look up. Usually this is the Component's
-   * `typeId` as a string. It must be a key defined in the `ComponentContainer`
-   * type.
+   * @param typeId The key to use as a look up. This is the Component's static
+   * id.
    *
    * @return The desired attached Component, or null if it's not attached.
    */
-  public getComponent<K extends keyof ComponentContainer>(
-    key: K
-  ): ComponentContainer[K] {
-    if (this.hasComponent(key)) {
-      return this.components[key];
+  public getComponent<CT extends keyof ComponentContainer>(
+    typeId: CT
+  ): ComponentContainer[CT]|null {
+    if (this.hasComponent(typeId)) {
+      return this.components[typeId];
     }
 
     return null;

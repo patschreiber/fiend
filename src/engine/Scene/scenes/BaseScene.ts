@@ -1,5 +1,5 @@
 import { Player } from '../../GameObject';
-import { IScene } from './IScene';
+import { IScene } from '../interfaces/IScene';
 import { BaseAtlas } from '../../../atlases/BaseAtlas';
 
 /**

@@ -1,4 +1,4 @@
-import { IScene } from './IScene';
+import { IScene } from '../interfaces/IScene';
 import { BaseScene } from './BaseScene';
 import { PlayerFactory, OrdinaryFolkFactory, Player } from '../../GameObject';
 import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
@@ -16,7 +16,7 @@ export class TestScene extends BaseScene implements IScene {
     super();
 
     this.maxActiveEntities = 1000;
-    this.tileMap = new OverworldAtlas();
+    this.tileMap  = new OverworldAtlas();
 
     let pf = new PlayerFactory();
     let off = new OrdinaryFolkFactory();

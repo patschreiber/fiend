@@ -1,16 +1,7 @@
 import { GameObject } from '../GameObject';
-import { BaseScene } from './scenes/BaseScene';
+import { BaseScene } from './index';
 import { TestScene } from './scenes/TestScene';
-
-interface ISceneManager {
-  currentScene: BaseScene;
-
-  loadScene(scene: BaseScene): void;
-  unloadScene(scene: BaseScene): void;
-  addToScene(gameObject: GameObject): void;
-  removeFromScene(gameObject: GameObject): void;
-  moveToQueue(gameObject: GameObject): void;
-}
+import { ISceneManager } from './interfaces/ISceneManager';
 
 /**
  * The SceneManager class.

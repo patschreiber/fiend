@@ -1,6 +1,7 @@
 import { Component } from "./Component";
 import { GameActor } from "../GameObject";
 import { FiendMath } from "../utilities/FiendMath";
+import { IComponent } from './interfaces/IComponent';
 
 /**
  * The Movement component. Adds movement to a GameObject.
@@ -9,7 +10,12 @@ import { FiendMath } from "../utilities/FiendMath";
  *
  * @extends [[Component]]
  */
-export class MovementComponent extends Component {
+export class MovementComponent extends Component implements IComponent {
+
+  /**
+   * The Lifeforce component.
+   */
+  private static readonly _typeId = "MovementComponent";
 
   /**
    * The speed at which the GameObject can move.
@@ -23,9 +29,15 @@ export class MovementComponent extends Component {
   public constructor(initialSpeed: number) {
     super();
 
-    this.typeId = "MovementComponent";
-
     this.speed = initialSpeed;
+  }
+
+  /**
+   * Retrieves the type id of the component. Used when fetching or checking a
+   * specific component for a [[GameObject]].
+   */
+  public getTypeId(): string {
+    return MovementComponent._typeId;
   }
 
   /**

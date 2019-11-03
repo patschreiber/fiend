@@ -1,3 +1,5 @@
+import { GameObjectId } from "../types/globals";
+
 /**
  * The interface for the [[GameObject]] class.
  *
@@ -42,7 +44,7 @@ export abstract class GameObject implements IGameObject {
   /**
    * @var id The id of the instance of the GameObject.
    */
-  private id: number;
+  private id: GameObjectId;
 
   /**
    * @constructor

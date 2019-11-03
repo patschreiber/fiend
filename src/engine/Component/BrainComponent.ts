@@ -1,18 +1,28 @@
-import { Component } from "./Component";
-import { GameObject } from "../GameObject";
+import { IComponent } from './interfaces/IComponent';
+import { Component } from './Component';
+import { GameObject } from '../GameObject';
 
 /**
  * The BrainComponent class.
+ * Allows a [[GameActor]] to operate autonomously.
+ *
+ * This component is part of the AI system.
+ *
+ * @extends [[Component]]
  */
-export class BrainComponent extends Component {
+export class BrainComponent extends Component implements IComponent {
 
   /**
-   * @constructor
+   * The Lifeforce component.
    */
-  public constructor() {
-    super();
+  private static readonly _typeId = "ColliderComponent";
 
-    this.typeId = "BrainComponent";
+  /**
+   * Retrieves the type id of the component. Used when fetching or checking a
+   * specific component for a [[GameObject]].
+   */
+  public getTypeId(): string {
+    return BrainComponent._typeId;
   }
 
   /**

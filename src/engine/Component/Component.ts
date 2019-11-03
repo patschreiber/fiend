@@ -1,26 +1,16 @@
-/**
- * The Component interface.
- */
-interface IComponent {}
+import { IComponent } from './interfaces/IComponent';
 
 /**
- * The Component class
+ * The Component base class.
+ *
  * @abstract
  */
-export abstract class Component {
+export abstract class Component implements IComponent {
 
   /**
-   * @var typeId The type of the component.
+   * The type id of the component. Used when fetching or checking a specific
+   * component for a [[GameObject]].
    */
-  protected typeId: string;
-
-  /**
-   * Accessor for the private member `typeId`.
-   *
-   * @returns The type id the Component.
-   */
-  public getTypeId(): string {
-    return this.typeId;
-  }
+  public abstract getTypeId(): string;
 
 }

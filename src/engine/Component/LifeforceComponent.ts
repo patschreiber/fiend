@@ -1,5 +1,6 @@
 import { GameObject } from '../GameObject/GameObject';
 import { Component } from './Component';
+import { IComponent } from './interfaces/IComponent';
 
 /**
  * The Lifeforce component. Adds health to a GameObject. Adds life, health
@@ -10,7 +11,12 @@ import { Component } from './Component';
  *
  * @extends [[Component]]
  */
-export class LifeforceComponent extends Component implements Component {
+export class LifeforceComponent extends Component implements IComponent {
+
+  /**
+   * The Lifeforce component.
+   */
+  private static readonly _typeId = "LifeforceComponent";
 
   /**
    * The current HP of the GameObject.
@@ -23,12 +29,15 @@ export class LifeforceComponent extends Component implements Component {
   private maxHP: number;
 
   /**
-   * @constructor
+   * Retrieves the type id of the component. Used when fetching or checking a
+   * specific component for a [[GameObject]].
    */
-  public constructor() {
-    super();
+  public getTypeId(): string {
+    return LifeforceComponent._typeId;
+  }
 
-    this.typeId = "LifeforceComponent";
+  public addProperties(): void {
+
   }
 
   /**
