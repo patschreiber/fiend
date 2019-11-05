@@ -3,6 +3,8 @@ import { Renderer } from './Render/Renderer';
 
 import { Player } from './GameObject';
 import { SceneManager } from './Scene/SceneManager';
+import { GameObjectManager } from './GameObject/GameObjectManager';
+import { ComponentManager } from './Component/ComponentManager';
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -24,6 +26,8 @@ export class FiendGame {
    * The manager responsible for orchestrating Scenes.
    */
   public SceneManager: SceneManager;
+  public GameObjectManager: GameObjectManager;
+  public ComponentManager: ComponentManager;
 
   /**
    * The instance of the Player's character.
@@ -83,7 +87,12 @@ export class FiendGame {
 
     this.lastFrameTime = 0;
 
-    this.SceneManager = new SceneManager();
+    this.GameObjectManager = new GameObjectManager();
+    this.ComponentManager = new ComponentManager();
+    this.SceneManager = new SceneManager(
+      this.GameObjectManager,
+      this.ComponentManager
+    );
 
     this.Renderer = new Renderer(this.canvas);
 
@@ -143,7 +152,7 @@ export class FiendGame {
 
     // TODO Remove clog.
     console.log('delta :', delta);
-    this.SceneManager.currentScene.update(delta);
+    this.SceneManager.update(delta);
   }
 
   /**

@@ -2,6 +2,15 @@ import { GameObject } from '../GameObject';
 import { BaseScene } from './index';
 import { TestScene } from './scenes/TestScene';
 import { ISceneManager } from './interfaces/ISceneManager';
+import { GameObjectManager } from '../GameObject/GameObjectManager';
+import { ComponentManager } from '../Component/ComponentManager';
+
+enum SceneManagerState {
+  Ready,
+  Loading,
+  Unloading,
+  Error
+}
 
 /**
  * The SceneManager class.
@@ -16,6 +25,8 @@ export class SceneManager implements ISceneManager {
    * The number of currently-active game objects.
    */
   public gameObjectCount: number;
+  public GOM: GameObjectManager;
+  public CM: ComponentManager;
 
   /**
    * The currently-loaded Scene.
@@ -25,7 +36,7 @@ export class SceneManager implements ISceneManager {
   /**
    * @constructor
    */
-  public constructor() {
+  public constructor(gom: GameObjectManager, cm: ComponentManager) {
     this.loadScene(new TestScene());
   }
 
@@ -81,5 +92,9 @@ export class SceneManager implements ISceneManager {
    */
   public moveToQueue(gameObject: GameObject): void {
     // TODO: Finish
+  }
+
+  public update(delta: number): void {
+    this.currentScene.update(delta);
   }
 }

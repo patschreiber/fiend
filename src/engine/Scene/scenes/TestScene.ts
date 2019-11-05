@@ -3,8 +3,8 @@ import { BaseScene } from './BaseScene';
 import {
   PlayerFactory,
   OrdinaryFolkFactory,
-  Player,
-  GameActor } from '../../GameObject';
+  Player
+} from '../../GameObject';
 import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
 
 /**
