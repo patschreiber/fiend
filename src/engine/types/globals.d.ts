@@ -1,11 +1,3 @@
-import {
-  Component,
-  EventComponent,
-  LifeforceComponent,
-  MovementComponent,
-  BrainComponent
-} from "../Component";
-
 /**
  * Provides an x,y coordinate tuple.
  * [x,y]: The coordinate tuple.
@@ -41,10 +33,3 @@ type Coordinate = {
 type EventContainer = {
   [eventName: string]: Event|CustomEvent,
 };
-
-/**
- * Provides a type for use with GameObject ids.
- * Essentially GameObjectId is an alias of the `number` type, however, it is so
- * important that we want to emphasize its use.
- */
-type GameObjectId = number;

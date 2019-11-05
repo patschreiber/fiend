@@ -10,7 +10,6 @@ import {
   EventComponent
 } from "../../../Component";
 
-import { Coordinate } from '../../../types/globals';
 import { PlayerDeathEvent } from '../../../Event';
 
 /**

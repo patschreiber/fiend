@@ -3,8 +3,6 @@ import {
   ActorFactory
 } from '../../GameObject';
 
-import { Coordinate } from '../../types/globals';
-
 /**
  * The interface for the [[Player]] class.
  *

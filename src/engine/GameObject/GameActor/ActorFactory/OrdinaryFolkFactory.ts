@@ -9,8 +9,6 @@ import {
   BrainComponent
 } from "../../../Component";
 
-import { Coordinate } from '../../../types/globals';
-
 /**
  * The OrdinaryFolkFactory class. This is used to spawn non-unique,
  * humanoid-like GameActors aka "Folks."

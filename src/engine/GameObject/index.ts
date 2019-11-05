@@ -5,6 +5,21 @@
  */
 
 /**
+ * The interface for GameObject.
+ */
+export * from './interfaces/IGameObject';
+
+/**
+ * The interface for GameActor.
+ */
+export * from './interfaces/IGameActor';
+
+/**
+ * The interface for GameObjectManager.
+ */
+export * from './interfaces/IGameObjectManager'
+
+/**
  * Progenitor classes for all entities in the game.
  */
 export * from './GameObject';

@@ -35,12 +35,12 @@ export class TestScene extends BaseScene implements IScene {
 
     // this.gameObjects.push(this.loadDummies(900));
 
-    this.gameObjects.push(this._PF.spawn({x:200,y:200}));
+    // this.gameObjects.push(this._PF.spawn({x:200,y:200}));
 
     // Stress test w/20,000 entities.
-    for(let i=0; i<20000; i++) {
-      this.gameObjects.push(this._OFF.spawn({x:200,y:100}));
-    }
+    // for(let i=0; i<100; i++) {
+    //   this.gameObjects.push(this._OFF.spawn({x:200,y:100}));
+    // }
 
     // TODO: This is a test to test event emission.
     document.getElementById('game-pane').addEventListener(

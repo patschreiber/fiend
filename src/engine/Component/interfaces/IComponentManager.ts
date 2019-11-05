@@ -1,5 +1,5 @@
-import { ComponentQueue } from '../../types/components';
+import { ComponentContainer } from '../../types/components';
 
 export interface IComponentManager {
-  eventComponentQueue: ComponentQueue;
+  eventComponentQueue: ComponentContainer;
 }

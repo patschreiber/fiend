@@ -1,4 +1,3 @@
-import { Coordinate } from '../../types/globals';
 import { ComponentContainer } from '../../types/components';
 import { GameObject } from '../../GameObject';
 import { IGameActor } from '../interfaces/IGameActor';

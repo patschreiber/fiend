@@ -1,4 +1,4 @@
-import { ComponentQueue } from '../types/components';
+import { ComponentContainer } from '../types/components';
 
 /**
  * The ComponentManager class.
@@ -6,8 +6,8 @@ import { ComponentQueue } from '../types/components';
  * Components that belong to [[GameObject]] entities.
  */
  export class ComponentManager {
-  private _brainComponentQueue: ComponentQueue;
-  private _colliderComponentQueue: ComponentQueue;
-  private _eventComponentQueue: ComponentQueue;
-  private _lifeforceComponent: ComponentQueue;
+  private _brainComponentQueue: ComponentContainer;
+  private _colliderComponentQueue: ComponentContainer;
+  private _eventComponentQueue: ComponentContainer;
+  private _lifeforceComponent: ComponentContainer;
 }

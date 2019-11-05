@@ -1,5 +1,4 @@
 import { GameActor } from "../GameActor";
-import { Coordinate } from "../../../types/globals";
 
 /**
  * The ActorFactory class. Used for common actors such as common enemies,

@@ -5,7 +5,6 @@ import {
   MovementComponent,
   BrainComponent
 } from '../Component';
-import { GameObjectId } from './globals';
 
 /**
  * Provides a container to house a GameActor's attached Components. Modifying
@@ -36,6 +35,8 @@ type ComponentContainer = {
  * different Component queue for each type of Component.
  * @example
  */
-type ComponentQueue = {
-  [gameObjectId: number]: Event|CustomEvent,
-}
+// type ComponentQueue = {
+//   [gameObjectId: number]: Component,
+// }
+
+

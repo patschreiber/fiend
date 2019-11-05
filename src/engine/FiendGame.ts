@@ -1,5 +1,4 @@
 import { InputHandler } from './Input/InputHandler';
-import { Camera } from './Render/Camera/Camera';
 import { Renderer } from './Render/Renderer';
 
 import { Player } from './GameObject';
@@ -25,11 +24,6 @@ export class FiendGame {
    * The manager responsible for orchestrating Scenes.
    */
   public SceneManager: SceneManager;
-
-  /**
-   * The main camera.
-   */
-  public Camera: Camera;
 
   /**
    * The instance of the Player's character.
@@ -95,8 +89,6 @@ export class FiendGame {
 
     this.InputHandler = new InputHandler();
 
-    this.Camera = new Camera();
-
     // TODO: Try and remove the player from this class. They should exist as an
     // entity in a scene, same as everything else. Pain points: InputHandler.
     this.Player = this.SceneManager.currentScene.getPlayer();
@@ -150,7 +142,7 @@ export class FiendGame {
   private _update(delta: number): void {
 
     // TODO Remove clog.
-    // console.log('delta :', delta);
+    console.log('delta :', delta);
     this.SceneManager.currentScene.update(delta);
   }
 

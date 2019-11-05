@@ -1,5 +1,4 @@
 import { IEventComponent } from './interfaces/IEventComponent';
-import { EventContainer } from '../types/globals';
 import { Component } from './Component';
 
 /**

@@ -1,28 +1,5 @@
-import { GameObjectId } from "../types/globals";
-
-/**
- * The interface for the [[GameObject]] class.
- *
- * @interface IGameObject
- */
-interface IGameObject {
-
-  /**
-   * Accessor for the private member `id`.
-   *
-   * @returns The id of the GameObject
-   */
-   getId(): number;
-
-  /**
-   * Defines the signature for the update method for the GameActor.
-   *
-   * @param delta The time difference between frames. Provided by the game's
-   * main game loop.
-   * @see FiendGame.main()
-   */
-  update(delta: number): void;
-}
+import { GameObjectId } from '../types/gameobjects';
+import { IGameObject } from './interfaces/IGameObject';
 
 /**
  * The GameObject abstract class. All game entities inherit from this class.
@@ -43,6 +20,7 @@ export abstract class GameObject implements IGameObject {
 
   /**
    * @var id The id of the instance of the GameObject.
+   * TODO: Switch this to use a Symbol (https://www.sitepen.com/blog/advanced-typescript-concepts-classes-and-types/)
    */
   private id: GameObjectId;
 
