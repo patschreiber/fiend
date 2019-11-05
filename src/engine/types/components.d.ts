@@ -35,8 +35,8 @@ type ComponentContainer = {
  * different Component queue for each type of Component.
  * @example
  */
-// type ComponentQueue = {
-//   [gameObjectId: number]: Component,
-// }
+type GameObjectComponentList = {
+  [gameObjectId: number]: BrainComponent;
+}
 
 

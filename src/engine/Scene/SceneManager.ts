@@ -4,6 +4,7 @@ import { TestScene } from './scenes/TestScene';
 import { ISceneManager } from './interfaces/ISceneManager';
 import { GameObjectManager } from '../GameObject/GameObjectManager';
 import { ComponentManager } from '../Component/ComponentManager';
+import { BrainComponent } from '../Component';
 
 enum SceneManagerState {
   Ready,
@@ -25,8 +26,8 @@ export class SceneManager implements ISceneManager {
    * The number of currently-active game objects.
    */
   public gameObjectCount: number;
-  public GOM: GameObjectManager;
-  public CM: ComponentManager;
+  public GameObjectManager: GameObjectManager;
+  public ComponentManager: ComponentManager;
 
   /**
    * The currently-loaded Scene.
@@ -37,6 +38,9 @@ export class SceneManager implements ISceneManager {
    * @constructor
    */
   public constructor(gom: GameObjectManager, cm: ComponentManager) {
+    this.ComponentManager = cm;
+    this.GameObjectManager = gom;
+
     this.loadScene(new TestScene());
   }
 
@@ -95,6 +99,8 @@ export class SceneManager implements ISceneManager {
   }
 
   public update(delta: number): void {
+    // this.ComponentManager.addComponent(BrainComponent);
+
     this.currentScene.update(delta);
   }
 }
