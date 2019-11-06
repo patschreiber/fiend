@@ -76,19 +76,18 @@ export class SceneManager implements ISceneManager {
    * @param scene The Scene to load.
    */
   public loadScene<S extends BaseScene>(scene: new () => S): void {
-    // this.state = SceneManagerState.Loading;
+    this.state = SceneManagerState.Loading;
 
     // TODO: Finish
     this.currentScene = new scene();
-    // for (let initialGO in this.currentScene.initialGameObjectManifest) {
-
-    //   // this.GameObjectManager.spawn(initialGO, initialGO.position, );
-    // }
-    // this.GameObjectManager.spawn("OrdinaryFolk", {x:100,y:100}, this.currentScene);
+    for (let initialGO in this.currentScene.initialGameObjectManifest) {
+      console.log('initialGO :', initialGO);
+      // this.GameObjectManager.spawn(initialGO.type, initialGO.position, );
+    }
+    this.GameObjectManager.spawn("OrdinaryFolk", {x:100,y:100}, this.currentScene);
+    console.log('this.activeGameObjects :', this.currentScene.activeGameObjects);
 
     this.state = SceneManagerState.Ready;
-
-    // console.log('this.initialGameObjectManifest :', this.currentScene.initialGameObjectManifest);
   }
 
   /**

@@ -3,8 +3,10 @@ import {
   EventComponent,
   LifeforceComponent,
   MovementComponent,
-  BrainComponent
+  BrainComponent,
+  ColliderComponent
 } from '../Component';
+import { IComponent } from '../Component/interfaces/IComponent';
 
 /**
  * Provides a container to house a GameActor's attached Components. Modifying
@@ -31,9 +33,24 @@ type ComponentContainer = {
 }
 
 /**
+ * Provides a structure of available Components that the system recognizes.
+ */
+type AvailableComponentsContainer = {
+  BrainComponent?: BrainComponent;
+  ColliderComponent?: ColliderComponent;
+  EventComponent?: EventComponent;
+  LifeforceComponent?: LifeforceComponent;
+  MovementComponent?: MovementComponent;
+}
+
+/**
+ * // TODO:
  * A container for all Components that exist in a scene. There will be a
  * different Component queue for each type of Component.
  * @example
+ * ```
+ * {10: BrainComponent}
+ * ```
  */
 type GameObjectComponentList = {
   [gameObjectId: number]: BrainComponent;

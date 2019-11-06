@@ -1,4 +1,11 @@
 /**
+ * Removes the `readonly` attribute from a member.
+ */
+type Mutable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
+
+/**
  * Provides an x,y coordinate tuple.
  * [x,y]: The coordinate tuple.
  *

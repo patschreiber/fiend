@@ -25,7 +25,11 @@ export abstract class BaseScene implements IScene {
    */
   public maxActiveEntities: number;
 
-  public abstract initialGameObjectManifest: GameObjectManifest;
+  /**
+   * A list of the GameObjects that should be initially present when the Scene
+   * loads. Contains templates so the factory classes can build the GameObjects.
+   */
+  public readonly initialGameObjectManifest: GameObjectManifest;
 
   /**
    * The list of active GameObjects. Every game object in this list will have
@@ -99,7 +103,6 @@ export abstract class BaseScene implements IScene {
     //     gameObject.update(delta);
     //   }
     // }
-    console.log('this.activeGameObjects :', this.activeGameObjects);
     for (let gameObject of this.activeGameObjects) {
       gameObject.update(delta);
     }

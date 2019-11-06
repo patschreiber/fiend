@@ -54,21 +54,6 @@ export class Template {
   }
 
   /**
-   * Helper method for retrieving the properties of a given template. Generally
-   * is most commonly used to get optics into if a template can be overridden by
-   * the caller or not.
-   *
-   * @param template The key of the requested GameObject template.
-   *
-   * @return An array of the template's property keys.
-   */
-  public static keys<K extends keyof TemplateStruct>(
-    template: K
-  ): Array<string> {
-    return Object.keys(Template.gameObjectTemplates[template]);
-  }
-
-  /**
    * Provides a mutable version of the GameObjectTemplate so the caller can
    * override the initial values of the template. Note: The index of
    * `properties` corresponds to the same index in the `values` array.

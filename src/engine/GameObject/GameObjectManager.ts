@@ -88,9 +88,13 @@ export class GameObjectManager implements IGameObjectManager {
         return false;
     }
 
-    this._addToContainer(GO, scene);
-
-    return GO.getId();
+    if (this._addToContainer(GO, scene)) {
+      return GO.getId();
+    } else {
+      console.log('addGameObjectWarning :', `GameObject (id:${GO.getId()})
+      could not be added to a GameObject container at ${scene}`);
+      return false;
+    }
   }
 
   /**
@@ -100,7 +104,8 @@ export class GameObjectManager implements IGameObjectManager {
    * TODO: Don't always add to active.
    *
    * @param gameObject The GameObject to add.
-   * @param container The container to put the GameObject in.
+   * @param scene The Scene that houses the containers that hold the
+   * GameObjects.
    *
    * @return If the game object was successfully added or not.
    */

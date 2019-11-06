@@ -6,9 +6,8 @@ import {
   Player,
 } from '../../GameObject';
 import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
-import {
-  GameObjectManifest
-} from '../../types/gameobjects';
+import { GameObjectManifest } from '../../types/gameobjects';
+import { Template } from '../../templates/Template';
 
 /**
  * The TestScene class.
@@ -16,8 +15,20 @@ import {
  */
 export class TestScene extends BaseScene implements IScene {
 
+  /**
+   * @inheritdoc
+   */
   public static readonly maxActiveEntities = 1000;
-  public readonly initialGameObjectManifest: GameObjectManifest;
+
+  /**
+   * @inheritdoc
+   */
+  public readonly initialGameObjectManifest: GameObjectManifest = [
+    Template.get("player"),
+    Template.get("ordinary_folk"),
+    Template.get("ordinary_folk"),
+    Template.mutate("player", ["position"], [{x:999,y:999}]) // Example of overriding a template's default values.
+  ];
 
   private _PF: PlayerFactory;
   private _OFF: OrdinaryFolkFactory
@@ -30,23 +41,7 @@ export class TestScene extends BaseScene implements IScene {
 
     this.tileMap  = new OverworldAtlas();
 
-    this.initialGameObjectManifest = [
-      {
-        type:"Player",
-        position: {x:125,y:125},
-        components: []
-      },
-      {
-        type:"OrdinaryFolk",
-        position: {x:200,y:100},
-        components: []
-      },
-      {
-        type:"OrdinaryFolk",
-        position: {x:300,y:200},
-        components: []
-      },
-    ];
+    console.log('this.initialGameObjectManifest :', this.initialGameObjectManifest);
 
     // this._PF = new PlayerFactory();
     // this._OFF = new OrdinaryFolkFactory();

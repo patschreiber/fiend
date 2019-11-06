@@ -1,5 +1,6 @@
 import { GameObject } from '../GameObject';
 import { IComponent } from '../Component/interfaces/IComponent';
+import { AvailableComponentsContainer } from './components';
 
 /**
  * Provides a type for use with GameObject ids.
@@ -56,19 +57,8 @@ export type GameObjectTemplate = {
   type: string;
   position: Coordinate;
   // components: Array<ComponentTemplate<Component>>;
-  components: Array<IComponent>;
+  components: Array<keyof AvailableComponentsContainer>;
 
-}
-
-// export type ComponentTemplate<C extends Component> = {
-//   type: C,
-//   // initialValues: any
-// }
-
-export type PlayerTemplate = {
-  type:"Player";
-  position: {x:125,y:125};
-  components: [];
 }
 
 /**

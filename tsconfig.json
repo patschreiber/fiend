@@ -13,6 +13,7 @@
   },
   "files": [
     "./src/engine/types/components.d.ts",
+    "./src/engine/types/gameobjects.d.ts",
     "./src/engine/types/globals.d.ts"
   ],
   "include": ["./src/**/*.ts"],
