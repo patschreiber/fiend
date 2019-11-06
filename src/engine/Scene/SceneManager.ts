@@ -4,9 +4,17 @@ import { TestScene } from './scenes/TestScene';
 import { ISceneManager } from './interfaces/ISceneManager';
 import { GameObjectManager } from '../GameObject/GameObjectManager';
 import { ComponentManager } from '../Component/ComponentManager';
-import { BrainComponent } from '../Component';
 
-enum SceneManagerState {
+/**
+ * Defines the different states that the SceneManager can be in.
+ * `Ready`: The SceneManager is ready to attempt an action that will change it's
+ * state.
+ * `Loading`: The SceneManager is currently loading a Scene.
+ * `Unloading`: The SceneManager is currently unloading a Scene.
+ * `Error`: The SceneManager is stuck in an Error state. Reloading the
+ * SceneMananger may fix the problem.
+ */
+export enum SceneManagerState {
   Ready,
   Loading,
   Unloading,
@@ -23,10 +31,23 @@ enum SceneManagerState {
 export class SceneManager implements ISceneManager {
 
   /**
+   * The current state of the SceneManager.
+   */
+  public state: SceneManagerState;
+
+  /**
    * The number of currently-active game objects.
    */
   public gameObjectCount: number;
+
+  /**
+   * The [[GameObjectManager]].
+   */
   public GameObjectManager: GameObjectManager;
+
+  /**
+   * The [[ComponentManager]].
+   */
   public ComponentManager: ComponentManager;
 
   /**
@@ -36,8 +57,13 @@ export class SceneManager implements ISceneManager {
 
   /**
    * @constructor
+   *
+   * @param gom A [[GameObjectManager]] instance.
+   * @param cm A [[ComponentManager]] instance.
    */
   public constructor(gom: GameObjectManager, cm: ComponentManager) {
+    this.state = SceneManagerState.Ready
+
     this.ComponentManager = cm;
     this.GameObjectManager = gom;
 
@@ -50,9 +76,13 @@ export class SceneManager implements ISceneManager {
    * @param scene The Scene to load.
    */
   public loadScene(scene: BaseScene): void {
+    this.state = SceneManagerState.Loading;
+
     // TODO: Finish
     this.currentScene = scene;
     this.gameObjectCount = scene.gameObjects.length;
+
+    this.state = SceneManagerState.Ready;
   }
 
   /**
@@ -89,17 +119,16 @@ export class SceneManager implements ISceneManager {
   }
 
   /**
-   * Moves a GameObject from one Scene's GameObject queue to another. Used for
-   * when GameObjects become inactive.
+   * Updates the Scene's GameObjects.
    *
-   * @param gameObject
+   * @param delta The time difference between frames. Provided by the game's
+   * main game loop.
+   * @see FiendGame.main()
    */
-  public moveToQueue(gameObject: GameObject): void {
-    // TODO: Finish
-  }
-
   public update(delta: number): void {
-    // this.ComponentManager.addComponent(BrainComponent);
+
+    this.GameObjectManager.spawn("OrdinaryFolk", {x:100,y:100});  //Test
+    let a = this.GameObjectManager.getActiveGameObjects();
 
     this.currentScene.update(delta);
   }
