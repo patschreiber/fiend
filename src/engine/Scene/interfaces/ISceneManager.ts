@@ -14,7 +14,7 @@ export interface ISceneManager {
   currentScene: BaseScene;
   GameObjectManager: GameObjectManager;
 
-  loadScene(scene: BaseScene): void;
+  loadScene<S extends BaseScene>(scene: new () => S): void;
   unloadScene(scene: BaseScene): void;
   addToScene(gameObject: GameObject): void;
   removeFromScene(gameObject: GameObject): void;

@@ -1,6 +1,10 @@
-import { Player } from '../../GameObject';
+import {
+  Player,
+  GameObject
+} from '../../GameObject';
 import { IScene } from '../interfaces/IScene';
 import { BaseAtlas } from '../../../atlases/BaseAtlas';
+import { GameObjectManifest } from '../../types/gameobjects';
 
 /**
  * The BaseScene class.
@@ -21,6 +25,8 @@ export abstract class BaseScene implements IScene {
    */
   public maxActiveEntities: number;
 
+  public abstract initialGameObjectManifest: GameObjectManifest;
+
   /**
    * The list of active GameObjects. Every game object in this list will have
    * their state updated every frame, if possible.
@@ -35,7 +41,32 @@ export abstract class BaseScene implements IScene {
    */
   public tileMap: BaseAtlas;
 
-  public sceneBoundaries: Array<number>;
+  /**
+   * Game objects that are considered “active” in the current Scene. Active
+   * GameObjects will update and render every frame.
+   */
+  public activeGameObjects: Array<GameObject>;
+
+  /**
+   * Contains game objects that are present in the scene, but are not being
+   * rendered. They are being updated every frame, however. These might be
+   * objects that are just out of frame, but may need to be rendered in the near
+   * future.
+   */
+  public culledGameObjects: Array<GameObject>;
+
+
+  /**
+   * Contains game objects that are present in the scene, but are not be
+   * rendered or updated for whatever reason.
+   */
+  public sleepingGameObjects: Array<GameObject>;
+
+  /**
+   * GameObjects that have been killed, destroyed, or otherwise incapacitated,
+   * but shouldn’t be deleted yet will be stored here.
+   */
+  public sceneGraveyard: Array<GameObject>;
 
   /**
    * @constructor
@@ -43,7 +74,13 @@ export abstract class BaseScene implements IScene {
   public constructor() {
 
     // Initialize the gameObjects container.
+    // TODO: Remove
     this.gameObjects = [];
+
+    this.activeGameObjects = new Array<GameObject>(1000);
+    this.culledGameObjects = Array<GameObject>(1000);
+    this.sleepingGameObjects = Array<GameObject>(1000);
+    this.sceneGraveyard = Array<GameObject>(1000);
   }
 
   /**
@@ -62,24 +99,16 @@ export abstract class BaseScene implements IScene {
     //     gameObject.update(delta);
     //   }
     // }
-    for (let gameObject of this.gameObjects) {
+    console.log('this.activeGameObjects :', this.activeGameObjects);
+    for (let gameObject of this.activeGameObjects) {
       gameObject.update(delta);
     }
-  }
 
-  /**
-   * Calculates the scene boundaries in pixels.
-   * TODO: This is probably a stop gap solution until colliders come into play.
-   *
-   * @return An array of game boundaries in `[top, right, bottom, left]` order.
-   */
-  public calculateSceneBoundaries(): Array<number> {
-    let pxSize = this.tileMap.gridElemPixelSize;
 
-    let bottom = this.tileMap.getGridHeight() * pxSize;
-    let right = this.tileMap.getGridWidth() * pxSize;
+    for (let gameObject of this.culledGameObjects) {
+      gameObject.update(delta);
+    }
 
-    return [0,right,bottom,0];
   }
 
   /**

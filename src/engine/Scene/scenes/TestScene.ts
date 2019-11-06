@@ -3,15 +3,21 @@ import { BaseScene } from './BaseScene';
 import {
   PlayerFactory,
   OrdinaryFolkFactory,
-  Player
+  Player,
 } from '../../GameObject';
 import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
+import {
+  GameObjectManifest
+} from '../../types/gameobjects';
 
 /**
  * The TestScene class.
  * This will be the Scene to test out new things.
  */
 export class TestScene extends BaseScene implements IScene {
+
+  public static readonly maxActiveEntities = 1000;
+  public readonly initialGameObjectManifest: GameObjectManifest;
 
   private _PF: PlayerFactory;
   private _OFF: OrdinaryFolkFactory
@@ -22,25 +28,31 @@ export class TestScene extends BaseScene implements IScene {
   public constructor() {
     super();
 
-    this.maxActiveEntities = 1000;
     this.tileMap  = new OverworldAtlas();
 
-    this._PF = new PlayerFactory();
-    this._OFF = new OrdinaryFolkFactory();
+    this.initialGameObjectManifest = [
+      {
+        type:"Player",
+        position: {x:125,y:125},
+        components: []
+      },
+      {
+        type:"OrdinaryFolk",
+        position: {x:200,y:100},
+        components: []
+      },
+      {
+        type:"OrdinaryFolk",
+        position: {x:300,y:200},
+        components: []
+      },
+    ];
 
-    this.sceneBoundaries = this.calculateSceneBoundaries();
+    // this._PF = new PlayerFactory();
+    // this._OFF = new OrdinaryFolkFactory();
 
-    this.gameObjects.push(this._PF.spawn({x:125,y:125}));
-    this.gameObjects.push(this._OFF.spawn({x:200,y:100}));
-
-    // this.gameObjects.push(this.loadDummies(900));
-
-    // this.gameObjects.push(this._PF.spawn({x:200,y:200}));
-
-    // Stress test w/20,000 entities.
-    // for(let i=0; i<100; i++) {
-    //   this.gameObjects.push(this._OFF.spawn({x:200,y:100}));
-    // }
+    // this.activeGameObjects.push(this._PF.spawn({x:125,y:125}));
+    // this.activeGameObjects.push(this._OFF.spawn({x:200,y:100}));
 
     // TODO: This is a test to test event emission.
     document.getElementById('game-pane').addEventListener(
@@ -61,7 +73,8 @@ export class TestScene extends BaseScene implements IScene {
 
     // The Player should always be the first gameObject loaded in the Test
     // Scene.
-    return this.gameObjects[0];
+    // return this.activeGameObjects[0];
+    return new Player(this._PF, {x:100,y:100});
   }
 
   /**

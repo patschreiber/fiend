@@ -1,8 +1,11 @@
-import { GameObjectId } from '../types/gameobjects';
+import {
+  GameObjectId
+} from '../types/gameobjects';
 import { OrdinaryFolkFactory } from '../GameObject';
 import { PlayerFactory } from '../GameObject';
 import { GameObject } from './GameObject';
 import { IGameObjectManager } from './interfaces/IGameObjectManager';
+import { BaseScene } from '../Scene';
 
 /**
  * The GameObjectManager class.
@@ -21,37 +24,11 @@ export class GameObjectManager implements IGameObjectManager {
   private _PF: PlayerFactory;
 
   /**
-   * Game objects that are considered “active” in the current Scene. Active
-   * GameObjects will update and render every frame.
-   */
-  private _activeGameObjects: Array<GameObject>;
-
-  /**
-   * Contains game objects that are present in the scene, but are not being
-   * rendered. They are being updated every frame, however. These might be
-   * objects that are just out of frame, but may need to be rendered in the near
-   * future.
-   */
-  private _culledGameObjects: Array<GameObject>;
-
-  /**
-   * Contains game objects that are present in the scene, but are not be
-   * rendered or updated for whatever reason.
-   */
-  private _sleepingGameObjects: Array<GameObject>;
-
-  /**
-   * GameObjects that have been killed, destroyed, or otherwise incapacitated,
-   * but shouldn’t be deleted yet will be stored here.
-   */
-  private _sceneGraveyard: Array<GameObject>;
-
-  /**
    * Game objects that are not present in the scene, but who’s state needs to be
    * maintained, go here. When a scene is unloaded, an entity marked with the
    * “persist” flag will be added to this container.
    */
-  private _inactiveGameObjects: Array<GameObject>;
+  public inactiveGameObjects: Array<GameObject>;
 
   /**
    * Contains game objects that are unique, which means they can only ever
@@ -68,30 +45,17 @@ export class GameObjectManager implements IGameObjectManager {
     this._PF = new PlayerFactory();
     this._OFF = new OrdinaryFolkFactory();
 
-    this._activeGameObjects = new Array<GameObject>(1000);
-    this._culledGameObjects = Array<GameObject>(1000);
-    this._sleepingGameObjects = Array<GameObject>(1000);
-    this._sceneGraveyard = Array<GameObject>(1000);
-    this._inactiveGameObjects = Array<GameObject>(1000);
+    this.inactiveGameObjects = Array<GameObject>(1000);
     // this._worldGraveyard = Array<GameObject>(1000);
   }
 
   /**
-   * Getter for the active GameObjects.
+   * Getter for the inactive GameObject container.
    *
-   * @return The container of GameObjects.
+   * @return The Array of inactive GameObjects.
    */
-  public getActiveGameObjects(): Array<GameObject> {
-    return this._activeGameObjects;
-  }
-
-  /**
-   * Getter for the culled GameObjects.
-   *
-   * @return The container of GameObjects.
-   */
-  public getCulledGameObjects(): Array<GameObject> {
-    return this._culledGameObjects;
+  public getInactiveGameObjects(): Array<GameObject> {
+    return this.inactiveGameObjects;
   }
 
   /**
@@ -101,7 +65,13 @@ export class GameObjectManager implements IGameObjectManager {
    *
    * @return The created GameObject id or false if it couldn't be created.
    */
-  public spawn(goType: string, position: Coordinate): GameObjectId|false {
+  public spawn<S extends BaseScene>(
+    goType: string,
+    position: Coordinate,
+    scene?: S,
+    // template?: GameObjectTemplate
+  ): GameObjectId|false {
+
 
     let GO = null;
     switch (goType) {
@@ -113,11 +83,12 @@ export class GameObjectManager implements IGameObjectManager {
         break;
       default:
         // TODO: Make this a real Error.
-        console.log('addGameObjectWarning :', `GameObject of type ${goType} could not be created because it is not a valid type.`);
+        console.log('addGameObjectWarning :', `GameObject of type ${goType}
+        could not be created because it is not a valid type.`);
         return false;
     }
 
-    this._addToContainer(GO, this._activeGameObjects);
+    this._addToContainer(GO, scene);
 
     return GO.getId();
   }
@@ -133,11 +104,12 @@ export class GameObjectManager implements IGameObjectManager {
    *
    * @return If the game object was successfully added or not.
    */
-  private _addToContainer(
+  private _addToContainer<S extends BaseScene>(
     gameObject: GameObject,
-    container: Array<GameObject>
+    scene: S
   ): boolean {
-    container[gameObject.getId()] = gameObject;
+
+    scene.activeGameObjects.push(gameObject);
 
     return true;
   }

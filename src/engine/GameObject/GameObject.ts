@@ -1,4 +1,6 @@
-import { GameObjectId } from '../types/gameobjects';
+import {
+  GameObjectId,
+} from '../types/gameobjects';
 import { IGameObject } from './interfaces/IGameObject';
 
 /**
@@ -22,11 +24,15 @@ export abstract class GameObject implements IGameObject {
    * @var id The id of the instance of the GameObject.
    * TODO: Switch this to use a Symbol (https://www.sitepen.com/blog/advanced-typescript-concepts-classes-and-types/)
    */
+  // private id: GameObjectId;
   private id: GameObjectId;
 
   /**
    * @constructor
    * Auto-increments the GameOject id for the new GameObject being created.
+   * TODO: Make sure to save the number we left off on when we quit so we can
+   * resume auto-incrementing when we save/load the game.
+   *
    */
   public constructor() {
     this.id = GameObject.idIncrementor++;

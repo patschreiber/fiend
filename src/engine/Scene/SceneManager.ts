@@ -36,7 +36,7 @@ export class SceneManager implements ISceneManager {
   public state: SceneManagerState;
 
   /**
-   * The number of currently-active game objects.
+   * The number of currently-processed game objects.
    */
   public gameObjectCount: number;
 
@@ -67,7 +67,7 @@ export class SceneManager implements ISceneManager {
     this.ComponentManager = cm;
     this.GameObjectManager = gom;
 
-    this.loadScene(new TestScene());
+    this.loadScene(TestScene);
   }
 
   /**
@@ -75,14 +75,20 @@ export class SceneManager implements ISceneManager {
    *
    * @param scene The Scene to load.
    */
-  public loadScene(scene: BaseScene): void {
-    this.state = SceneManagerState.Loading;
+  public loadScene<S extends BaseScene>(scene: new () => S): void {
+    // this.state = SceneManagerState.Loading;
 
     // TODO: Finish
-    this.currentScene = scene;
-    this.gameObjectCount = scene.gameObjects.length;
+    this.currentScene = new scene();
+    // for (let initialGO in this.currentScene.initialGameObjectManifest) {
+
+    //   // this.GameObjectManager.spawn(initialGO, initialGO.position, );
+    // }
+    // this.GameObjectManager.spawn("OrdinaryFolk", {x:100,y:100}, this.currentScene);
 
     this.state = SceneManagerState.Ready;
+
+    // console.log('this.initialGameObjectManifest :', this.currentScene.initialGameObjectManifest);
   }
 
   /**
@@ -100,7 +106,7 @@ export class SceneManager implements ISceneManager {
    *
    * @param gameObject The GameObject to add to the Scene.
    */
-  public addToScene(gameObject: GameObject): void {
+  public addToScene(goType: GameObject): void {
     if (this.gameObjectCount < this.currentScene.maxActiveEntities) {
       // TODO: Finish
     }
@@ -126,10 +132,6 @@ export class SceneManager implements ISceneManager {
    * @see FiendGame.main()
    */
   public update(delta: number): void {
-
-    this.GameObjectManager.spawn("OrdinaryFolk", {x:100,y:100});  //Test
-    let a = this.GameObjectManager.getActiveGameObjects();
-
     this.currentScene.update(delta);
   }
 }
