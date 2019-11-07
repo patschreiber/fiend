@@ -1,5 +1,8 @@
-import { GameObjectTemplate } from '../types/gameobjects';
 import { ObjectMutator as OM } from '../utilities/ObjectMutator';
+import {
+  GameObjectTemplate,
+  TemplateType
+} from '../types/gameobjects';
 
 /**
  * The structure of a template collection.
@@ -13,13 +16,15 @@ type TemplateStruct = {
  */
 export class Template {
 
+  // public static type: TemplateType = TemplateType;
+
   /**
    * The structured Template data. Specific template data is available at each
    * key of the structure.
    */
   protected static readonly gameObjectTemplates: TemplateStruct = {
-    "player": {
-      type: "Player",
+    "Player": {
+      type: TemplateType.Player,
       position: {x:125,y:125},
       components: [
         "BrainComponent",
@@ -28,8 +33,8 @@ export class Template {
         "MovementComponent"
         ]
     },
-    "ordinary_folk": {
-      type: "OrdinaryFolk",
+    "OrdinaryFolk": {
+      type: TemplateType.OrdinaryFolk,
       position: {x:200,y:100},
       components: [
         "MovementComponent"
@@ -38,7 +43,7 @@ export class Template {
   }
 
   /**
-   * Retrieves a specified [[GameObjectTemplate]].
+   * Retrieves a specified GameObjectTemplate.
    *
    * @param template The key of the requested GameObject template.
    *
@@ -71,7 +76,6 @@ export class Template {
   ): Mutable<GameObjectTemplate> {
     let mutantTemplate = OM.clone(Template.gameObjectTemplates[template]);
 
-    // for (let i=0; i<properties.length; i++) {
     for (let i in properties) {
       mutantTemplate[properties[i]] = values[i];
     }
@@ -79,3 +83,25 @@ export class Template {
     return mutantTemplate;
   }
 }
+
+// ORDINARY FOLK
+//   public draw(ctx: CanvasRenderingContext2D): void {
+//     ctx.beginPath();
+//     ctx.rect(this.position.x, this.position.y, 20, 20);
+//     ctx.fillStyle = "#FF0000";
+//     ctx.fill();
+//     ctx.closePath();
+//   }
+
+//   /**
+//    * Draws the Player entity
+//    *
+//    * @param ctx The canvas context.
+//    */
+//    public draw(ctx: CanvasRenderingContext2D) {
+//     ctx.beginPath();
+//     ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI*2);
+//     ctx.fillStyle = "#0095DD";
+//     ctx.fill();
+//     ctx.closePath();
+//   }

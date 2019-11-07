@@ -1,10 +1,11 @@
-import { InputHandler } from './Input/InputHandler';
-import { Renderer } from './Render/Renderer';
-
-import { Player } from './GameObject';
 import { SceneManager } from './Scene/SceneManager';
 import { GameObjectManager } from './GameObject/GameObjectManager';
 import { ComponentManager } from './Component/ComponentManager';
+import { InputHandler } from './Input/InputHandler';
+import { Renderer } from './Render/Renderer';
+
+import { GameObject } from './GameObject';
+import { Template } from './templates/Template';
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -32,7 +33,7 @@ export class FiendGame {
   /**
    * The instance of the Player's character.
    */
-  public Player: Player;
+  public Player: GameObject;
 
   /**
    * The canvas in the DOM. What the game is rendered on.
@@ -100,7 +101,7 @@ export class FiendGame {
 
     // TODO: Try and remove the player from this class. They should exist as an
     // entity in a scene, same as everything else. Pain points: InputHandler.
-    this.Player = this.SceneManager.currentScene.getPlayer();
+    this.Player = GameObject.create(Template.get("Player"));
 
     // Let's kick off the game loop!
     this.main(performance.now());
@@ -110,8 +111,8 @@ export class FiendGame {
    * Generates a new canvas DOM canvas element. The game will run in this
    * canvas.
    *
-   * @param {number} w The width of the canvas, in pixels.
-   * @param {number} h The height of the canvas, in pixels.
+   * @param w The width of the canvas, in pixels.
+   * @param h The height of the canvas, in pixels.
    * TODO: We might want to have the browser viewport be the width and height of the canvas.
    */
   private genCanvas(w: number, h: number): HTMLCanvasElement {

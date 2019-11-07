@@ -1,7 +1,8 @@
+import { ISceneManager } from './interfaces/ISceneManager';
+
 import { GameObject } from '../GameObject';
 import { BaseScene } from './index';
 import { TestScene } from './scenes/TestScene';
-import { ISceneManager } from './interfaces/ISceneManager';
 import { GameObjectManager } from '../GameObject/GameObjectManager';
 import { ComponentManager } from '../Component/ComponentManager';
 
@@ -38,7 +39,7 @@ export class SceneManager implements ISceneManager {
   /**
    * The number of currently-processed game objects.
    */
-  public gameObjectCount: number;
+  // public gameObjectCount: number;
 
   /**
    * The [[GameObjectManager]].
@@ -62,7 +63,7 @@ export class SceneManager implements ISceneManager {
    * @param cm A [[ComponentManager]] instance.
    */
   public constructor(gom: GameObjectManager, cm: ComponentManager) {
-    this.state = SceneManagerState.Ready
+    this.state = SceneManagerState.Ready;
 
     this.ComponentManager = cm;
     this.GameObjectManager = gom;
@@ -80,11 +81,12 @@ export class SceneManager implements ISceneManager {
 
     // TODO: Finish
     this.currentScene = new scene();
-    for (let initialGO in this.currentScene.initialGameObjectManifest) {
-      console.log('initialGO :', initialGO);
-      // this.GameObjectManager.spawn(initialGO.type, initialGO.position, );
+    for (let template of this.currentScene.initialGameObjectManifest) {
+      this.GameObjectManager.spawnFromTemplate(
+        template,
+        this.currentScene.activeGameObjects
+      );
     }
-    this.GameObjectManager.spawn("OrdinaryFolk", {x:100,y:100}, this.currentScene);
     console.log('this.activeGameObjects :', this.currentScene.activeGameObjects);
 
     this.state = SceneManagerState.Ready;
@@ -97,7 +99,7 @@ export class SceneManager implements ISceneManager {
    */
   public unloadScene(scene: BaseScene): void {
     // TODO: Finish
-    this.gameObjectCount = 0;
+    // this.gameObjectCount = 0;
   }
 
   /**
@@ -106,11 +108,11 @@ export class SceneManager implements ISceneManager {
    * @param gameObject The GameObject to add to the Scene.
    */
   public addToScene(goType: GameObject): void {
-    if (this.gameObjectCount < this.currentScene.maxActiveEntities) {
+    // if (this.gameObjectCount < this.currentScene.maxActiveEntities) {
       // TODO: Finish
-    }
+    // }
 
-    this.gameObjectCount++;
+    // this.gameObjectCount++;
   }
 
   /**
@@ -120,7 +122,7 @@ export class SceneManager implements ISceneManager {
    */
   public removeFromScene(gameObject: GameObject): void {
     // TODO: Finish
-    this.gameObjectCount--;
+    // this.gameObjectCount--;
   }
 
   /**

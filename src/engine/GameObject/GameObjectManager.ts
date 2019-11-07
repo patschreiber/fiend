@@ -1,10 +1,11 @@
-import {
-  GameObjectId
-} from '../types/gameobjects';
-import { OrdinaryFolkFactory } from '../GameObject';
-import { PlayerFactory } from '../GameObject';
-import { GameObject } from './GameObject';
 import { IGameObjectManager } from './interfaces/IGameObjectManager';
+import {
+  GameObjectId,
+  GameObjectTemplate
+} from '../types/gameobjects';
+// import { OrdinaryFolkFactory } from '../GameObject';
+// import { PlayerFactory } from '../GameObject';
+import { GameObject } from './GameObject';
 import { BaseScene } from '../Scene';
 
 /**
@@ -16,12 +17,12 @@ export class GameObjectManager implements IGameObjectManager {
   /**
    * The OrdinaryFolkFactory GameObject factory.
    */
-  private _OFF: OrdinaryFolkFactory;
+  // private _OFF: OrdinaryFolkFactory;
 
   /**
    * The PlayerFactory GameObject factory.
    */
-  private _PF: PlayerFactory;
+  // private _PF: PlayerFactory;
 
   /**
    * Game objects that are not present in the scene, but who’s state needs to be
@@ -42,8 +43,8 @@ export class GameObjectManager implements IGameObjectManager {
    */
   public constructor() {
 
-    this._PF = new PlayerFactory();
-    this._OFF = new OrdinaryFolkFactory();
+    // this._PF = new PlayerFactory();
+    // this._OFF = new OrdinaryFolkFactory();
 
     this.inactiveGameObjects = Array<GameObject>(1000);
     // this._worldGraveyard = Array<GameObject>(1000);
@@ -58,65 +59,81 @@ export class GameObjectManager implements IGameObjectManager {
     return this.inactiveGameObjects;
   }
 
-  /**
-   * Spawns a new GameObject in the Scene.
-   * @param goType The type of GameObject to create.
-   * @param position The position of the created GameObject.
-   *
-   * @return The created GameObject id or false if it couldn't be created.
-   */
-  public spawn<S extends BaseScene>(
-    goType: string,
-    position: Coordinate,
-    scene?: S,
-    // template?: GameObjectTemplate
+  public spawnFromTemplate(
+    template: GameObjectTemplate,
+    container?: Array<GameObject>
   ): GameObjectId|false {
 
-
-    let GO = null;
-    switch (goType) {
-      case "Player":
-        GO = this._PF.spawn(position);
-        break;
-      case "OrdinaryFolk":
-        GO = this._OFF.spawn(position);
-        break;
-      default:
-        // TODO: Make this a real Error.
-        console.log('addGameObjectWarning :', `GameObject of type ${goType}
-        could not be created because it is not a valid type.`);
-        return false;
-    }
-
-    if (this._addToContainer(GO, scene)) {
-      return GO.getId();
+    let newGameObject = GameObject.create(template);
+    if (container === undefined) {
+      this.inactiveGameObjects.push(newGameObject);
     } else {
-      console.log('addGameObjectWarning :', `GameObject (id:${GO.getId()})
-      could not be added to a GameObject container at ${scene}`);
-      return false;
+      container.push(newGameObject);
     }
+
+    return newGameObject.getId();
   }
 
-  /**
-   * Adds a GameObject to one of the `_activeGameObjects`, `_culledGameObjects`,
-   * `_sleepingGameObjects`, `sceneGraveyard`, `_inactiveGameObjects`, or
-   * `_worldGraveyard` GameObject containers.
-   * TODO: Don't always add to active.
-   *
-   * @param gameObject The GameObject to add.
-   * @param scene The Scene that houses the containers that hold the
-   * GameObjects.
-   *
-   * @return If the game object was successfully added or not.
-   */
-  private _addToContainer<S extends BaseScene>(
-    gameObject: GameObject,
-    scene: S
-  ): boolean {
+  // /**
+  //  * Spawns a new GameObject in the Scene.
+  //  *
+  //  * @param goType The type of GameObject to create.
+  //  * @param position The position of the created GameObject.
+  //  *
+  //  * @return The created GameObject id or false if it couldn't be created.
+  //  */
+  // public spawn<S extends BaseScene>(
+  //   goType: string,
+  //   position: Coordinate,
+  //   scene?: S,
+  //   // template?: GameObjectTemplate
+  // ): GameObjectId|false {
 
-    scene.activeGameObjects.push(gameObject);
 
-    return true;
-  }
+  //   let GO = null;
+  //   switch (goType) {
+  //     case "Player":
+  //       GO = this._PF.spawn(position);
+  //       break;
+  //     case "OrdinaryFolk":
+  //       GO = this._OFF.spawn(position);
+  //       break;
+  //     default:
+  //       // TODO: Make this a real Error.
+  //       console.log('addGameObjectWarning :', `GameObject of type ${goType}
+  //       could not be created because it is not a valid type.`);
+  //       return false;
+  //   }
+
+  //   if (this._addToContainer(GO, scene)) {
+  //     return GO.getId();
+  //   } else {
+  //     console.log('addGameObjectWarning :', `GameObject (id:${GO.getId()})
+  //     could not be added to a GameObject container at ${scene}`);
+  //     return false;
+  //   }
+  // }
+
+  // /**
+  //  * Adds a GameObject to one of the `_activeGameObjects`, `_culledGameObjects`,
+  //  * `_sleepingGameObjects`, `sceneGraveyard`, `_inactiveGameObjects`, or
+  //  * `_worldGraveyard` GameObject containers.
+  //  * TODO: Don't always add to active.
+  //  *
+  //  * @param gameObject The GameObject to add.
+  //  * @param scene The Scene that houses the containers that hold the
+  //  * GameObjects.
+  //  *
+  //  * @return If the game object was successfully added or not.
+  //  */
+  // private _addToContainer<S extends BaseScene>(
+  //   gameObject: GameObject,
+  //   scene: S
+  // ): boolean {
+
+  //   scene.activeGameObjects.push(gameObject);
+
+  //   return true;
+  // }
 
 }

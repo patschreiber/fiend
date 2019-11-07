@@ -12,9 +12,9 @@
     "forceConsistentCasingInFileNames": true   // Disallow inconsistently-cased references to the same file
   },
   "files": [
+    "./src/engine/types/globals.d.ts",
     "./src/engine/types/components.d.ts",
-    "./src/engine/types/gameobjects.d.ts",
-    "./src/engine/types/globals.d.ts"
+    "./src/engine/types/gameobjects.d.ts"
   ],
   "include": ["./src/**/*.ts"],
   "exclude": ["node_modules", "build", "**/*.spec.ts"]

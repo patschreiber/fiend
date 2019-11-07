@@ -1,5 +1,4 @@
 import {
-  Player,
   GameObject
 } from '../../GameObject';
 import { IScene } from '../interfaces/IScene';
@@ -104,23 +103,21 @@ export abstract class BaseScene implements IScene {
     //   }
     // }
     for (let gameObject of this.activeGameObjects) {
-      gameObject.update(delta);
+      // gameObject.update(delta);
     }
-
 
     for (let gameObject of this.culledGameObjects) {
-      gameObject.update(delta);
+      // gameObject.update(delta);
     }
-
   }
 
   /**
-   * Retrieves the instance of the [[Player]] in the current scene. Scenes may
-   * have to retrieve the player differently from one another, so it's up to the
-   * sublass to decide.
+   * Retrieves the [[GameObject]] that in the current scene. Scenes may have to
+   * retrieve the player differently from one another, so it's up to the sublass
+   * to decide.
    *
-   * @return The instance of the Player from the scene.
+   * @return The instance of the Player GameObject from the scene.
    */
-  public abstract getPlayer(): Player;
+  public abstract getPlayer(): GameObject;
 
 }

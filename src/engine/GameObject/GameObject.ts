@@ -1,5 +1,6 @@
 import {
   GameObjectId,
+  GameObjectTemplate
 } from '../types/gameobjects';
 import { IGameObject } from './interfaces/IGameObject';
 
@@ -7,25 +8,30 @@ import { IGameObject } from './interfaces/IGameObject';
  * The GameObject abstract class. All game entities inherit from this class.
  * On instantiation, the class will generate an auto-incrementing id for use
  * in identifying the newly-created GameObject.
- *
- * @abstract
  */
-export abstract class GameObject implements IGameObject {
+export class GameObject implements IGameObject {
 
   /**
-   * @var idIncrementor Keeps track of the `id` of the last GameObject
-   instantiated.
+   * Keeps track of the `id` of the last GameObject instantiated.
    *
    * @static
    */
-  private static idIncrementor: number = 1;
+  private static _idIncrementor: number = 1;
 
   /**
-   * @var id The id of the instance of the GameObject.
+   * The id of the instance of the GameObject.
    * TODO: Switch this to use a Symbol (https://www.sitepen.com/blog/advanced-typescript-concepts-classes-and-types/)
    */
   // private id: GameObjectId;
-  private id: GameObjectId;
+  private _id: GameObjectId;
+
+  /**
+   * GameObject tags can be added to a GameObject to facilitate the
+   * identification of an Object. They should not be used as the law on what the
+   * GameObject type actually is, since they can be changed on the fly. Think of
+   * Tags as more of a quality-of-life feature for the developer.
+   */
+  private _tags: Array<string>;
 
   /**
    * @constructor
@@ -34,8 +40,17 @@ export abstract class GameObject implements IGameObject {
    * resume auto-incrementing when we save/load the game.
    *
    */
-  public constructor() {
-    this.id = GameObject.idIncrementor++;
+  private constructor(template: GameObjectTemplate) {
+    this._id = GameObject._idIncrementor++;
+  }
+
+  /**
+   * Creates a new instance of a GameObject based on the given template.
+   *
+   * @param template The template to base the new GameObject from.
+   */
+  public static create(template: GameObjectTemplate): GameObject {
+    return new GameObject(template);
   }
 
   /**
@@ -44,17 +59,16 @@ export abstract class GameObject implements IGameObject {
    * @returns The id of the GameObject
    */
   public getId(): number {
-    return this.id;
+    return this._id;
   }
 
   /**
-   * Updates the GameObject's state. Intended to be run in the main game loop.
+   * Accessor for the private member `tags`.
    *
-   * @abstract
-   * @param delta The time difference between frames. Provided by the game's
-   * main game loop.
-   * @see FiendGame.main()
+   * @return The Array of tags on the GameObject.
    */
-  public abstract update(delta: number): void;
+  public getTags(): Array<string> {
+    return this._tags;
+  }
 
 }

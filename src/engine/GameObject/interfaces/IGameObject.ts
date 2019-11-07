@@ -19,5 +19,5 @@
    * main game loop.
    * @see FiendGame.main()
    */
-  update(delta: number): void;
+  getTags(): Array<string>;
 }

@@ -33,14 +33,14 @@ type ComponentContainer = {
 }
 
 /**
- * Provides a structure of available Components that the system recognizes.
+ * Provides a structure of available Components that the engine recognizes.
  */
-type AvailableComponentsContainer = {
-  BrainComponent?: BrainComponent;
-  ColliderComponent?: ColliderComponent;
-  EventComponent?: EventComponent;
-  LifeforceComponent?: LifeforceComponent;
-  MovementComponent?: MovementComponent;
+type AvailableComponentTypes = {
+  BrainComponent: BrainComponent;
+  ColliderComponent: ColliderComponent;
+  EventComponent: EventComponent;
+  LifeforceComponent: LifeforceComponent;
+  MovementComponent: MovementComponent;
 }
 
 /**

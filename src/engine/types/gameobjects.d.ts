@@ -1,13 +1,5 @@
+import { AvailableComponentTypes } from './components';
 import { GameObject } from '../GameObject';
-import { IComponent } from '../Component/interfaces/IComponent';
-import { AvailableComponentsContainer } from './components';
-
-/**
- * Provides a type for use with GameObject ids.
- * Essentially GameObjectId is an alias of the `number` type, however, it is so
- * important that we want to emphasize its use.
- */
-export type GameObjectId = number;
 
 /**
  * The desired status for any given GameObject. The engine will move GameObjects
@@ -23,13 +15,30 @@ export type GameObjectId = number;
  * GameObject when the current Scene is unloaded, or move it to the
  * `WorldGraveyard` if it was a unique entity.
  */
- export enum GameObjectStatus {
+export const enum GameObjectStatus {
   Active = "Active",
   Cull = "Cull",
   Sleep = "Sleep",
   Inactive = "Inactive",
   Delete = "Delete"
 }
+
+/**
+ * Provides a structure of available Templates that the engine recognizes.
+ * `Player`: Template best suited for Player-controlled characters.
+ * `OrdinaryFolk`: A generic NPC class.
+ */
+export const enum TemplateType {
+  Player = "Player",
+  OrdinaryFolk = "OrdinaryFolk"
+}
+
+/**
+ * Provides a type for use with GameObject ids.
+ * Essentially GameObjectId is an alias of the `number` type, however, it is so
+ * important that we want to emphasize its use.
+ */
+export type GameObjectId = number;
 
 /**
  * Tells a Scene or other structure which GameObjects to initialize when the
@@ -54,11 +63,11 @@ export type GameObjectId = number;
  * ```
  */
 export type GameObjectTemplate = {
-  type: string;
+  // type: TemplateType;
+  type: TemplateType,
   position: Coordinate;
-  // components: Array<ComponentTemplate<Component>>;
-  components: Array<keyof AvailableComponentsContainer>;
-
+  components: Array<keyof AvailableComponentTypes>;
+  tags?: Array<string>;
 }
 
 /**

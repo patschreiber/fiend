@@ -1,13 +1,9 @@
 import { IScene } from '../interfaces/IScene';
 import { BaseScene } from './BaseScene';
-import {
-  PlayerFactory,
-  OrdinaryFolkFactory,
-  Player,
-} from '../../GameObject';
 import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
 import { GameObjectManifest } from '../../types/gameobjects';
 import { Template } from '../../templates/Template';
+import { GameObject } from '../../GameObject';
 
 /**
  * The TestScene class.
@@ -24,14 +20,11 @@ export class TestScene extends BaseScene implements IScene {
    * @inheritdoc
    */
   public readonly initialGameObjectManifest: GameObjectManifest = [
-    Template.get("player"),
-    Template.get("ordinary_folk"),
-    Template.get("ordinary_folk"),
-    Template.mutate("player", ["position"], [{x:999,y:999}]) // Example of overriding a template's default values.
+    Template.get("Player"),
+    Template.get("OrdinaryFolk"),
+    Template.get("OrdinaryFolk"),
+    Template.mutate("Player", ["position"], [{x:999,y:999}]) // Example of overriding a template's default values.
   ];
-
-  private _PF: PlayerFactory;
-  private _OFF: OrdinaryFolkFactory
 
   /**
    * @constructor
@@ -58,18 +51,11 @@ export class TestScene extends BaseScene implements IScene {
   }
 
   /**
-   * Retrieves the instance of the [[Player]] in the current scene. Scenes may
-   * have to retrieve the player differently from one another, so it's up to the
-   * sublass to decide.
-   *
-   * @return The instance of the Player from the scene.
+   * @inheritdoc
    */
-  public getPlayer(): Player {
-
-    // The Player should always be the first gameObject loaded in the Test
-    // Scene.
-    // return this.activeGameObjects[0];
-    return new Player(this._PF, {x:100,y:100});
+  public getPlayer(): GameObject {
+    // TODO...
+    return GameObject.create(Template.get("Player"));
   }
 
   /**

@@ -1,6 +1,6 @@
-import { Component } from "./Component";
-import { GameActor } from "../GameObject";
-import { FiendMath } from "../utilities/FiendMath";
+import { Component } from './Component';
+import { GameObject } from '../GameObject';
+import { FiendMath } from '../utilities/FiendMath';
 import { IComponent } from './interfaces/IComponent';
 
 /**
@@ -44,10 +44,10 @@ export class MovementComponent extends Component implements IComponent {
    * Move the Actor north.
    * @param delta The game's delta between frames.
    */
-   public moveN(actor: GameActor, delta: number): void {
+   public moveN(actor: GameObject, delta: number): void {
     // Decrementing {y} makes the actor move south, since we're dealing with a
     // 2D array and not an actual mathematical quadrants.
-    actor.position.y -= this.speed * delta;
+    // actor.position.y -= this.speed * delta;
 
     // Dont allow the position to exceed the bounds of the Scene.
     // FiendMath.clamp(actor.position.y -= this.speed * delta, );
@@ -56,30 +56,33 @@ export class MovementComponent extends Component implements IComponent {
   /**
    * Move the Actor south.
    *
+   * @param actor The GameObject to operate on.
    * @param delta The game's delta between frames.
    */
-  public moveS(actor: GameActor, delta: number): void {
+  public moveS(actor: GameObject, delta: number): void {
     // Increasing {y} makes the actor move south, since we're dealing with a 2D
     // array and not mathematical quadrants.
-    actor.position.y += this.speed * delta;
+    // actor.position.y += this.speed * delta;
   }
 
   /**
    * Move the Actor east.
    *
+   * @param actor The GameObject to operate on.
    * @param delta The game's delta between frames.
    */
-  public moveE(actor: GameActor, delta: number): void {
-    actor.position.x += this.speed * delta;
+  public moveE(actor: GameObject, delta: number): void {
+    // actor.position.x += this.speed * delta;
   }
 
   /**
    * Move the Actor west.
    *
+   * @param actor The GameObject to operate on.
    * @param delta The game's delta between frames.
    */
-  public moveW(actor: GameActor, delta: number): void {
-    actor.position.x -= this.speed * delta;
+  public moveW(actor: GameObject, delta: number): void {
+    // actor.position.x -= this.speed * delta;
   }
 
 }
