@@ -4,7 +4,7 @@ import { GameObject } from '../GameObject';
 
 /**
  * The BrainComponent class.
- * Allows a [[GameActor]] to operate autonomously.
+ * Allows a [[GameObject]] to operate autonomously.
  *
  * This component is part of the AI system.
  *
@@ -13,15 +13,15 @@ import { GameObject } from '../GameObject';
 export class BrainComponent extends Component implements IComponent {
 
   /**
-   * The Lifeforce component.
+   * The BrainComponent's component type id.
    */
-  private static readonly _typeId = "ColliderComponent";
+  private static readonly _typeId = Symbol("BrainComponent");
 
   /**
    * Retrieves the type id of the component. Used when fetching or checking a
    * specific component for a [[GameObject]].
    */
-  public getTypeId(): string {
+  public getTypeId(): Symbol {
     return BrainComponent._typeId;
   }
 

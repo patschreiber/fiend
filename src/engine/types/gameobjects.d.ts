@@ -1,4 +1,7 @@
-import { AvailableComponentTypes } from './components';
+import {
+  AvailableComponentTypes,
+  ComponentTemplate
+} from './components';
 import { GameObject } from '../GameObject';
 
 /**
@@ -67,6 +70,7 @@ export type GameObjectTemplate = {
   type: TemplateType,
   position: Coordinate;
   components: Array<keyof AvailableComponentTypes>;
+  // components: Array<ComponentTemplate<C extends Component>>
   tags?: Array<string>;
 }
 

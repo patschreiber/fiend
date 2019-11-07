@@ -32,10 +32,15 @@ type ComponentContainer = {
    BrainComponent?: BrainComponent;
 }
 
+// TODO: WIP
+type ComponentTemplate<C extends Component> = {
+  component: C, customValues: Partial<any>
+}
+
 /**
  * Provides a structure of available Components that the engine recognizes.
  */
-type AvailableComponentTypes = {
+export type AvailableComponentTypes = {
   BrainComponent: BrainComponent;
   ColliderComponent: ColliderComponent;
   EventComponent: EventComponent;
@@ -52,8 +57,8 @@ type AvailableComponentTypes = {
  * {10: BrainComponent}
  * ```
  */
-type GameObjectComponentList = {
-  [gameObjectId: number]: BrainComponent;
+type GameObjectComponentList<C extends Component> = {
+  [gameObjectId: number]: C;
 }
 
 

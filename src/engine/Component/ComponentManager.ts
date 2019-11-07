@@ -1,5 +1,9 @@
 import { ComponentContainer } from '../types/components';
 import { Component } from './Component';
+import {
+  GameObjectId,
+  GameObjectTemplate
+} from '../types/gameobjects';
 
 /**
  * The ComponentManager class.
@@ -39,6 +43,18 @@ import { Component } from './Component';
 
     return comp;
   }
+
+  /**
+   * Spawns Components based on the given [[GameObjectTemplate]].
+   *
+   * @internal
+   * Components are always subordinate to GameObject (they will always be
+   * attached to a GameObject and not the other way around), so
+   *
+   * @param template The [[GameObjectTemplate]] with defined Components.
+   * @param goid The id of the GameObject that owns these Components.
+   */
+  public spawnFromTemplate(template: GameObjectTemplate, goid: GameObjectId) {}
 
   // /**
   //  * Removes a Component from the GameActor's `ComponentContainer`, if it's
