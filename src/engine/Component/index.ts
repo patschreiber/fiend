@@ -16,21 +16,32 @@ export * from './EventComponent';
 
 /**
  * The Lifeforce component. Adds health and all that comes with it when attached
- * to a GameActor.
+ * to a GameObject.
  */
 export * from './LifeforceComponent';
 
 /**
- * The Movement component. Adds movement to a GameActor.
+ * The Movement component. Adds movement to a GameObject.
  */
 export * from './MovementComponent';
 
 /**
- * The Brain component. Adds AI and behavior to a GameActor.
+ * The Brain component. Adds AI and behavior to a GameObject.
  */
 export * from './BrainComponent';
 
 /**
- * The Collider component. Adds collision detection to a GameActor.
+ * The Collider component. Adds collision detection to a GameObject.
  */
- export * from './ColliderComponent';
+export * from './ColliderComponent';
+
+/**
+ * The Velocity component. Gives the GameObject the need for speed.
+ */
+export * from './VelocityComponent';
+
+/**
+ * The Position component. Adds a location for the GameObect.
+ */
+export * from './PositionComponent';
+
