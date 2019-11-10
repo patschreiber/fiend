@@ -1,7 +1,9 @@
-import { IScene } from './IScene';
+import { IScene } from '../interfaces/IScene';
 import { BaseScene } from './BaseScene';
-import { PlayerFactory, OrdinaryFolkFactory, Player } from '../../GameObject';
 import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
+import { GameObjectManifest, TemplateType } from '../../types/gameobjects';
+import { Template } from '../../templates/Template';
+import { GameObject } from '../../GameObject';
 
 /**
  * The TestScene class.
@@ -10,21 +12,35 @@ import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
 export class TestScene extends BaseScene implements IScene {
 
   /**
+   * @inheritdoc
+   */
+  public static readonly maxActiveEntities = 1000;
+
+  /**
+   * @inheritdoc
+   */
+  public readonly initialGameObjectManifest: GameObjectManifest = [
+    Template.get("Player"),
+    Template.get("OrdinaryFolk"),
+    Template.get(TemplateType.OrdinaryFolk), // You can use the TemplateType enum as well.
+    Template.mutate("Player", ["position"], [{x:999,y:999}]) // Example of overriding a template's default values.
+  ];
+
+  /**
    * @constructor
    */
   public constructor() {
     super();
 
-    this.maxActiveEntities = 1000;
-    this.tileMap = new OverworldAtlas();
+    this.tileMap  = new OverworldAtlas();
 
-    let pf = new PlayerFactory();
-    let off = new OrdinaryFolkFactory();
+    console.log('this.initialGameObjectManifest :', this.initialGameObjectManifest);
 
-    this.sceneBoundaries = this.calculateSceneBoundaries();
+    // this._PF = new PlayerFactory();
+    // this._OFF = new OrdinaryFolkFactory();
 
-    this.gameObjects.push(pf.spawn({x:125,y:125}));
-    this.gameObjects.push(off.spawn({x:200,y:100}));
+    // this.activeGameObjects.push(this._PF.spawn({x:125,y:125}));
+    // this.activeGameObjects.push(this._OFF.spawn({x:200,y:100}));
 
     // TODO: This is a test to test event emission.
     document.getElementById('game-pane').addEventListener(
@@ -35,17 +51,11 @@ export class TestScene extends BaseScene implements IScene {
   }
 
   /**
-   * Retrieves the instance of the [[Player]] in the current scene. Scenes may
-   * have to retrieve the player differently from one another, so it's up to the
-   * sublass to decide.
-   *
-   * @return The instance of the Player from the scene.
+   * @inheritdoc
    */
-  public getPlayer(): Player {
-
-    // The Player should always be the first gameObject loaded in the Test
-    // Scene.
-    return this.gameObjects[0];
+  public getPlayer(): GameObject {
+    // TODO...
+    return GameObject.create(Template.get("Player"));
   }
 
   /**

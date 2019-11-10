@@ -1,15 +1,28 @@
+import { ISceneManager } from './interfaces/ISceneManager';
+
 import { GameObject } from '../GameObject';
-import { BaseScene } from './scenes/BaseScene';
+import { BaseScene } from './index';
 import { TestScene } from './scenes/TestScene';
+import { GameObjectManager } from '../GameObject/GameObjectManager';
+import { ComponentManager } from '../Component/ComponentManager';
+import { LifeforceComponent } from '../Component';
+import { ComponentFactory } from '../Component/ComponentFactory/ComponentFactory';
+import { Template } from '../templates/Template';
 
-interface ISceneManager {
-  currentScene: BaseScene;
-
-  loadScene(scene: BaseScene): void;
-  unloadScene(scene: BaseScene): void;
-  addToScene(gameObject: GameObject): void;
-  removeFromScene(gameObject: GameObject): void;
-  moveToQueue(gameObject: GameObject): void;
+/**
+ * Defines the different states that the SceneManager can be in.
+ * `Ready`: The SceneManager is ready to attempt an action that will change it's
+ * state.
+ * `Loading`: The SceneManager is currently loading a Scene.
+ * `Unloading`: The SceneManager is currently unloading a Scene.
+ * `Error`: The SceneManager is stuck in an Error state. Reloading the
+ * SceneMananger may fix the problem.
+ */
+export enum SceneManagerState {
+  Ready,
+  Loading,
+  Unloading,
+  Error
 }
 
 /**
@@ -22,9 +35,19 @@ interface ISceneManager {
 export class SceneManager implements ISceneManager {
 
   /**
-   * The number of currently-active game objects.
+   * The current state of the SceneManager.
    */
-  public gameObjectCount: number;
+  public state: SceneManagerState;
+
+  /**
+   * The [[GameObjectManager]].
+   */
+  public GameObjectManager: GameObjectManager;
+
+  /**
+   * The [[ComponentManager]].
+   */
+  public ComponentManager: ComponentManager;
 
   /**
    * The currently-loaded Scene.
@@ -33,9 +56,17 @@ export class SceneManager implements ISceneManager {
 
   /**
    * @constructor
+   *
+   * @param gom A [[GameObjectManager]] instance.
+   * @param cm A [[ComponentManager]] instance.
    */
-  public constructor() {
-    this.loadScene(new TestScene());
+  public constructor(gom: GameObjectManager, cm: ComponentManager) {
+    this.state = SceneManagerState.Ready;
+
+    this.ComponentManager = cm;
+    this.GameObjectManager = gom;
+
+    this.loadScene(TestScene);
   }
 
   /**
@@ -43,10 +74,36 @@ export class SceneManager implements ISceneManager {
    *
    * @param scene The Scene to load.
    */
-  public loadScene(scene: BaseScene): void {
+  public loadScene<S extends BaseScene>(scene: new () => S): void {
+    this.state = SceneManagerState.Loading;
+
+    // TODO: This is all a test.
+    let a = ComponentFactory.create(LifeforceComponent, {currentHP: 100, maxHP: 999});
+    let b = ComponentFactory.create(LifeforceComponent);
+    let c = ComponentFactory.create(LifeforceComponent, {currentHP: 37});
+    // let d = ComponentFactory.create(Template.get("Player").components[0]["component"]);
+    console.log('a :', a);
+    console.log('b :', b);
+    console.log('c :', c);
+
+    // this.ComponentManager.addComponent<BrainComponent>(C);
+
     // TODO: Finish
-    this.currentScene = scene;
-    this.gameObjectCount = scene.gameObjects.length;
+    this.currentScene = new scene();
+    for (let template of this.currentScene.initialGameObjectManifest) {
+      let goid = this.GameObjectManager.spawnFromTemplate(
+        template,
+        this.currentScene.activeGameObjects
+      );
+
+      if (goid) {
+        console.log('template["components"] :', template["components"]);
+        this.ComponentManager.spawnFromTemplate(template["components"], goid);
+      }
+    }
+    console.log('this.activeGameObjects :', this.currentScene.activeGameObjects);
+
+    this.state = SceneManagerState.Ready;
   }
 
   /**
@@ -56,7 +113,7 @@ export class SceneManager implements ISceneManager {
    */
   public unloadScene(scene: BaseScene): void {
     // TODO: Finish
-    this.gameObjectCount = 0;
+    // this.gameObjectCount = 0;
   }
 
   /**
@@ -64,12 +121,12 @@ export class SceneManager implements ISceneManager {
    *
    * @param gameObject The GameObject to add to the Scene.
    */
-  public addToScene(gameObject: GameObject): void {
-    if (this.gameObjectCount < this.currentScene.maxActiveEntities) {
+  public addToScene(goType: GameObject): void {
+    // if (this.gameObjectCount < this.currentScene.maxActiveEntities) {
       // TODO: Finish
-    }
+    // }
 
-    this.gameObjectCount++;
+    // this.gameObjectCount++;
   }
 
   /**
@@ -79,16 +136,21 @@ export class SceneManager implements ISceneManager {
    */
   public removeFromScene(gameObject: GameObject): void {
     // TODO: Finish
-    this.gameObjectCount--;
+    // this.gameObjectCount--;
   }
 
   /**
-   * Moves a GameObject from one Scene's GameObject queue to another. Used for
-   * when GameObjects become inactive.
+   * Updates the Scene's GameObjects.
    *
-   * @param gameObject
+   * @param delta The time difference between frames. Provided by the game's
+   * main game loop.
+   * @see FiendGame.main()
    */
-  public moveToQueue(gameObject: GameObject): void {
-    // TODO: Finish
+  public update(delta: number): void {
+    this.currentScene.update(delta);
+  }
+
+  public test() {
+
   }
 }

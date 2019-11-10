@@ -1,10 +1,9 @@
-import {
-  Component,
-  EventComponent,
-  LifeforceComponent,
-  MovementComponent,
-  BrainComponent
-} from "../Component";
+/**
+ * Removes the `readonly` attribute from a member.
+ */
+type Mutable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
 
 /**
  * Provides an x,y coordinate tuple.
@@ -41,27 +40,3 @@ type Coordinate = {
 type EventContainer = {
   [eventName: string]: Event|CustomEvent,
 };
-
-/**
- * Provides a container to house an entity's attached Components. Modifying the
- * contents of this container should be done through an interface provided by
- * the entity; it should not be modified directly. An entity may not have any
- * Components, so we mark every one optional.
- *
- * @example
- * Player.components = {
- *   MovementComponent: new MovementComponent(),
- *   LifeforceComponent: new LifeforceComponent(),
- * }
- * // Gets the event component attached to the player, then attached a new event
- * // "SomeEvent" to the EventComponent.
- * player.getComponent("EventComponent").attach(SomeEvent.create(player));
- *
- * @see https://stackoverflow.com/questions/58573975
- */
-type ComponentContainer = {
-  EventComponent?: EventComponent;
-  LifeforceComponent?: LifeforceComponent;
-  MovementComponent?: MovementComponent;
-  BrainComponent?: BrainComponent;
-}

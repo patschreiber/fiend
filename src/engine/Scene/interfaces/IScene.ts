@@ -1,4 +1,4 @@
-import { Player } from '../../GameObject';
+import { GameObject } from '../../GameObject';
 
 /**
  * The IScene interface. All Scenes will implement this interface.
@@ -8,5 +8,5 @@ export interface IScene {
   gameObjects: Array<any>;
   tileMap: any;
   update(delta: number): void;
-  getPlayer(): Player;
+  getPlayer(): GameObject;
 }

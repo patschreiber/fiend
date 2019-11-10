@@ -1,5 +1,9 @@
-import { GameObject } from '../GameObject/GameObject';
 import { Component } from './Component';
+
+export interface ILifeforceComponentMembers extends IComponentMembers {
+  currentHP: number,
+  maxHP: number,
+}
 
 /**
  * The Lifeforce component. Adds health to a GameObject. Adds life, health
@@ -10,32 +14,45 @@ import { Component } from './Component';
  *
  * @extends [[Component]]
  */
-export class LifeforceComponent extends Component implements Component {
+export class LifeforceComponent extends Component implements ILifeforceComponentMembers {
+
+  /**
+   * The LifeforceComponents's component type id.
+   */
+  private static _type: Symbol = Symbol("LifeforceComponent");
+
+  private static defaults: ILifeforceComponentMembers = {
+    currentHP: 125,
+    maxHP: 125
+  }
 
   /**
    * The current HP of the GameObject.
    */
-  private currentHP: number;
+  public currentHP: number;
 
   /**
    * The maximum HP of the GameObject.
    */
-  private maxHP: number;
+  public maxHP: number;
 
   /**
    * @constructor
+   * @internal We use [[Partial]] to declare every
+   * @param args (optional) The members of the class.
    */
-  public constructor() {
+  public constructor(overrides: ILifeforceComponentMembers) {
     super();
-
-    this.typeId = "LifeforceComponent";
+    Object.assign(this, LifeforceComponent.defaults);
+    Object.assign(this, overrides);
   }
 
   /**
-   * Update is intended to be run once per frame.
-   *
-   * @param GO The GameObject this component belongs to.
+   * Retrieves the type id of the component. Used when fetching or checking a
+   * specific component for a [[GameObject]].
    */
-  public update(GO: GameObject): void {}
+  public getTypeId(): Symbol {
+    return LifeforceComponent._type;
+  }
 
 }
