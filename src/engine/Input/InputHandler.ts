@@ -1,59 +1,19 @@
-import { Command } from "../Command";
-import { GameActor } from '../GameObject';
+import { Command } from '../Command';
+import { GameObject } from '../GameObject';
 
-import { NullCommand } from "../Command";
-import { MoveNorthCommand } from "../Command";
-import { MoveSouthCommand } from "../Command";
-import { MoveEastCommand } from "../Command";
-import { MoveWestCommand } from "../Command";
-
-/**
- * The interface for the InputHandler
- */
-interface IInputHandler {
-
-  /**
-   * Binds an input to a command.
-   *
-   * @param event The user interaction with a keyboard.
-   * @param command
-   */
-  keyBind(event: KeyboardEvent, command: Command): void;
-
-  /**
-   * Handles any input if a mapped button is pressed. Run once per game update
-   * tick.
-   *
-   * @param actor The game actor entity to handle input. Most likely will be the
-   * Player(s).
-   * @param delta The time difference between frames. Provided by the game's
-   * main game loop.
-   * @see FiendGame.main()
-   */
-  handleInput(actor: GameActor, delta: number): void;
-}
-
-/**
- * The IInputMap interface.
- * @keys
- * [key]: The name of the key pressed, sent by the browser.header
- * [command]: The mapped command to be executed.
- * [status]: The button's current status
- */
-interface IInputMap {
-  [key: string]: {
-    command: Command,
-    status: ButtonStatus
-  }
-}
+import { NullCommand } from '../Command';
+import { MoveNorthCommand } from '../Command';
+import { MoveSouthCommand } from '../Command';
+import { MoveEastCommand } from '../Command';
+import { MoveWestCommand } from '../Command';
+import { IInputMap } from './interfaces/IInputMap';
+import { IInputHandler } from './interfaces/IInputHandler';
 
 /**
  * The built-in control scheme types. Allows a user to change the control scheme
  * without remapping all the keys individually.
- *
- * @type {enum} ControlSchemes
  */
-enum ControlSchemes {
+export enum ControlSchemes {
   DEFAULT,
   FPS,
   ONEHANDED_RIGHT,
@@ -62,10 +22,8 @@ enum ControlSchemes {
 
 /**
  * Maps a button to a keyboard input key.
- *
- * @type {enum} Button
  */
-enum Button {
+export enum Button {
   UP = "ArrowUp",
   DOWN = "ArrowDown",
   LEFT = "ArrowLeft",
@@ -86,10 +44,8 @@ enum Button {
  * [HELD]: The button is held down.
  * [RELEASED]: The button has been released from a pressed state.
  * [DISABLED]: The button has been disabled and will not fire events.
- *
- * @type {enum} ButtonStatus
  */
- enum ButtonStatus {
+export enum ButtonStatus {
   PRESSED,
   RAISED,
   HELD,
@@ -105,11 +61,12 @@ export class InputHandler implements IInputHandler {
   /**
    * TODO Structure should add ["context"] so we can have context-independent
    * buttons
-   * @type {IInputMap} The inputMap instance.
+   * @type The inputMap instance.
    */
   private inputMap: IInputMap;
 
   /**
+   * @constructor
    * The InputHandler constructor.
    * Attaches the keydown and keyup KeyboardEvent to the document.
    */
@@ -133,8 +90,9 @@ export class InputHandler implements IInputHandler {
   /**
    * Binds an input to a command.
    *
-   * @param {KeyboardEvent} event The key to bind the event to
-   * @param {Command} command The command to bind to the button
+   * @param event The key to bind the event to. Uses the browser's native
+   * [[KeyboardEvent]] event.
+   * @param command The command to bind to the button.
    */
   public keyBind(event: KeyboardEvent, command: Command): void {
     this.inputMap[event.key].command = command;
@@ -169,8 +127,14 @@ export class InputHandler implements IInputHandler {
 
   /**
    * Handles user input. Runs once per game loop.
+   *
+   * @param actor The GameObject entity to handle input. Most likely will be the
+   * Player(s) currently in the game.
+   * @param delta The time difference between frames. Provided by the game's
+   * main game loop.
+   * @see FiendGame.main()
    */
-  public handleInput(actor: GameActor, delta: number): void {
+  public handleInput(actor: GameObject, delta: number): void {
 
     if (this.inputMap[Button.UP].status === ButtonStatus.PRESSED) {
       this.inputMap[Button.UP].command.execute(actor, delta);
@@ -231,7 +195,7 @@ export class InputHandler implements IInputHandler {
       case 1:
         break;
       default:
-        // this.inputMap[Button.UP].command = new MoveNorthCommand(player: GameActor);
+        // this.inputMap[Button.UP].command = new MoveNorthCommand(player: GameObject);
         this.inputMap[Button.UP].command = new MoveNorthCommand();
         this.inputMap[Button.DOWN].command = new MoveSouthCommand();
         this.inputMap[Button.LEFT].command = new MoveWestCommand();

@@ -1,6 +1,9 @@
-import { Player } from '../../GameObject';
-import { IScene } from './IScene';
+import {
+  GameObject
+} from '../../GameObject';
+import { IScene } from '../interfaces/IScene';
 import { BaseAtlas } from '../../../atlases/BaseAtlas';
+import { GameObjectManifest } from '../../types/gameobjects';
 
 /**
  * The BaseScene class.
@@ -22,6 +25,12 @@ export abstract class BaseScene implements IScene {
   public maxActiveEntities: number;
 
   /**
+   * A list of the GameObjects that should be initially present when the Scene
+   * loads. Contains templates so the factory classes can build the GameObjects.
+   */
+  public readonly initialGameObjectManifest: GameObjectManifest;
+
+  /**
    * The list of active GameObjects. Every game object in this list will have
    * their state updated every frame, if possible.
    * TODO: Make the type a Union like with Components.
@@ -35,7 +44,32 @@ export abstract class BaseScene implements IScene {
    */
   public tileMap: BaseAtlas;
 
-  public sceneBoundaries: Array<number>;
+  /**
+   * Game objects that are considered “active” in the current Scene. Active
+   * GameObjects will update and render every frame.
+   */
+  public activeGameObjects: Array<GameObject>;
+
+  /**
+   * Contains game objects that are present in the scene, but are not being
+   * rendered. They are being updated every frame, however. These might be
+   * objects that are just out of frame, but may need to be rendered in the near
+   * future.
+   */
+  public culledGameObjects: Array<GameObject>;
+
+
+  /**
+   * Contains game objects that are present in the scene, but are not be
+   * rendered or updated for whatever reason.
+   */
+  public sleepingGameObjects: Array<GameObject>;
+
+  /**
+   * GameObjects that have been killed, destroyed, or otherwise incapacitated,
+   * but shouldn’t be deleted yet will be stored here.
+   */
+  public sceneGraveyard: Array<GameObject>;
 
   /**
    * @constructor
@@ -43,7 +77,13 @@ export abstract class BaseScene implements IScene {
   public constructor() {
 
     // Initialize the gameObjects container.
+    // TODO: Remove
     this.gameObjects = [];
+
+    this.activeGameObjects = new Array<GameObject>(1000);
+    this.culledGameObjects = Array<GameObject>(1000);
+    this.sleepingGameObjects = Array<GameObject>(1000);
+    this.sceneGraveyard = Array<GameObject>(1000);
   }
 
   /**
@@ -62,33 +102,22 @@ export abstract class BaseScene implements IScene {
     //     gameObject.update(delta);
     //   }
     // }
-    for (let gameObject of this.gameObjects) {
-      gameObject.update(delta);
+    for (let gameObject of this.activeGameObjects) {
+      // gameObject.update(delta);
+    }
+
+    for (let gameObject of this.culledGameObjects) {
+      // gameObject.update(delta);
     }
   }
 
   /**
-   * Calculates the scene boundaries in pixels.
-   * TODO: This is probably a stop gap solution until colliders come into play.
+   * Retrieves the [[GameObject]] that in the current scene. Scenes may have to
+   * retrieve the player differently from one another, so it's up to the sublass
+   * to decide.
    *
-   * @return An array of game boundaries in `[top, right, bottom, left]` order.
+   * @return The instance of the Player GameObject from the scene.
    */
-  public calculateSceneBoundaries(): Array<number> {
-    let pxSize = this.tileMap.gridElemPixelSize;
-
-    let bottom = this.tileMap.getGridHeight() * pxSize;
-    let right = this.tileMap.getGridWidth() * pxSize;
-
-    return [0,right,bottom,0];
-  }
-
-  /**
-   * Retrieves the instance of the [[Player]] in the current scene. Scenes may
-   * have to retrieve the player differently from one another, so it's up to the
-   * sublass to decide.
-   *
-   * @return The instance of the Player from the scene.
-   */
-  public abstract getPlayer(): Player;
+  public abstract getPlayer(): GameObject;
 
 }
