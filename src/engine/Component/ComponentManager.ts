@@ -1,9 +1,14 @@
-import { ComponentContainer } from '../types/components';
-import { Component } from './Component';
 import {
-  GameObjectId,
-  GameObjectTemplate
-} from '../types/gameobjects';
+  ComponentContainer,
+  ComponentId,
+  ComponentTemplate
+} from '../types/components';
+import { Component } from './Component';
+import { BrainComponent } from './BrainComponent';
+import { ColliderComponent } from './ColliderComponent';
+import { EventComponent } from './EventComponent';
+import { LifeforceComponent } from './LifeforceComponent';
+import { GameObjectId } from '../types/gameobjects';
 
 /**
  * The ComponentManager class.
@@ -11,10 +16,10 @@ import {
  * Components that belong to [[GameObject]] entities.
  */
  export class ComponentManager {
-  private _brainComponents: ComponentContainer;
-  private _colliderComponents: ComponentContainer;
-  private _eventComponents: ComponentContainer;
-  private _lifeforceComponents: ComponentContainer;
+  private _brainComponents: ComponentContainer<BrainComponent>;
+  private _colliderComponents: ComponentContainer<ColliderComponent>;
+  private _eventComponents: ComponentContainer<EventComponent>;
+  private _lifeforceComponents: ComponentContainer<LifeforceComponent>;
 
   /**
    * Adds a Component to the GameActor's `ComponentContainer`, if it's not
@@ -54,7 +59,14 @@ import {
    * @param template The [[GameObjectTemplate]] with defined Components.
    * @param goid The id of the GameObject that owns these Components.
    */
-  public spawnFromTemplate(template: GameObjectTemplate, goid: GameObjectId) {}
+  public spawnFromTemplate(
+    componentTemplate: Array<ComponentTemplate>,
+    goid: GameObjectId
+  ): ComponentId {
+    console.log('goid :', goid);
+
+    return 10;
+  }
 
   // /**
   //  * Removes a Component from the GameActor's `ComponentContainer`, if it's
@@ -68,7 +80,7 @@ import {
   // public removeComponent(key: string): boolean {
 
   //   if (this.hasComponent(key)) {
-  //     delete this.components[key];
+  //     delete this.components[key];     // TODO: Do not use delete, it makes non-contiguous arrays
   //     return true;
   //   }
 

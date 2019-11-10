@@ -1,8 +1,20 @@
 import {
-  AvailableComponentTypes,
   ComponentTemplate
 } from './components';
 import { GameObject } from '../GameObject';
+import { Component } from '../Component';
+
+/**
+ * Provides a type for use with GameObject ids.
+ * Essentially GameObjectId is an alias of the `number` type, however, it is so
+ * important that we want to emphasize its use.
+ * @internal
+ * Note, a `number` is used over a `Symbol` for the id intentionally. Symbols
+ * aren't indexable, so the id can never act as the array index a GameObject is
+ * located at (which may cause issues depending on how the storage is ultimately
+ * managed).
+ */
+ export type GameObjectId = number;
 
 /**
  * The desired status for any given GameObject. The engine will move GameObjects
@@ -37,13 +49,6 @@ export const enum TemplateType {
 }
 
 /**
- * Provides a type for use with GameObject ids.
- * Essentially GameObjectId is an alias of the `number` type, however, it is so
- * important that we want to emphasize its use.
- */
-export type GameObjectId = number;
-
-/**
  * Tells a Scene or other structure which GameObjects to initialize when the
  * structure is loaded.
  * @example
@@ -51,26 +56,24 @@ export type GameObjectId = number;
  * // Contents of GameObjectManifest[]
  * [
  *   {
- *     type: "Player",
+ *     type: TemplateType.Player,   // "Player"
  *     position: {x:299,y:210}
  *   },
  *   {
- *      type: "OrdinaryFolk",
+ *      type: TemplateType.OrdinaryFolk,    // "OrdinaryFolk"
  *      position: {x:0,y:10}
  *   },
  *   {
- *     type: "OrdinaryFolk",
+ *     type: type: TemplateType.OrdinaryFolk,    // "OrdinaryFolk"
  *     position: {x:132,y:742}
  *   },
  * ]
  * ```
  */
 export type GameObjectTemplate = {
-  // type: TemplateType;
   type: TemplateType,
-  position: Coordinate;
-  components: Array<keyof AvailableComponentTypes>;
-  // components: Array<ComponentTemplate<C extends Component>>
+  position: Coordinate;    // TODO: Move to Position Component
+  components: Array<ComponentTemplate>;
   tags?: Array<string>;
 }
 

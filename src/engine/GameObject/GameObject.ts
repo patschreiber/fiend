@@ -8,6 +8,9 @@ import { IGameObject } from './interfaces/IGameObject';
  * The GameObject abstract class. All game entities inherit from this class.
  * On instantiation, the class will generate an auto-incrementing id for use
  * in identifying the newly-created GameObject.
+ *
+ * TODO: Consider we might not even NEED to create an instance of a GameObject
+ * if we play our cards right. We could just generate the auto-incrementing ID.
  */
 export class GameObject implements IGameObject {
 
@@ -23,7 +26,7 @@ export class GameObject implements IGameObject {
    * TODO: Switch this to use a Symbol (https://www.sitepen.com/blog/advanced-typescript-concepts-classes-and-types/)
    */
   // private id: GameObjectId;
-  private _id: GameObjectId;
+  private readonly _id: GameObjectId;
 
   /**
    * GameObject tags can be added to a GameObject to facilitate the
@@ -56,9 +59,9 @@ export class GameObject implements IGameObject {
   /**
    * Accessor for the private member `id`.
    *
-   * @returns The id of the GameObject
+   * @returns The id of the instance of the GameObject.
    */
-  public getId(): number {
+  public getId(): GameObjectId {
     return this._id;
   }
 

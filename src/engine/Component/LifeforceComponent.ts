@@ -1,7 +1,6 @@
 import { Component } from './Component';
-import { IComponent } from './interfaces/IComponent';
 
-interface ILifeforceComponentMembers {
+export interface ILifeforceComponentMembers extends IComponentMembers {
   currentHP: number,
   maxHP: number,
 }
@@ -15,7 +14,7 @@ interface ILifeforceComponentMembers {
  *
  * @extends [[Component]]
  */
-export class LifeforceComponent extends Component  {//implements IComponent {
+export class LifeforceComponent extends Component implements ILifeforceComponentMembers {
 
   /**
    * The LifeforceComponents's component type id.
@@ -42,7 +41,7 @@ export class LifeforceComponent extends Component  {//implements IComponent {
    * @internal We use [[Partial]] to declare every
    * @param args (optional) The members of the class.
    */
-  public constructor(overrides: Partial<ILifeforceComponentMembers>) {
+  public constructor(overrides: ILifeforceComponentMembers) {
     super();
     Object.assign(this, LifeforceComponent.defaults);
     Object.assign(this, overrides);

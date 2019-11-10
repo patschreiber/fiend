@@ -1,7 +1,7 @@
 import { IScene } from '../interfaces/IScene';
 import { BaseScene } from './BaseScene';
 import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
-import { GameObjectManifest } from '../../types/gameobjects';
+import { GameObjectManifest, TemplateType } from '../../types/gameobjects';
 import { Template } from '../../templates/Template';
 import { GameObject } from '../../GameObject';
 
@@ -22,7 +22,7 @@ export class TestScene extends BaseScene implements IScene {
   public readonly initialGameObjectManifest: GameObjectManifest = [
     Template.get("Player"),
     Template.get("OrdinaryFolk"),
-    Template.get("OrdinaryFolk"),
+    Template.get(TemplateType.OrdinaryFolk), // You can use the TemplateType enum as well.
     Template.mutate("Player", ["position"], [{x:999,y:999}]) // Example of overriding a template's default values.
   ];
 

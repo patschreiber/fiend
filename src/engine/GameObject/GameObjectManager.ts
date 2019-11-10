@@ -3,26 +3,13 @@ import {
   GameObjectId,
   GameObjectTemplate
 } from '../types/gameobjects';
-// import { OrdinaryFolkFactory } from '../GameObject';
-// import { PlayerFactory } from '../GameObject';
 import { GameObject } from './GameObject';
-import { BaseScene } from '../Scene';
 
 /**
  * The GameObjectManager class.
  * Manages GameObjects and the containers they belong to.
  */
 export class GameObjectManager implements IGameObjectManager {
-
-  /**
-   * The OrdinaryFolkFactory GameObject factory.
-   */
-  // private _OFF: OrdinaryFolkFactory;
-
-  /**
-   * The PlayerFactory GameObject factory.
-   */
-  // private _PF: PlayerFactory;
 
   /**
    * Game objects that are not present in the scene, but who’s state needs to be
@@ -67,8 +54,10 @@ export class GameObjectManager implements IGameObjectManager {
     let newGameObject = GameObject.create(template);
     if (container === undefined) {
       this.inactiveGameObjects.push(newGameObject);
+      // this.inactiveGameObjects.push(newGameObject.getId()); //TODO: Use this
     } else {
       container.push(newGameObject);
+      // container.push(newGameObject.getId()); //TODO: Use this
     }
 
     return newGameObject.getId();

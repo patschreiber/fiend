@@ -3,20 +3,20 @@ import {
   GameObjectTemplate,
   TemplateType
 } from '../types/gameobjects';
+import { Component, LifeforceComponent, ILifeforceComponentMembers } from '../Component';
+import { ComponentType } from '../types/components';
 
 /**
  * The structure of a template collection.
  */
 type TemplateStruct = {
   [templateKey: string]: GameObjectTemplate;
-}
 
+}
 /**
  * The Template class.
  */
 export class Template {
-
-  // public static type: TemplateType = TemplateType;
 
   /**
    * The structured Template data. Specific template data is available at each
@@ -27,18 +27,22 @@ export class Template {
       type: TemplateType.Player,
       position: {x:125,y:125},
       components: [
-        "BrainComponent",
-        "ColliderComponent",
-        "LifeforceComponent",
-        "MovementComponent"
-        ]
+        [ComponentType.Collider],
+        [ComponentType.Lifeforce, {currentHP: 100, maxHP: 100}],
+        [ComponentType.Position],
+        [ComponentType.Velocity],
+      ]
     },
     "OrdinaryFolk": {
       type: TemplateType.OrdinaryFolk,
       position: {x:200,y:100},
       components: [
-        "MovementComponent"
-      ]
+        [ComponentType.Brain],
+        [ComponentType.Lifeforce],
+        [ComponentType.Position],
+        [ComponentType.Velocity],
+      ],
+      tags: ["ghost", "no collider"]
     },
   }
 
@@ -99,6 +103,7 @@ export class Template {
 //    * @param ctx The canvas context.
 //    */
 //    public draw(ctx: CanvasRenderingContext2D) {
+
 //     ctx.beginPath();
 //     ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI*2);
 //     ctx.fillStyle = "#0095DD";

@@ -7,6 +7,7 @@ import { GameObjectManager } from '../GameObject/GameObjectManager';
 import { ComponentManager } from '../Component/ComponentManager';
 import { LifeforceComponent } from '../Component';
 import { ComponentFactory } from '../Component/ComponentFactory/ComponentFactory';
+import { Template } from '../templates/Template';
 
 /**
  * Defines the different states that the SceneManager can be in.
@@ -37,11 +38,6 @@ export class SceneManager implements ISceneManager {
    * The current state of the SceneManager.
    */
   public state: SceneManagerState;
-
-  /**
-   * The number of currently-processed game objects.
-   */
-  // public gameObjectCount: number;
 
   /**
    * The [[GameObjectManager]].
@@ -81,9 +77,11 @@ export class SceneManager implements ISceneManager {
   public loadScene<S extends BaseScene>(scene: new () => S): void {
     this.state = SceneManagerState.Loading;
 
-    let a = ComponentFactory.create(LifeforceComponent, {currentHP: 100, maxHP: 999})
-    let b = ComponentFactory.create(LifeforceComponent)
-    let c = ComponentFactory.create(LifeforceComponent, {currentHP: 37})
+    // TODO: This is all a test.
+    let a = ComponentFactory.create(LifeforceComponent, {currentHP: 100, maxHP: 999});
+    let b = ComponentFactory.create(LifeforceComponent);
+    let c = ComponentFactory.create(LifeforceComponent, {currentHP: 37});
+    // let d = ComponentFactory.create(Template.get("Player").components[0]["component"]);
     console.log('a :', a);
     console.log('b :', b);
     console.log('c :', c);
@@ -99,7 +97,8 @@ export class SceneManager implements ISceneManager {
       );
 
       if (goid) {
-        this.ComponentManager.spawnFromTemplate(template, goid);
+        console.log('template["components"] :', template["components"]);
+        this.ComponentManager.spawnFromTemplate(template["components"], goid);
       }
     }
     console.log('this.activeGameObjects :', this.currentScene.activeGameObjects);
@@ -149,5 +148,9 @@ export class SceneManager implements ISceneManager {
    */
   public update(delta: number): void {
     this.currentScene.update(delta);
+  }
+
+  public test() {
+
   }
 }

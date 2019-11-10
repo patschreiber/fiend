@@ -19,12 +19,24 @@ export class ComponentFactory {
    * that match.
    *
    * @return A new instance of the desired Component type.
+   *
+   * @example
+   * let a = ComponentFactory.create(LifeforceComponent, {currentHP: 100})
    */
-  public static create<C extends Component>(
-    type: new(...overrides: any[]) => C,
-    ...overrides: any[]
+  public static create<C extends Component, T extends IComponentMembers>(
+    type: new(overrides?: Partial<T>) => C,
+    overrides?: Partial<T>
   ): C {
 
-    return new type(...overrides);
+    return new type(overrides);
   }
+
+  // TODO: Note, this one was too generic, but worked, just in case.
+  // public static create<C extends Component>(
+  //   type: new(...overrides: any[]) => C,
+  //   ...overrides: any[]
+  // ): C {
+
+  //   return new type(...overrides);
+  // }
 }
