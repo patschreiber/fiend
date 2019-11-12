@@ -1,7 +1,6 @@
 import {
   ComponentId,
-  ComponentTemplate,
-  ComponentOverrides
+  ComponentTemplate
 } from '../types/components';
 import { Component } from './Component';
 import { BrainComponent } from './BrainComponent';
@@ -47,23 +46,6 @@ import { VelocityComponent } from './VelocityComponent';
   }
 
   /**
-   * Adds a new Component type container to the active Components pool.
-   *
-   * @param compType The Component type to create a container for.
-   *
-   * @return If the Component container was successfully created and attached.
-   */
-  public registerNewComponentType(compType: string): boolean {
-
-    try {
-      this._activePools[compType] = new Array<typeof compType>();
-    } catch (e) {
-      console.error(e, {type: "ComponentTypeRegistration"});
-      return false;
-    }
-  }
-
-  /**
    * Spawns Components based on the given [[GameObjectTemplate]].
    *
    * @internal
@@ -97,7 +79,7 @@ import { VelocityComponent } from './VelocityComponent';
       }
     }
 
-    console.log('ComponentManager._activePools :', ComponentManager._activePools);
+    console.log('this._activePools :', this._activePools);
 
     return true; //Temp
   }
@@ -134,7 +116,6 @@ import { VelocityComponent } from './VelocityComponent';
   public addComponent<C extends Component, T extends IComponentMembers>(
     goid: GameObjectId,
     component: new (overrides?: Partial<T>) => C,
-    // compType: new (overrides?: Partial<T>) => Component,
     overrides?: Partial<T>
   ): ComponentId|null {
 

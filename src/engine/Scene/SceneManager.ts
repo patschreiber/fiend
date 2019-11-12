@@ -1,12 +1,9 @@
 import { ISceneManager } from './interfaces/ISceneManager';
-
 import { GameObject } from '../GameObject';
 import { BaseScene } from './index';
 import { TestScene } from './scenes/TestScene';
 import { GameObjectManager } from '../GameObject/GameObjectManager';
 import { ComponentManager } from '../Component/ComponentManager';
-import { LifeforceComponent } from '../Component';
-import { ComponentFactory } from '../Component/ComponentFactory/ComponentFactory';
 
 /**
  * Defines the different states that the SceneManager can be in.
@@ -77,12 +74,12 @@ export class SceneManager implements ISceneManager {
     this.state = SceneManagerState.Loading;
 
     // TODO: This is all a test.
-    let a = ComponentFactory.create(LifeforceComponent, {currentHP: 100, maxHP: 999});
-    let b = ComponentFactory.create(LifeforceComponent);
-    let c = ComponentFactory.create(LifeforceComponent, {currentHP: 37});
-    console.log('a :', a);
-    console.log('b :', b);
-    console.log('c :', c);
+    // let a = ComponentFactory.create(LifeforceComponent, {currentHP: 100, maxHP: 999});
+    // let b = ComponentFactory.create(LifeforceComponent);
+    // let c = ComponentFactory.create(LifeforceComponent, {currentHP: 37});
+    // console.log('a :', a);
+    // console.log('b :', b);
+    // console.log('c :', c);
 
     // this.ComponentManager.addComponent<BrainComponent>(C);
 
@@ -95,8 +92,6 @@ export class SceneManager implements ISceneManager {
         template,
         this.currentScene.activeGameObjects
       );
-
-      // console.log('template["components"] :', template["components"]);
 
       if (goid) {
         this.ComponentManager.spawnFromTemplate(template["components"], goid);
