@@ -7,7 +7,6 @@ import { GameObjectManager } from '../GameObject/GameObjectManager';
 import { ComponentManager } from '../Component/ComponentManager';
 import { LifeforceComponent } from '../Component';
 import { ComponentFactory } from '../Component/ComponentFactory/ComponentFactory';
-import { Template } from '../templates/Template';
 
 /**
  * Defines the different states that the SceneManager can be in.
@@ -97,6 +96,8 @@ export class SceneManager implements ISceneManager {
         this.currentScene.activeGameObjects
       );
 
+      // console.log('template["components"] :', template["components"]);
+
       if (goid) {
         this.ComponentManager.spawnFromTemplate(template["components"], goid);
       }
@@ -150,7 +151,4 @@ export class SceneManager implements ISceneManager {
     this.currentScene.update(delta);
   }
 
-  public test() {
-
-  }
 }

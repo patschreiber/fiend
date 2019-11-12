@@ -1,6 +1,7 @@
 import {
   ComponentId,
-  ComponentTemplate
+  ComponentTemplate,
+  ComponentOverrides
 } from '../types/components';
 import { Component } from './Component';
 import { BrainComponent } from './BrainComponent';
@@ -11,7 +12,6 @@ import { GameObjectId } from '../types/gameobjects';
 import { ComponentFactory } from './ComponentFactory/ComponentFactory';
 import { PositionComponent } from './PositionComponent';
 import { VelocityComponent } from './VelocityComponent';
-import { IComponent } from './interfaces/IComponent';
 
 /**
  * The ComponentManager class.
@@ -79,29 +79,27 @@ import { IComponent } from './interfaces/IComponent';
     templateComponentCollection: Array<ComponentTemplate>,
     goid: ComponentId
   ): boolean {
+    let cid: ComponentId;
 
-    // Creates a new Component instance for every Component template we received
-    for (let componentTemplate of templateComponentCollection[0]) {
+    // Creates a new Component instance for every Component template we receive.
+    for (let componentTemplate of templateComponentCollection) {
       let compType = componentTemplate[0];
-      let compDefaultValueOverrides = componentTemplate[1];
+      let overrides = componentTemplate[1];
 
-      let cid: ComponentId;
-      if (this.hasComponent(goid, compType)) {
-        cid = this.addComponent(compType, compType, compDefaultValueOverrides);
-      }
+      cid = this.addComponent(goid, compType, overrides);
 
-      // If the comp was created, we add it to the appropriate list, otherwise
-      // let's log the error but continue to minimize damages.
-      if (cid) {
-        // this.addToPool(comp.getId(), goid);
-      } else {
-        console.log('component_creation_error :', `There was a problem when
+      // If the comp was created, it was added to the appropriate list,
+      // otherwise, let's log the error but continue to minimize damages.
+      if (cid === null) {
+        console.log('component_creation_warning :', `There was a problem when
         creating Component of type ${compType} for GameObject (id:${goid}).
         Make sure the GameObject has the correct Components attached to it`);
       }
-
-      return true;
     }
+
+    console.log('ComponentManager._activePools :', ComponentManager._activePools);
+
+    return true; //Temp
   }
 
   /**
@@ -137,20 +135,18 @@ import { IComponent } from './interfaces/IComponent';
     goid: GameObjectId,
     component: new (overrides?: Partial<T>) => C,
     // compType: new (overrides?: Partial<T>) => Component,
-    // compType: Component,
-    compType: C,
     overrides?: Partial<T>
   ): ComponentId|null {
 
-    ComponentFactory.create(component)
+    // if (this.hasComponent(goid, component)) {
 
-    if (this.hasComponent(goid, compType)) {
-
-    }
+    // }
 
     let comp: Component;
     try {
       comp = ComponentFactory.create(component, overrides);
+      this._activePools[comp.getTypeId()][goid] = comp;
+
       return comp.getId();
     } catch (e) {
       console.error(e, {type: "ComponentCreationError"});
@@ -173,9 +169,8 @@ import { IComponent } from './interfaces/IComponent';
     goid: GameObjectId,
     compType: Component
   ): boolean {
+
     let pool = this.getComponentContainer(compType);
-
-
     return pool[typeof compType] === undefined ? false : true;
   }
 
@@ -239,6 +234,8 @@ import { IComponent } from './interfaces/IComponent';
    * @param component The Component who's container will be retrieved.
    */
   public getComponentContainer(component: Component): Array<Component> {
+
+    console.log('component :', component);
 
     return this._activePools[component.getTypeId()];
   }

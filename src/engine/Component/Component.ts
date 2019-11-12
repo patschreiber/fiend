@@ -8,7 +8,7 @@ import { ComponentId } from '../types/components';
  * Note that the _typeId member found on every subclass is not defined here.
  * @abstract
  */
-export abstract class Component implements IComponent {
+export class Component implements IComponent {
 
   /**
    * Keeps track of the `id` of the last GameObject instantiated.
@@ -55,6 +55,6 @@ export abstract class Component implements IComponent {
     return this._cid;
   }
 
-  public abstract getTypeId(): string;
+  public getTypeId(): string { return ""; }
 
 }
