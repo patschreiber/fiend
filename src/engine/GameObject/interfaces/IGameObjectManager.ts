@@ -1,10 +1,18 @@
+import { GameObjectId, GameObjectTemplate } from '../../types/gameobjects';
+import { GameObject } from '../GameObject';
+
 /**
  * The IGameObjectManager interface.
  */
 export interface IGameObjectManager {
 
-  // spawn(
-  //   goType: string,
-  //   position: Coordinate,
-  // ): GameObjectId|false;
+  inactiveGameObjects: Array<GameObjectId>;
+
+  getInactiveGameObjects(): Array<GameObjectId>;
+
+  spawnFromTemplate(
+    template: GameObjectTemplate,
+    container?: Array<GameObject>
+  ): GameObjectId|false;
+
 }

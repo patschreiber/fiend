@@ -3,8 +3,8 @@ import {
   GameObjectTemplate,
   TemplateType
 } from '../types/gameobjects';
-import { Component, LifeforceComponent, ILifeforceComponentMembers } from '../Component';
-import { ComponentType } from '../types/components';
+import { Component, LifeforceComponent, ILifeforceComponentMembers, ColliderComponent, PositionComponent, VelocityComponent, BrainComponent } from '../Component';
+import { ComponentTemplateType as ComponentType } from '../types/components';
 
 /**
  * The structure of a template collection.
@@ -27,20 +27,20 @@ export class Template {
       type: TemplateType.Player,
       position: {x:125,y:125},
       components: [
-        [ComponentType.Collider],
-        [ComponentType.Lifeforce, {currentHP: 100, maxHP: 100}],
-        [ComponentType.Position],
-        [ComponentType.Velocity],
+        [ColliderComponent],
+        [LifeforceComponent, {currentHP: 100, maxHP: 100}],
+        [PositionComponent],
+        [VelocityComponent],
       ]
     },
     "OrdinaryFolk": {
       type: TemplateType.OrdinaryFolk,
       position: {x:200,y:100},
       components: [
-        [ComponentType.Brain],
-        [ComponentType.Lifeforce],
-        [ComponentType.Position],
-        [ComponentType.Velocity],
+        [BrainComponent],
+        [LifeforceComponent],
+        [PositionComponent],
+        [VelocityComponent],
       ],
       tags: ["ghost", "no collider"]
     },

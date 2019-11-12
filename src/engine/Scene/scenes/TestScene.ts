@@ -36,12 +36,6 @@ export class TestScene extends BaseScene implements IScene {
 
     console.log('this.initialGameObjectManifest :', this.initialGameObjectManifest);
 
-    // this._PF = new PlayerFactory();
-    // this._OFF = new OrdinaryFolkFactory();
-
-    // this.activeGameObjects.push(this._PF.spawn({x:125,y:125}));
-    // this.activeGameObjects.push(this._OFF.spawn({x:200,y:100}));
-
     // TODO: This is a test to test event emission.
     document.getElementById('game-pane').addEventListener(
       'player_died',

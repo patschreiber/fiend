@@ -5,7 +5,9 @@ import {
   MovementComponent,
   BrainComponent,
   ColliderComponent,
-  ILifeforceComponentMembers
+  ILifeforceComponentMembers,
+  PositionComponent,
+  VelocityComponent
 } from '../Component';
 import { IComponent } from '../Component/interfaces/IComponent';
 
@@ -51,26 +53,30 @@ export type ComponentId = number;
 //   component: C, customValues?: Partial<T>
 // }
 
-// interface ComponentTemplate<C extends Component, T extends IComponentMembers> {
-//   component: C, customValues?: Partial<T>
-// }
-
-type AvailableComps = BrainComponent|LifeforceComponent|MovementComponent;
-
 /**
  * Provides a structure of available Components that the engine recognizes.
  * Should probably be alphabetical.
  * TODO: Does the enum int value === the array key of the Component array? E.g.
  * Does ComponentManager->components[0] equal the BrainComponent?
  */
-export const enum ComponentType {
-  Brain,
-  Collider,
-  Event,
-  Lifeforce,
-  Position,
-  Velocity
+export const enum ComponentTemplateType {
+  Brain = "BrainComponent",
+  Collider = "ColliderComponent",
+  Event = "EventComponent",
+  Lifeforce = "LifeforceComponent",
+  Position = "PositionComponent",
+  Velocity = "VelocityComponent"
 }
+
+// type ComponentTypes = {
+//   Component: Component,
+//   BrainComponent: BrainComponent,
+//   ColliderComponent: ColliderComponent,
+//   EventComponent: EventComponent,
+//   MovementComponent: MovementComponent,
+//   PositionComponent: PositionComponent,
+//   VelocityComponent: VelocityComponent,
+// };
 
 /**
  * The template for use with GaneObjects to help facilitate easy creation of
@@ -85,7 +91,7 @@ export const enum ComponentType {
  * Player's position is at [100,0].
  * Player's life is at 100/999 since the default currentHP wasn't overwritten.
  */
-export type ComponentTemplate = [ComponentType, ComponentOverrides?];
+export type ComponentTemplate = [typeof Component, ComponentOverrides?];
 
 /**
  * The Component values to override. We don't typecheck here, but do when the
@@ -106,4 +112,6 @@ interface ComponentOverrides {
  */
 type ComponentContainer<C extends Component> = {
   [gameObjectId: number]: C;
-}
+};
+
+// type ComponentPool = Array<<C extends Component>(compContainer:C) => C>;

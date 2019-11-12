@@ -15,13 +15,13 @@ export class BrainComponent extends Component implements IComponent {
   /**
    * The BrainComponent's component type id.
    */
-  private static readonly _typeId = Symbol("BrainComponent");
+  private static readonly _typeId = "BrainComponent";
 
   /**
    * Retrieves the type id of the component. Used when fetching or checking a
-   * specific component for a [[GameObject]].
+   * specific instance of a Component.
    */
-  public getTypeId(): Symbol {
+  public getTypeId(): string {
     return BrainComponent._typeId;
   }
 

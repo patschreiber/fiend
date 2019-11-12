@@ -81,15 +81,16 @@ export class SceneManager implements ISceneManager {
     let a = ComponentFactory.create(LifeforceComponent, {currentHP: 100, maxHP: 999});
     let b = ComponentFactory.create(LifeforceComponent);
     let c = ComponentFactory.create(LifeforceComponent, {currentHP: 37});
-    // let d = ComponentFactory.create(Template.get("Player").components[0]["component"]);
     console.log('a :', a);
     console.log('b :', b);
     console.log('c :', c);
 
     // this.ComponentManager.addComponent<BrainComponent>(C);
 
-    // TODO: Finish
     this.currentScene = new scene();
+    // We dumbly create every GameObject in the Scene's manifest right now
+    // regardless of if they are a special type. This will become more
+    // intelligent as features become built.
     for (let template of this.currentScene.initialGameObjectManifest) {
       let goid = this.GameObjectManager.spawnFromTemplate(
         template,
@@ -97,7 +98,6 @@ export class SceneManager implements ISceneManager {
       );
 
       if (goid) {
-        console.log('template["components"] :', template["components"]);
         this.ComponentManager.spawnFromTemplate(template["components"], goid);
       }
     }

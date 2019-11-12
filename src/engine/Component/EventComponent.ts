@@ -1,11 +1,12 @@
 import { IEventComponent } from './interfaces/IEventComponent';
 import { Component } from './Component';
+import { IComponent } from './interfaces/IComponent';
 
 /**
  * The EventComponent class.
  * @implements [[IEventComponent]]
  */
-export class EventComponent extends Component implements IEventComponent {
+export class EventComponent extends Component implements IComponent, IEventComponent {
 
   /**
    * The type id of the component.
