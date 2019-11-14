@@ -60,10 +60,6 @@ type Pool = {
     try {
 
       let comp = ComponentFactory.create(component, overrides);
-      console.log('comp :', comp.getTypeId());
-      console.log('goid :', goid);
-      console.log('this._activePools :', this._activePools[comp.getTypeId()]);
-      // console.log('this._activePools[comp.getTypeId()][goid] :', this._activePools[comp.getTypeId()][goid]);
       this._activePools[comp.getTypeId()][goid] = comp;
 
       return comp.getId();
@@ -159,7 +155,6 @@ type Pool = {
     for (let componentTemplate of templateComponentCollection) {
       let compType = componentTemplate[0];
       let overrides = componentTemplate[1];
-      console.log('goid :', goid);
       cid = this.addComponent(compType, goid, overrides);
 
       // If the comp was created, it was added to the appropriate list,
