@@ -93,31 +93,8 @@ export abstract class BaseScene implements IScene {
    * main game loop.
    * @see FiendGame.main()
    */
+   // TODO: We dont need this. Can just grab the List of game objects from FiendGame by calling the SceneManager
   public update(delta: number): void {
-    // TODO:
-    // for (let gameObject of this.gameObjects) {
-    //   if (gameObject.hasComponent("MovementComponent")) {
-    //     gameObject.update(delta, this.sceneBoundaries);
-    //   } else {
-    //     gameObject.update(delta);
-    //   }
-    // }
-    for (let gameObject of this.activeGameObjects) {
-      // gameObject.update(delta);
-    }
-
-    for (let gameObject of this.culledGameObjects) {
-      // gameObject.update(delta);
-    }
   }
-
-  /**
-   * Retrieves the [[GameObject]] that in the current scene. Scenes may have to
-   * retrieve the player differently from one another, so it's up to the sublass
-   * to decide.
-   *
-   * @return The instance of the Player GameObject from the scene.
-   */
-  public abstract getPlayer(): GameObject;
 
 }

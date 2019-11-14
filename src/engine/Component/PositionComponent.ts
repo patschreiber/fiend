@@ -28,7 +28,7 @@ export class PositionComponent extends Component implements IPositionComponentMe
    * @internal We use [[Partial]] to declare every
    * @param args (optional) The members of the class.
    */
-   public constructor(overrides: Partial<IPositionComponentMembers>) {
+   public constructor(overrides?: Partial<IPositionComponentMembers>) {
     super();
     Object.assign(this, PositionComponent.defaults);
     Object.assign(this, overrides);

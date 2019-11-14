@@ -22,7 +22,7 @@ export class BrainComponent extends Component implements IComponent, IBrainCompo
    * @internal We use [[Partial]] to declare every
    * @param args (optional) The members of the class.
    */
-  public constructor(overrides: Partial<IBrainComponentMembers>) {
+  public constructor(overrides?: Partial<IBrainComponentMembers>) {
     super();
     Object.assign(this, BrainComponent.defaults);
     Object.assign(this, overrides);

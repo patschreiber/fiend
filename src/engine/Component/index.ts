@@ -21,11 +21,6 @@ export * from './EventComponent';
 export * from './LifeforceComponent';
 
 /**
- * The Movement component. Adds movement to a GameObject.
- */
-export * from './MovementComponent';
-
-/**
  * The Brain component. Adds AI and behavior to a GameObject.
  */
 export * from './BrainComponent';
@@ -44,4 +39,9 @@ export * from './VelocityComponent';
  * The Position component. Adds a location for the GameObect.
  */
 export * from './PositionComponent';
+
+/**
+ * The Render component. Gives the GameObject a shape that can be drawn.
+ */
+export * from './RenderComponent';
 

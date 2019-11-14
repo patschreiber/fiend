@@ -2,7 +2,6 @@ import {
   Component,
   EventComponent,
   LifeforceComponent,
-  MovementComponent,
   BrainComponent,
   ColliderComponent,
   ILifeforceComponentMembers,
@@ -10,6 +9,29 @@ import {
   VelocityComponent
 } from '../Component';
 import { IComponent } from '../Component/interfaces/IComponent';
+import { RenderComponent } from '../Component/RenderComponent';
+
+/**
+ * The ComponentTypes type definition. This is useful for when a Component is
+ * reuqested by it's string type id.
+ *
+ * @internal When adding new Components, be sure to add it to this list as well!
+ *
+ * @example
+ * ```ts
+ * public getComponent<K extends keyof ComponentTypes>(
+ *   component: K
+ * ): ComponentTypes[K] {}
+ */
+export type ComponentTypes = {
+  BrainComponent: BrainComponent,
+  ColliderComponent: ColliderComponent,
+  EventComponent: EventComponent,
+  LifeforceComponent: LifeforceComponent,
+  PositionComponent: PositionComponent,
+  RenderComponent: RenderComponent,
+  VelocityComponent: VelocityComponent
+}
 
 /**
  * Provides a type for use with Component ids.
