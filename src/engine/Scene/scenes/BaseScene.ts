@@ -80,10 +80,10 @@ export abstract class BaseScene implements IScene {
     // TODO: Remove
     this.gameObjects = [];
 
-    this.activeGameObjects = new Array<GameObject>(1000);
-    this.culledGameObjects = Array<GameObject>(1000);
-    this.sleepingGameObjects = Array<GameObject>(1000);
-    this.sceneGraveyard = Array<GameObject>(1000);
+    this.activeGameObjects = new Array<GameObject>();
+    this.culledGameObjects = Array<GameObject>();
+    this.sleepingGameObjects = Array<GameObject>();
+    this.sceneGraveyard = Array<GameObject>();
   }
 
   /**

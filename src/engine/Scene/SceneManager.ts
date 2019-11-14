@@ -1,13 +1,10 @@
 import { ISceneManager } from './interfaces/ISceneManager';
-
 import { GameObject } from '../GameObject';
 import { BaseScene } from './index';
 import { TestScene } from './scenes/TestScene';
 import { GameObjectManager } from '../GameObject/GameObjectManager';
 import { ComponentManager } from '../Component/ComponentManager';
-import { LifeforceComponent } from '../Component';
-import { ComponentFactory } from '../Component/ComponentFactory/ComponentFactory';
-import { Template } from '../templates/Template';
+import { PositionComponent } from '../Component';
 
 /**
  * Defines the different states that the SceneManager can be in.
@@ -77,31 +74,25 @@ export class SceneManager implements ISceneManager {
   public loadScene<S extends BaseScene>(scene: new () => S): void {
     this.state = SceneManagerState.Loading;
 
-    // TODO: This is all a test.
-    let a = ComponentFactory.create(LifeforceComponent, {currentHP: 100, maxHP: 999});
-    let b = ComponentFactory.create(LifeforceComponent);
-    let c = ComponentFactory.create(LifeforceComponent, {currentHP: 37});
-    // let d = ComponentFactory.create(Template.get("Player").components[0]["component"]);
-    console.log('a :', a);
-    console.log('b :', b);
-    console.log('c :', c);
-
-    // this.ComponentManager.addComponent<BrainComponent>(C);
-
-    // TODO: Finish
+    // Load the scene/
     this.currentScene = new scene();
+    // We dumbly create every GameObject in the Scene's manifest right now
+    // regardless of if they are a special type. This will become more
+    // intelligent as features become built.
     for (let template of this.currentScene.initialGameObjectManifest) {
       let goid = this.GameObjectManager.spawnFromTemplate(
         template,
         this.currentScene.activeGameObjects
       );
 
+      // Once the GameObject is successfully created, we then turn to creating
+      // it's components.
       if (goid) {
-        console.log('template["components"] :', template["components"]);
         this.ComponentManager.spawnFromTemplate(template["components"], goid);
       }
     }
     console.log('this.activeGameObjects :', this.currentScene.activeGameObjects);
+    console.log(this.ComponentManager.getActiveComponentPools());
 
     this.state = SceneManagerState.Ready;
   }
@@ -147,10 +138,25 @@ export class SceneManager implements ISceneManager {
    * @see FiendGame.main()
    */
   public update(delta: number): void {
+
+    for (let go of this.currentScene.activeGameObjects) {
+      if (go === undefined) {
+        throw new Error(
+          `There was an undefined GameObject, they should be contiguous!`
+        );
+      }
+
+      // this.ComponentManager.addComponent(101, PositionComponent);
+      let posC = this.ComponentManager.getComponent(go.getId(), PositionComponent);
+      // let cont = this.ComponentManager.getComponentContainer(PositionComponent);
+      // let comp = cont[go.getId()];
+      if (go.getId() === 4) {
+        let a = posC["localPosition"].x++;
+        console.log('a :', a);
+      }
+    }
+
     this.currentScene.update(delta);
   }
 
-  public test() {
-
-  }
 }

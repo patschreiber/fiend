@@ -1,8 +1,9 @@
 import { Component } from './Component';
+import { IComponent } from './interfaces/IComponent';
 
 export interface ILifeforceComponentMembers extends IComponentMembers {
-  currentHP: number,
-  maxHP: number,
+  currentHP?: number,
+  maxHP?: number,
 }
 
 /**
@@ -14,12 +15,12 @@ export interface ILifeforceComponentMembers extends IComponentMembers {
  *
  * @extends [[Component]]
  */
-export class LifeforceComponent extends Component implements ILifeforceComponentMembers {
+export class LifeforceComponent extends Component implements IComponent, ILifeforceComponentMembers {
 
   /**
    * The LifeforceComponents's component type id.
    */
-  private static _type: Symbol = Symbol("LifeforceComponent");
+  private static readonly _type: string = "LifeforceComponent";
 
   private static defaults: ILifeforceComponentMembers = {
     currentHP: 125,
@@ -41,7 +42,7 @@ export class LifeforceComponent extends Component implements ILifeforceComponent
    * @internal We use [[Partial]] to declare every
    * @param args (optional) The members of the class.
    */
-  public constructor(overrides: ILifeforceComponentMembers) {
+  public constructor(overrides?: Partial<ILifeforceComponentMembers>) {
     super();
     Object.assign(this, LifeforceComponent.defaults);
     Object.assign(this, overrides);
@@ -51,7 +52,7 @@ export class LifeforceComponent extends Component implements ILifeforceComponent
    * Retrieves the type id of the component. Used when fetching or checking a
    * specific component for a [[GameObject]].
    */
-  public getTypeId(): Symbol {
+  public getTypeId(): string {
     return LifeforceComponent._type;
   }
 

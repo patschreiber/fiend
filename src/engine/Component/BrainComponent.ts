@@ -1,34 +1,39 @@
-import { IComponent } from './interfaces/IComponent';
 import { Component } from './Component';
-import { GameObject } from '../GameObject';
+import { IComponent } from './interfaces/IComponent';
+
+export interface IBrainComponentMembers extends IComponentMembers {}
 
 /**
- * The BrainComponent class.
- * Allows a [[GameObject]] to operate autonomously.
- *
- * This component is part of the AI system.
+ * The BrainComponent component.
  *
  * @extends [[Component]]
  */
-export class BrainComponent extends Component implements IComponent {
+export class BrainComponent extends Component implements IComponent, IBrainComponentMembers {
 
   /**
-   * The BrainComponent's component type id.
+   * The LifeforceComponents's component type id.
    */
-  private static readonly _typeId = Symbol("BrainComponent");
+  private static readonly _type: string = "BrainComponent";
+
+  private static defaults: IBrainComponentMembers = {}
+
+  /**
+   * @constructor
+   * @internal We use [[Partial]] to declare every
+   * @param args (optional) The members of the class.
+   */
+  public constructor(overrides: Partial<IBrainComponentMembers>) {
+    super();
+    Object.assign(this, BrainComponent.defaults);
+    Object.assign(this, overrides);
+  }
 
   /**
    * Retrieves the type id of the component. Used when fetching or checking a
    * specific component for a [[GameObject]].
    */
-  public getTypeId(): Symbol {
-    return BrainComponent._typeId;
+  public getTypeId(): string {
+    return BrainComponent._type;
   }
 
-  /**
-   * Update is intended to be run once per frame.
-   *
-   * @param GO The GameObject this component belongs to.
-   */
-  public update(GO: GameObject): void {}
 }
