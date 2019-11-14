@@ -8,5 +8,4 @@ export interface IScene {
   gameObjects: Array<any>;
   tileMap: any;
   update(delta: number): void;
-  getPlayer(): GameObject;
 }
