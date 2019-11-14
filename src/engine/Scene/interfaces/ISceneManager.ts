@@ -1,5 +1,4 @@
 import { BaseScene } from '../scenes/BaseScene';
-import { GameObject } from '../../GameObject';
 import { SceneManagerState } from '../SceneManager';
 import { GameObjectManager } from '../../GameObject/GameObjectManager';
 
@@ -15,8 +14,6 @@ export interface ISceneManager {
   GameObjectManager: GameObjectManager;
 
   loadScene<S extends BaseScene>(scene: new () => S): void;
-  unloadScene(scene: BaseScene): void;
-  addToScene(gameObject: GameObject): void;
-  removeFromScene(gameObject: GameObject): void;
+  unloadScene(): void;
   update(delta: number): void;
 }

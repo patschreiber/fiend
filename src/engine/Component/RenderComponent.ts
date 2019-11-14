@@ -36,7 +36,7 @@ export class RenderComponent extends Component implements IComponent, IRenderCom
     return RenderComponent._type;
   }
 
-    /**
+  /**
    * Draws the Player entity
    *
    * @param ctx The canvas context.
