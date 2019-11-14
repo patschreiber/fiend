@@ -12,6 +12,7 @@ import { GameObjectId } from '../types/gameobjects';
 import { ComponentFactory } from './ComponentFactory/ComponentFactory';
 import { PositionComponent } from './PositionComponent';
 import { VelocityComponent } from './VelocityComponent';
+import { RenderComponent } from './../Component';
 
 /**
  * The Component Pool type definition.
@@ -37,6 +38,7 @@ type Pool = {
     EventComponent: Array<EventComponent>(),
     LifeforceComponent: new Array<LifeforceComponent>(),
     PositionComponent: new Array<PositionComponent>(),
+    RenderComponent: new Array<RenderComponent>(),
     VelocityComponent: new Array<VelocityComponent>(),
   };
 
@@ -58,6 +60,10 @@ type Pool = {
     try {
 
       let comp = ComponentFactory.create(component, overrides);
+      console.log('comp :', comp.getTypeId());
+      console.log('goid :', goid);
+      console.log('this._activePools :', this._activePools[comp.getTypeId()]);
+      // console.log('this._activePools[comp.getTypeId()][goid] :', this._activePools[comp.getTypeId()][goid]);
       this._activePools[comp.getTypeId()][goid] = comp;
 
       return comp.getId();
@@ -83,7 +89,7 @@ type Pool = {
     component: K,
     goid: GameObjectId
     // componentTypeId: string
-  ): Component|null {
+  ): ComponentTypes[K]|null {
 
     let attachedComponent = this.getComponentContainer(component)[goid];
     if (attachedComponent === undefined) {
@@ -153,7 +159,7 @@ type Pool = {
     for (let componentTemplate of templateComponentCollection) {
       let compType = componentTemplate[0];
       let overrides = componentTemplate[1];
-
+      console.log('goid :', goid);
       cid = this.addComponent(compType, goid, overrides);
 
       // If the comp was created, it was added to the appropriate list,

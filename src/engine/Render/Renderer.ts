@@ -1,9 +1,8 @@
 // TODO: Remove all this scene-specific shit out of here. Ex. EMPTY_TILE.
 
 import { OverworldAtlas } from "../../atlases/OverworldAtlas";
-import { BaseScene } from "../Scene/scenes/BaseScene";
-import { TestScene } from "../Scene/scenes/TestScene";
 import { BaseAtlas } from "../../atlases/BaseAtlas";
+import { SceneManager } from '../Scene';
 
 export class Renderer {
   // TODO: Add object culling to not render items which can't be seen
@@ -14,6 +13,8 @@ export class Renderer {
   ctx: CanvasRenderingContext2D;
   pixels: number;
   scale: number;
+
+  SceneManager: SceneManager;
 
   /**
    * TODO: Change this to be the scene. Recreate the Renderer when a new scene
@@ -77,18 +78,25 @@ export class Renderer {
    * //TODO: Pass in a dumb list of GameObjects to be rendered. Render shouldn't know about Scenes.
    * // https://gamedev.stackexchange.com/questions/153879/scene-components-and-renderer
    */
-  public draw(scene: BaseScene|TestScene): void {
+  public draw(SM: SceneManager): void {
     // Clear the screen on every frame so our entities don't have trails.
     // TODO: Internet says clearing the screen on every draw might be a bad idea.
     this._clrScreen();
 
     // Draws the Scene's background.
-    this.drawTileMap(scene.tileMap);
+    this.drawTileMap(SM.currentScene.tileMap);
 
     // Iterate through the scene's gameObjects and render them.
-    // TODO: Find a better way. Not all GameObjects will be renderable.
-    for (let gameObject of scene.gameObjects) {
-      gameObject.draw(this.ctx);
+    // TODO: Make this use a hasComponent() function for readability.
+    for (let gameObject of SM.currentScene.activeGameObjects) {
+      let goid = gameObject.getId();
+      let renComp = SM.ComponentManager
+        .getComponent("RenderComponent", goid);
+      let posComp = SM.ComponentManager.getComponent("PositionComponent", goid)
+
+      if (renComp !== undefined && posComp !== undefined) {
+        renComp.draw(this.ctx, posComp.localPosition);
+      }
     }
   }
 

@@ -11,6 +11,7 @@ import {
   BrainComponent,
   Component
 } from '../Component';
+import { RenderComponent } from '../Component/RenderComponent';
 
 /**
  * The structure of a template collection.
@@ -34,9 +35,11 @@ export class Template {
       components: [
         [ColliderComponent],
         [LifeforceComponent, {currentHP: 100, maxHP: 100}],
-        [PositionComponent],
+        [PositionComponent, {localPosition: {x:200,y:200}}],
+        [RenderComponent],
         [VelocityComponent],
       ]
+      // TODO: Add default model option
     },
     "OrdinaryFolk": {
       type: TemplateType.OrdinaryFolk,
@@ -44,6 +47,7 @@ export class Template {
         [BrainComponent],
         [LifeforceComponent],
         [PositionComponent],
+        [RenderComponent],
         [VelocityComponent],
       ],
       tags: ["ghost", "no collider"]

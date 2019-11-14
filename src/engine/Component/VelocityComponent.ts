@@ -18,7 +18,7 @@ export class VelocityComponent extends Component implements IVelocityComponentMe
    * @internal We use [[Partial]] to declare every
    * @param args (optional) The members of the class.
    */
-   public constructor(overrides: Partial<IVelocityComponentMembers>) {
+   public constructor(overrides?: Partial<IVelocityComponentMembers>) {
     super();
     Object.assign(this, VelocityComponent.defaults);
     Object.assign(this, overrides);

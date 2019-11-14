@@ -2,7 +2,6 @@ import {
   Component,
   EventComponent,
   LifeforceComponent,
-  MovementComponent,
   BrainComponent,
   ColliderComponent,
   ILifeforceComponentMembers,

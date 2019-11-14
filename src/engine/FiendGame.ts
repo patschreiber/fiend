@@ -152,7 +152,7 @@ export class FiendGame {
   private _update(delta: number): void {
 
     // TODO Remove clog.
-    console.log('delta :', delta);
+    // console.log('delta :', delta);
     this.SceneManager.update(delta);
   }
 
@@ -165,7 +165,7 @@ export class FiendGame {
     // TODO: Renderer might have to be attached/related to SceneManager in some
     // way since we might need to know the world coordinates. Or not. The update()
     // method provides the transform for game objects
-    this.Renderer.draw(this.SceneManager.currentScene);
+    this.Renderer.draw(this.SceneManager);
   }
 
   /**
