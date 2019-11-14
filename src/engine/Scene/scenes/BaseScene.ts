@@ -111,13 +111,4 @@ export abstract class BaseScene implements IScene {
     }
   }
 
-  /**
-   * Retrieves the [[GameObject]] that in the current scene. Scenes may have to
-   * retrieve the player differently from one another, so it's up to the sublass
-   * to decide.
-   *
-   * @return The instance of the Player GameObject from the scene.
-   */
-  public abstract getPlayer(): GameObject;
-
 }

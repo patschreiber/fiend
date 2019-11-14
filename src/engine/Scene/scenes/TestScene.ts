@@ -45,14 +45,6 @@ export class TestScene extends BaseScene implements IScene {
   }
 
   /**
-   * @inheritdoc
-   */
-  public getPlayer(): GameObject {
-    // TODO...
-    return GameObject.create(Template.get("Player")); // TODO: replace this
-  }
-
-  /**
    * TEST
    * TODO: Remove
    *
