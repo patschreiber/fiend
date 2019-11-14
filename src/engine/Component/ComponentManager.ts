@@ -1,6 +1,7 @@
 import {
   ComponentId,
-  ComponentTemplate
+  ComponentTemplate,
+  ComponentTypes
 } from '../types/components';
 import { Component } from './Component';
 import { BrainComponent } from './BrainComponent';
@@ -13,6 +14,14 @@ import { PositionComponent } from './PositionComponent';
 import { VelocityComponent } from './VelocityComponent';
 
 /**
+ * The Component Pool type definition.
+ * TODO: Come up with something better than 'any'.
+ */
+type Pool = {
+  [key: string]: Array<any>;
+}
+
+/**
  * The ComponentManager class.
  * The ComponentManager is responsible for orchestrating all currently-active
  * Components that belong to [[GameObject]] entities. There are a few
@@ -22,7 +31,7 @@ import { VelocityComponent } from './VelocityComponent';
   /**
    * The data structure to house the active Components.
    */
-  private _activePools = {
+  private _activePools:Pool = {
     BrainComponent: new Array<BrainComponent>(),
     ColliderComponent: new Array<ColliderComponent>(),
     EventComponent: Array<EventComponent>(),
@@ -41,26 +50,21 @@ import { VelocityComponent } from './VelocityComponent';
    null if it wasn't.
    */
   public addComponent<T extends IComponentMembers>(
-    goid: GameObjectId,
     component: new (overrides?: Partial<T>) => Component,
+    goid: GameObjectId,
     overrides?: Partial<T>
   ): ComponentId|null {
 
-    // let comp: Component = new component();
-
-    // If the GameObject already has a component of this type attached, we don't
-    // want to add another.
-    // if (this.hasComponent(goid, comp)) {
-    //   return null;
-    // }
-    let comp: Component
     try {
-      comp = ComponentFactory.create(component, overrides);
+
+      let comp = ComponentFactory.create(component, overrides);
       this._activePools[comp.getTypeId()][goid] = comp;
 
       return comp.getId();
     } catch (e) {
+
       console.error(e, {type: "ComponentCreationError"});
+
       return null;
     }
   }
@@ -75,9 +79,10 @@ import { VelocityComponent } from './VelocityComponent';
    *
    * @return The desired attached Component, or null if it's not attached.
    */
-  public getComponent(
-    goid: GameObjectId,
-    component: typeof Component
+  public getComponent<K extends keyof ComponentTypes>(
+    component: K,
+    goid: GameObjectId
+    // componentTypeId: string
   ): Component|null {
 
     let attachedComponent = this.getComponentContainer(component)[goid];
@@ -89,25 +94,6 @@ import { VelocityComponent } from './VelocityComponent';
   }
 
   /**
-   * Checks to see if a Component is attached to this GameActor via the
-   * `ComponentContainer` list.
-   *
-   * @param typeId The key to use as a look up. This is the Component's static
-   * id.
-   *
-   * @return If the Component is attached to the GameObject.
-   */
-   public hasComponent(//<C extends Component>(
-    goid: GameObjectId,
-    component: typeof Component
-  ): boolean {
-
-    let container = this.getComponentContainer(component)[goid];
-
-    return container === undefined ? false : true;
-  }
-
-  /**
    * Removes a Component from the GameActor's `ComponentContainer`, if it's
    * attached.
    *
@@ -116,15 +102,13 @@ import { VelocityComponent } from './VelocityComponent';
    *
    * @return If the Component was successfully removed or not.
    */
-  public removeComponent(goid: GameObjectId, component: typeof Component): boolean {
-    if (this.hasComponent(goid, component)) {
-      this.getComponentContainer(component)[goid] = undefined;
-    }
+  public removeComponent<K extends keyof ComponentTypes>(
+    component: K,
+    goid: GameObjectId
+  ): boolean {
 
+    delete this.getComponentContainer(component)[goid];
     return true;
-
-    // // TODO: Make this a real exception.
-    // console.log('removeComponentError :', `Cannot remove Component ${key} since one's not attached to this GameActor(id:${this.getId()})`);
   }
 
   /**
@@ -134,9 +118,8 @@ import { VelocityComponent } from './VelocityComponent';
    *
    * @return The container for the Component type.
    */
-  public getComponentContainer(component: typeof Component): Array<Component> {
-    let comp = new component();
-    return this._activePools[comp.getTypeId()];
+  public getComponentContainer<K extends keyof ComponentTypes>(component: K): Array<ComponentTypes[K]> {
+    return this._activePools[component];
   }
 
   /**
@@ -171,7 +154,7 @@ import { VelocityComponent } from './VelocityComponent';
       let compType = componentTemplate[0];
       let overrides = componentTemplate[1];
 
-      cid = this.addComponent(goid, compType, overrides);
+      cid = this.addComponent(compType, goid, overrides);
 
       // If the comp was created, it was added to the appropriate list,
       // otherwise, let's log the error but continue to minimize damages.
