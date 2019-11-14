@@ -4,6 +4,7 @@ import { BaseScene } from './index';
 import { TestScene } from './scenes/TestScene';
 import { GameObjectManager } from '../GameObject/GameObjectManager';
 import { ComponentManager } from '../Component/ComponentManager';
+import { PositionComponent } from '../Component';
 
 /**
  * Defines the different states that the SceneManager can be in.
@@ -98,6 +99,7 @@ export class SceneManager implements ISceneManager {
       }
     }
     console.log('this.activeGameObjects :', this.currentScene.activeGameObjects);
+    console.log(this.ComponentManager.getActiveComponentPools());
 
     this.state = SceneManagerState.Ready;
   }
@@ -143,6 +145,23 @@ export class SceneManager implements ISceneManager {
    * @see FiendGame.main()
    */
   public update(delta: number): void {
+
+    for (let go of this.currentScene.activeGameObjects) {
+      if (go === undefined) {
+        throw new Error("There was an undefined GameObject, they should be contiguous!");
+      }
+
+      // console.log('go :', go);
+      // this.ComponentManager.addComponent(101, PositionComponent);
+      let posC = this.ComponentManager.getComponent(go.getId(), PositionComponent);
+      // let cont = this.ComponentManager.getComponentContainer(PositionComponent);
+      // let comp = cont[go.getId()];
+      if (go.getId() === 4) {
+        let a = posC["localPosition"].x++;
+        console.log('a :', a);
+      }
+    }
+
     this.currentScene.update(delta);
   }
 

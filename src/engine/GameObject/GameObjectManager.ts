@@ -30,7 +30,7 @@ export class GameObjectManager implements IGameObjectManager {
    * @constructor
    */
   public constructor() {
-    this.inactiveGameObjects = Array<GameObjectId>(1000);
+    this.inactiveGameObjects = Array<GameObjectId>();
   }
 
   /**
