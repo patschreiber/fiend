@@ -4,7 +4,6 @@ import {
   GameObjectTemplate
 } from '../types/gameobjects';
 import { GameObject } from './GameObject';
-import { ComponentId } from '../types/components';
 
 /**
  * The GameObjectManager class.
@@ -18,6 +17,16 @@ export class GameObjectManager implements IGameObjectManager {
    * “persist” flag will be added to this container.
    */
   public inactiveGameObjects: Array<GameObjectId>;
+
+  /**
+   * The data structure that tracks all of the Components attached to an
+   * instance of a GameObject. The Array indices represent a specific Component
+   * type. If new Component types are ever added, they get appended to this
+   * pool. If a index ever has `-1` for it's value, that Component has been
+   * soft-deleted in the system; new Components of that type cannot be added to
+   * the GameObject.
+   */
+  //  private _attachedComponents: Array<ComponentId> = new Array(8);
 
   /**
    * Contains game objects that are unique, which means they can only ever
@@ -43,14 +52,19 @@ export class GameObjectManager implements IGameObjectManager {
   }
 
   /**
-   * The data structure that tracks all of the Components attached to an
-   * instance of a GameObject. The Array indices represent a specific Component
-   * type. If new Component types are ever added, they get appended to this
-   * pool. If a index ever has `-1` for it's value, that Component has been
-   * soft-deleted in the system; new Components of that type cannot be added to
-   * the GameObject.
+   * Removes a GameObject from being tracked by the game state. Depending on the
+   * status, the GameObject will either be hard deleted, or moved to an
+   * "inactive pool" where it will be tracked by the game engine, but not
+   * implemented.
+   *
+   * @param goid The instance id of the GameObject to remove.
+   *
+   * @return If the GameObject was successfully dealt with or not.
    */
-  private _attachedComponents: Array<ComponentId> = new Array(8);
+  public removeGameObjet(goid: GameObjectId): boolean {
+    // TODO:
+    return true;
+  }
 
   /**
    *
