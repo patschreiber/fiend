@@ -25,7 +25,6 @@ export class GameObject implements IGameObject {
    * The id of the instance of the GameObject.
    * TODO: Switch this to use a Symbol (https://www.sitepen.com/blog/advanced-typescript-concepts-classes-and-types/)
    */
-  // private id: GameObjectId;
   private readonly _id: GameObjectId;
 
   /**
@@ -50,7 +49,7 @@ export class GameObject implements IGameObject {
   /**
    * Creates a new instance of a GameObject based on the given template.
    *
-   * @param template The template to base the new GameObject from.
+   * @param template The template to base the new GameObject on.
    */
   public static create(template: GameObjectTemplate): GameObject {
     return new GameObject(template);

@@ -4,10 +4,11 @@ import { ComponentId } from '../types/components';
 
 /**
  * The Component base class. // TODO: CHange name to BaseComponent
- *
+ * @internal
+ * Note that the _typeId member found on every subclass is not defined here.
  * @abstract
  */
-export abstract class Component implements IComponent {
+export class Component implements IComponent {
 
   /**
    * Keeps track of the `id` of the last GameObject instantiated.
@@ -21,7 +22,10 @@ export abstract class Component implements IComponent {
    */
   private readonly _cid: ComponentId;
 
-  // private static _typeId: Symbol() // TODO: Come back to this.
+  /**
+   * The id of the GameObject this Component is currently associated with.
+   */
+  public goid: GameObjectId;
 
   /**
    * @constructor
@@ -31,14 +35,9 @@ export abstract class Component implements IComponent {
    * resume auto-incrementing when we save/load the game.
    * TODO: Make constructor private, like GameObject is. Use ComponentFactory.
    */
-   public constructor() {
+  public constructor(overrides?: IComponentMembers) {
     this._cid = Component._idIncrementor++;
   }
-
-  /**
-   * The id of the GameObject this Component is currently associated with.
-   */
-  public goid: GameObjectId;
 
   /**
    * The type id of the component. Used when fetching or checking a specific
@@ -55,5 +54,7 @@ export abstract class Component implements IComponent {
   public getId(): ComponentId {
     return this._cid;
   }
+
+  public getTypeId(): string { return ""; }
 
 }
