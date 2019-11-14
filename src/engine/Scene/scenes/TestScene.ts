@@ -23,7 +23,7 @@ export class TestScene extends BaseScene implements IScene {
     Template.get("Player"),
     Template.get("OrdinaryFolk"),
     Template.get(TemplateType.OrdinaryFolk), // You can use the TemplateType enum as well.
-    Template.mutate("Player", ["position"], [{x:999,y:999}]) // Example of overriding a template's default values.
+    Template.mutate("Player", ["tags"], [["player_2", "special", "keep"]]) // Example of overriding a template's default values.
   ];
 
   /**
@@ -49,7 +49,7 @@ export class TestScene extends BaseScene implements IScene {
    */
   public getPlayer(): GameObject {
     // TODO...
-    return GameObject.create(Template.get("Player"));
+    return GameObject.create(Template.get("Player")); // TODO: replace this
   }
 
   /**

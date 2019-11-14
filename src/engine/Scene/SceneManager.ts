@@ -74,16 +74,7 @@ export class SceneManager implements ISceneManager {
   public loadScene<S extends BaseScene>(scene: new () => S): void {
     this.state = SceneManagerState.Loading;
 
-    // TODO: This is all a test.
-    // let a = ComponentFactory.create(LifeforceComponent, {currentHP: 100, maxHP: 999});
-    // let b = ComponentFactory.create(LifeforceComponent);
-    // let c = ComponentFactory.create(LifeforceComponent, {currentHP: 37});
-    // console.log('a :', a);
-    // console.log('b :', b);
-    // console.log('c :', c);
-
-    // this.ComponentManager.addComponent<BrainComponent>(C);
-
+    // Load the scene/
     this.currentScene = new scene();
     // We dumbly create every GameObject in the Scene's manifest right now
     // regardless of if they are a special type. This will become more
@@ -94,6 +85,8 @@ export class SceneManager implements ISceneManager {
         this.currentScene.activeGameObjects
       );
 
+      // Once the GameObject is successfully created, we then turn to creating
+      // it's components.
       if (goid) {
         this.ComponentManager.spawnFromTemplate(template["components"], goid);
       }
@@ -148,10 +141,11 @@ export class SceneManager implements ISceneManager {
 
     for (let go of this.currentScene.activeGameObjects) {
       if (go === undefined) {
-        throw new Error("There was an undefined GameObject, they should be contiguous!");
+        throw new Error(
+          `There was an undefined GameObject, they should be contiguous!`
+        );
       }
 
-      // console.log('go :', go);
       // this.ComponentManager.addComponent(101, PositionComponent);
       let posC = this.ComponentManager.getComponent(go.getId(), PositionComponent);
       // let cont = this.ComponentManager.getComponentContainer(PositionComponent);

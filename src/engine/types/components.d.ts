@@ -24,59 +24,25 @@ import { IComponent } from '../Component/interfaces/IComponent';
  */
 export type ComponentId = number;
 
-/**
- * Provides a container to house a GameActor's attached Components. Modifying
- * the contents of this container should be done through an interface provided
- * by the actor; it should not be modified directly. An actor may not have any
- * Components, so we mark every one as optional.
- *
- * @example
- * Player.components = {
-  *   MovementComponent: new MovementComponent(),
-  *   LifeforceComponent: new LifeforceComponent(),
-  * }
-  * // Gets the event component attached to the player, then attached a new event
-  * // "SomeEvent" to the EventComponent.
-  * player.getComponent("EventComponent").attach(SomeEvent.create(player));
-  *
-  * @see https://stackoverflow.com/questions/58573975
-  */
-// type ComponentContainer = {
-//    EventComponent?: EventComponent;
-//    LifeforceComponent?: LifeforceComponent;
-//    MovementComponent?: MovementComponent;
-//    BrainComponent?: BrainComponent;
-// }
-
-// // TODO: WIP
-// type ComponentTemplate<C extends Component, T extends IComponentMembers> = {
-//   component: C, customValues?: Partial<T>
-// }
-
-/**
- * Provides a structure of available Components that the engine recognizes.
- * Should probably be alphabetical.
- * TODO: Does the enum int value === the array key of the Component array? E.g.
- * Does ComponentManager->components[0] equal the BrainComponent?
- */
-export const enum ComponentTemplateType {
-  Brain = "BrainComponent",
-  Collider = "ColliderComponent",
-  Event = "EventComponent",
-  Lifeforce = "LifeforceComponent",
-  Position = "PositionComponent",
-  Velocity = "VelocityComponent"
-}
-
-// type ComponentTypes = {
-//   Component: Component,
-//   BrainComponent: BrainComponent,
-//   ColliderComponent: ColliderComponent,
-//   EventComponent: EventComponent,
-//   MovementComponent: MovementComponent,
-//   PositionComponent: PositionComponent,
-//   VelocityComponent: VelocityComponent,
-// };
+  /**
+   * Provides a container to house a GameActor's attached Components. Each array
+   * index denotes a type of Component. For instance, array index 0 will always
+   * signify the PositionComponent, so if a (non-zero) value is present here, we
+   * know that that particular GameObject has a PositionComponent. Modifying
+   * the contents of this container should be done through an interface provided
+   * by the actor; it should not be modified directly. An actor may not have any
+   * Components, in which case all values for this array will be `0`.
+   *
+   * @example
+   * ```
+   * gameObjectId:[componentId,componentId,componentId,componentId]
+   * // Output
+   * 1001:[0,22,0,37,0,104,0,53]
+   * ```
+   */
+  type GameObjectComponentReference<C extends Component> = {
+    [gameObjectId: number]: ComponentId;
+  };
 
 /**
  * The template for use with GaneObjects to help facilitate easy creation of
@@ -100,18 +66,3 @@ export type ComponentTemplate = [typeof Component, ComponentOverrides?];
 interface ComponentOverrides {
   [key: string]: any;
 }
-
-/**
- * // TODO:
- * A container for all Components that exist in a scene. There will be a
- * different Component queue for each type of Component.
- * @example
- * ```
- * {10: BrainComponent}
- * ```
- */
-type ComponentContainer<C extends Component> = {
-  [gameObjectId: number]: C;
-};
-
-// type ComponentPool = Array<<C extends Component>(compContainer:C) => C>;

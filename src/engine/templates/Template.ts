@@ -3,8 +3,14 @@ import {
   GameObjectTemplate,
   TemplateType
 } from '../types/gameobjects';
-import { Component, LifeforceComponent, ILifeforceComponentMembers, ColliderComponent, PositionComponent, VelocityComponent, BrainComponent } from '../Component';
-import { ComponentTemplateType as ComponentType } from '../types/components';
+import {
+  LifeforceComponent,
+  ColliderComponent,
+  PositionComponent,
+  VelocityComponent,
+  BrainComponent,
+  Component
+} from '../Component';
 
 /**
  * The structure of a template collection.
@@ -25,7 +31,6 @@ export class Template {
   protected static readonly gameObjectTemplates: TemplateStruct = {
     "Player": {
       type: TemplateType.Player,
-      position: {x:125,y:125},
       components: [
         [ColliderComponent],
         [LifeforceComponent, {currentHP: 100, maxHP: 100}],
@@ -35,7 +40,6 @@ export class Template {
     },
     "OrdinaryFolk": {
       type: TemplateType.OrdinaryFolk,
-      position: {x:200,y:100},
       components: [
         [BrainComponent],
         [LifeforceComponent],

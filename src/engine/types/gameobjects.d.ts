@@ -51,28 +51,9 @@ export const enum TemplateType {
 /**
  * Tells a Scene or other structure which GameObjects to initialize when the
  * structure is loaded.
- * @example
- * ```ts
- * // Contents of GameObjectManifest[]
- * [
- *   {
- *     type: TemplateType.Player,   // "Player"
- *     position: {x:299,y:210}
- *   },
- *   {
- *      type: TemplateType.OrdinaryFolk,    // "OrdinaryFolk"
- *      position: {x:0,y:10}
- *   },
- *   {
- *     type: type: TemplateType.OrdinaryFolk,    // "OrdinaryFolk"
- *     position: {x:132,y:742}
- *   },
- * ]
- * ```
  */
 export type GameObjectTemplate = {
   type: TemplateType,
-  position: Coordinate;    // TODO: Move to Position Component
   components: Array<ComponentTemplate>;
   tags?: Array<string>;
 }
@@ -83,6 +64,7 @@ export type GameObjectTemplate = {
 export type GameObjectManifest = Array<GameObjectTemplate>;
 
 /**
+ * TODO:
  * Holds the unique GameObjects that have been removed from the game. Prevents
  * these GameObjects from being instantiated again at a later time. Records the
  * GameObject's state at the time of addition and the date the GameObject was
