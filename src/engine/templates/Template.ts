@@ -9,9 +9,8 @@ import {
   PositionComponent,
   VelocityComponent,
   BrainComponent,
-  Component
+  RenderComponent
 } from '../Component';
-import { RenderComponent } from '../Component/RenderComponent';
 
 /**
  * The structure of a template collection.
