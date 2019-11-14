@@ -60,6 +60,10 @@ type Pool = {
     try {
 
       let comp = ComponentFactory.create(component, overrides);
+      console.log('comp :', comp.getTypeId());
+      console.log('goid :', goid);
+      console.log('this._activePools :', this._activePools[comp.getTypeId()]);
+      // console.log('this._activePools[comp.getTypeId()][goid] :', this._activePools[comp.getTypeId()][goid]);
       this._activePools[comp.getTypeId()][goid] = comp;
 
       return comp.getId();
