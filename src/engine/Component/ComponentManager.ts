@@ -113,19 +113,17 @@ import { VelocityComponent } from './VelocityComponent';
   //   }
   // }
 
-  public addComponent<C extends Component, T extends IComponentMembers>(
+  public addComponent<T extends IComponentMembers>(
     goid: GameObjectId,
-    component: new (overrides?: Partial<T>) => C,
+    component: new (overrides?: Partial<T>) => Component,
     overrides?: Partial<T>
   ): ComponentId|null {
 
-    // if (this.hasComponent(goid, component)) {
-
-    // }
-
     let comp: Component;
     try {
+      if (this.hasComponent(goid, BrainComponent))
       comp = ComponentFactory.create(component, overrides);
+
       this._activePools[comp.getTypeId()][goid] = comp;
 
       return comp.getId();
@@ -146,13 +144,13 @@ import { VelocityComponent } from './VelocityComponent';
    *
    * @return If the Component is attached to this GameActor.
    */
-   public hasComponent(
+   public hasComponent<Component>(
     goid: GameObjectId,
     compType: Component
   ): boolean {
-
-    let pool = this.getComponentContainer(compType);
-    return pool[typeof compType] === undefined ? false : true;
+    return true;
+    // let pool = this.getComponentContainer(compType);
+    // return pool[typeof compType] === undefined ? false : true;
   }
 
   // /**
