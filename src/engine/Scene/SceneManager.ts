@@ -1,10 +1,8 @@
 import { ISceneManager } from './interfaces/ISceneManager';
-import { GameObject } from '../GameObject';
 import { BaseScene } from './index';
 import { TestScene } from './scenes/TestScene';
 import { GameObjectManager } from '../GameObject/GameObjectManager';
 import { ComponentManager } from '../Component/ComponentManager';
-import { PositionComponent, RenderComponent } from '../Component';
 
 /**
  * Defines the different states that the SceneManager can be in.
@@ -91,8 +89,6 @@ export class SceneManager implements ISceneManager {
         this.ComponentManager.spawnFromTemplate(template["components"], goid);
       }
     }
-    console.log('this.activeGameObjects :', this.currentScene.activeGameObjects);
-    console.log(this.ComponentManager.getActiveComponentPools());
 
     this.state = SceneManagerState.Ready;
   }
@@ -102,33 +98,7 @@ export class SceneManager implements ISceneManager {
    *
    * @param scene The Scene to unload.
    */
-  public unloadScene(scene: BaseScene): void {
-    // TODO: Finish
-    // this.gameObjectCount = 0;
-  }
-
-  /**
-   * Adds a GameObject to the current Scene.
-   *
-   * @param gameObject The GameObject to add to the Scene.
-   */
-  public addToScene(goType: GameObject): void {
-    // if (this.gameObjectCount < this.currentScene.maxActiveEntities) {
-      // TODO: Finish
-    // }
-
-    // this.gameObjectCount++;
-  }
-
-  /**
-   * Removes a GameObject from the current Scene.
-   *
-   * @param gameObject The GameObject to remove from the Scene.
-   */
-  public removeFromScene(gameObject: GameObject): void {
-    // TODO: Finish
-    // this.gameObjectCount--;
-  }
+  public unloadScene(): void {}
 
   /**
    * Updates the Scene's GameObjects.
@@ -146,10 +116,8 @@ export class SceneManager implements ISceneManager {
         );
       }
 
-      // this.ComponentManager.addComponent(PositionComponent, 101);
-      let posC = this.ComponentManager.getComponent("PositionComponent", go.getId());
-      console.log('posC :', posC);
-      // let container = this.ComponentManager.getComponentContainer("PositionComponent");
+      let posC = this.ComponentManager
+        .getComponent("PositionComponent", go.getId());
 
       if (go.getId() === 4) {
         posC["localPosition"].x = posC["localPosition"].x + (10 * delta);

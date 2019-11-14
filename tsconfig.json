@@ -10,6 +10,8 @@
     "moduleResolution": "node",  // helps with "barrel" files (index.ts)
     "extendedDiagnostics": true,   // Show verbose diagnostic information
     "forceConsistentCasingInFileNames": true   // Disallow inconsistently-cased references to the same file
+    // "noUnusedLocals": true,    // Won't compile if there are unused vars
+    // "noUnusedParameters": true // Won't compile if there are unused params
   },
   "files": [
     "./src/engine/types/globals.d.ts",

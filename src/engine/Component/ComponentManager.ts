@@ -159,7 +159,6 @@ type Pool = {
     for (let componentTemplate of templateComponentCollection) {
       let compType = componentTemplate[0];
       let overrides = componentTemplate[1];
-      console.log('goid :', goid);
       cid = this.addComponent(compType, goid, overrides);
 
       // If the comp was created, it was added to the appropriate list,
