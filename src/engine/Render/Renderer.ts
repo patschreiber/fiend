@@ -95,12 +95,9 @@ export class Renderer {
       let posComp = SM.ComponentManager
         .getComponent("PositionComponent", goid);
 
-      // console.log('renComp :', renComp);
-      // console.log('posComp :', posComp);
-
       if (
-        (renComp !== undefined || renComp !== null)
-        && (posComp !== undefined || posComp !== null)
+        (renComp !== undefined && renComp !== null)
+        && (posComp !== undefined && posComp !== null)
       ) {
         renComp.draw(this.ctx, posComp.localPosition);
       }
