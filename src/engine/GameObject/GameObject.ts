@@ -3,7 +3,6 @@ import {
   GameObjectTemplate
 } from '../types/gameobjects';
 import { IGameObject } from './interfaces/IGameObject';
-import { F_object } from '../structs/F_object';
 
 /**
  * The GameObject abstract class. All game entities inherit from this class.
@@ -44,7 +43,6 @@ export class GameObject implements IGameObject {
    *
    */
   private constructor(template: GameObjectTemplate) {
-    super();
     this._id = GameObject._idIncrementor++;
   }
 
