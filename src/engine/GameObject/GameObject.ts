@@ -42,7 +42,7 @@ export class GameObject implements IGameObject {
    * resume auto-incrementing when we save/load the game.
    *
    */
-  private constructor(template: GameObjectTemplate) {
+  private constructor(template?: GameObjectTemplate) {
     this._id = GameObject._idIncrementor++;
   }
 
@@ -51,7 +51,7 @@ export class GameObject implements IGameObject {
    *
    * @param template The template to base the new GameObject on.
    */
-  public static create(template: GameObjectTemplate): GameObject {
+  public static create(template?: GameObjectTemplate): GameObject {
     return new GameObject(template);
   }
 
