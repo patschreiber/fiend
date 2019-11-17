@@ -15,6 +15,6 @@ export interface IGameObjectManager {
     container?: Array<GameObject>
   ): GameObjectId|false;
 
-  removeGameObjet(goid: GameObjectId): boolean;
+  removeGameObject(goid: GameObjectId): boolean;
 
 }

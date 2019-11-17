@@ -24,13 +24,13 @@ import { RenderComponent } from '../Component/RenderComponent';
  * ): ComponentTypes[K] {}
  */
 export type ComponentTypes = {
-  BrainComponent: BrainComponent,
-  ColliderComponent: ColliderComponent,
-  EventComponent: EventComponent,
-  LifeforceComponent: LifeforceComponent,
-  PositionComponent: PositionComponent,
-  RenderComponent: RenderComponent,
-  VelocityComponent: VelocityComponent
+  BrainComponent?: BrainComponent,
+  ColliderComponent?: ColliderComponent,
+  EventComponent?: EventComponent,
+  LifeforceComponent?: LifeforceComponent,
+  PositionComponent?: PositionComponent,
+  RenderComponent?: RenderComponent,
+  VelocityComponent?: VelocityComponent
 }
 
 /**
@@ -62,6 +62,7 @@ export type ComponentId = number;
    * 1001:[0,22,0,37,0,104,0,53]
    * ```
    */
+   // TODO:
   type GameObjectComponentReference<C extends Component> = {
     [gameObjectId: number]: ComponentId;
   };

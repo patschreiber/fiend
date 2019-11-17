@@ -73,4 +73,13 @@ export class GameObject implements IGameObject {
     return this._tags;
   }
 
+  /**
+   * Retrieves the most recently created GameObject id.
+   *
+   * @return The GameObject id of the youngest GameObject.
+   */
+  public static getMostRecentId(): GameObjectId {
+    return GameObject._idIncrementor;
+  }
+
 }

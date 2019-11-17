@@ -61,7 +61,7 @@ export class GameObjectManager implements IGameObjectManager {
    *
    * @return If the GameObject was successfully dealt with or not.
    */
-  public removeGameObjet(goid: GameObjectId): boolean {
+  public removeGameObject(goid: GameObjectId): boolean {
     // TODO:
     return true;
   }
