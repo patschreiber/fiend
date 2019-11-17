@@ -59,7 +59,7 @@ export enum ButtonStatus {
 export class InputHandler implements IInputHandler {
 
   /**
-   * TODO Structure should add ["context"] so we can have context-independent
+   * TODO: Structure should add ["context"] so we can have context-independent
    * buttons
    * @type The inputMap instance.
    */
@@ -125,45 +125,49 @@ export class InputHandler implements IInputHandler {
     }
   }
 
-  /**
-   * Handles user input. Runs once per game loop.
-   *
-   * @param actor The GameObject entity to handle input. Most likely will be the
-   * Player(s) currently in the game.
-   * @param delta The time difference between frames. Provided by the game's
-   * main game loop.
-   * @see FiendGame.main()
-   */
-  public handleInput(actor: GameObject, delta: number): void {
-
-    if (this.inputMap[Button.UP].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.UP].command.execute(actor, delta);
-    }
-    if (this.inputMap[Button.DOWN].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.DOWN].command.execute(actor, delta);
-    }
-    if (this.inputMap[Button.LEFT].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.LEFT].command.execute(actor, delta);
-    }
-    if (this.inputMap[Button.RIGHT].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.RIGHT].command.execute(actor, delta);
-    }
-    if (this.inputMap[Button.E].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.E].command.execute(actor, delta);
-    }
-    if (this.inputMap[Button.Q].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.Q].command.execute(actor, delta);
-    }
-    if (this.inputMap[Button.BSPACE].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.BSPACE].command.execute(actor, delta);
-    }
-    if (this.inputMap[Button.ENTER].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.ENTER].command.execute(actor, delta);
-    }
-    if (this.inputMap[Button.SHIFT].status === ButtonStatus.PRESSED) {
-      this.inputMap[Button.SHIFT].command.execute(actor, delta);
-    }
+  public getInputState(): IInputMap {
+    return this.inputMap;
   }
+
+  // /**
+  //  * Handles user input. Runs once per game loop.
+  //  *
+  //  * @param actor The GameObject entity to handle input. Most likely will be the
+  //  * Player(s) currently in the game.
+  //  * @param delta The time difference between frames. Provided by the game's
+  //  * main game loop.
+  //  * @see FiendGame.main()
+  //  */
+  // public handleInput(actor: GameObject, delta: number): void {
+
+  //   if (this.inputMap[Button.UP].status === ButtonStatus.PRESSED) {
+  //     this.inputMap[Button.UP].command.execute(actor, delta);
+  //   }
+  //   if (this.inputMap[Button.DOWN].status === ButtonStatus.PRESSED) {
+  //     this.inputMap[Button.DOWN].command.execute(actor, delta);
+  //   }
+  //   if (this.inputMap[Button.LEFT].status === ButtonStatus.PRESSED) {
+  //     this.inputMap[Button.LEFT].command.execute(actor, delta);
+  //   }
+  //   if (this.inputMap[Button.RIGHT].status === ButtonStatus.PRESSED) {
+  //     this.inputMap[Button.RIGHT].command.execute(actor, delta);
+  //   }
+  //   if (this.inputMap[Button.E].status === ButtonStatus.PRESSED) {
+  //     this.inputMap[Button.E].command.execute(actor, delta);
+  //   }
+  //   if (this.inputMap[Button.Q].status === ButtonStatus.PRESSED) {
+  //     this.inputMap[Button.Q].command.execute(actor, delta);
+  //   }
+  //   if (this.inputMap[Button.BSPACE].status === ButtonStatus.PRESSED) {
+  //     this.inputMap[Button.BSPACE].command.execute(actor, delta);
+  //   }
+  //   if (this.inputMap[Button.ENTER].status === ButtonStatus.PRESSED) {
+  //     this.inputMap[Button.ENTER].command.execute(actor, delta);
+  //   }
+  //   if (this.inputMap[Button.SHIFT].status === ButtonStatus.PRESSED) {
+  //     this.inputMap[Button.SHIFT].command.execute(actor, delta);
+  //   }
+  // }
 
   /**
    * Initializes an input map so the structure is available when needed.
@@ -195,7 +199,6 @@ export class InputHandler implements IInputHandler {
       case 1:
         break;
       default:
-        // this.inputMap[Button.UP].command = new MoveNorthCommand(player: GameObject);
         this.inputMap[Button.UP].command = new MoveNorthCommand();
         this.inputMap[Button.DOWN].command = new MoveSouthCommand();
         this.inputMap[Button.LEFT].command = new MoveWestCommand();

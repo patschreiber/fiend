@@ -1,4 +1,5 @@
 import { Component } from './Component';
+import { IComponent } from './interfaces/IComponent';
 
 /**
  * The PositionComponent class.
@@ -6,22 +7,36 @@ import { Component } from './Component';
  * @implements IPositionComponentMembers
  * TODO:: Flesh this out
  */
-export class PositionComponent extends Component implements IPositionComponentMembers {
+export class PositionComponent extends Component implements IComponent, IPositionComponentMembers {
+
+  /**
+   The position of the related GameObject relative to it's parent's position.
+   */
+  public localPosition: Coordinate;
+
+  /**
+   * The position of the related GameObject relative to the world.
+   */
+  public worldPosition: Coordinate;
+
+  /**
+   * The x,y position of the related GameObject.
+   */
+  public gridLocation: Coordinate;
 
   /**
    * The Collider component.
    */
   private static readonly _typeId = "PositionComponent";
 
+  /**
+   * The PositionComponent's default values.
+   */
   private static defaults: IPositionComponentMembers = {
     localPosition: {x:0,y:0},
     worldPosition: {x:0,y:0},
     gridLocation: {x:0,y:0},
   }
-
-  public localPosition: Coordinate;
-  public worldPosition: Coordinate;
-  public gridLocation: Coordinate;
 
   /**
    * @constructor

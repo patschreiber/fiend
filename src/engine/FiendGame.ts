@@ -6,6 +6,8 @@ import { Renderer } from './Render/Renderer';
 
 import { GameObject } from './GameObject';
 import { Template } from './templates/Template';
+import { MovementSystem } from './Input/MovementSystem';
+import { BrainComponent } from './Component';
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -29,6 +31,15 @@ export class FiendGame {
   public SceneManager: SceneManager;
   public GameObjectManager: GameObjectManager;
   public ComponentManager: ComponentManager;
+
+  /**
+   * Systems
+   */
+
+  /**
+   * The movement system.
+   */
+  public MovementSystem: MovementSystem;
 
   /**
    * The instance of the Player's character.
@@ -95,6 +106,8 @@ export class FiendGame {
       this.ComponentManager
     );
 
+    this.MovementSystem = new MovementSystem(this.ComponentManager);
+
     this.Renderer = new Renderer(this.canvas);
 
     this.InputHandler = new InputHandler();
@@ -133,7 +146,7 @@ export class FiendGame {
    * TODO: Handle input should be InputComponent and be attached to GameActors.
    */
   private _handleInput(delta: number): void {
-    this.InputHandler.handleInput(this.Player, delta);
+    // this.InputHandler.handleInput(this.Player, delta);
   }
 
   /**
@@ -151,9 +164,23 @@ export class FiendGame {
    */
   private _update(delta: number): void {
 
-    // TODO Remove clog.
-    // console.log('delta :', delta);
-    this.SceneManager.update(delta);
+    // TODO: Remove clog.
+    console.log('delta :', delta);
+
+    for (let go of this.SceneManager.currentScene.activeGameObjects) {
+      this.MovementSystem.update(go, delta, this.InputHandler.getInputState());
+
+      // BEGIN TEST TODO:
+      if (GameObject.getMostRecentId() < 1999) {
+        console.log('GameObject.getMostRecentId() :', GameObject.getMostRecentId());
+      }
+
+
+      this.ComponentManager.removeComponent("PositionComponent", go.getId());
+      console.log('this.Com :', this.ComponentManager.getComponentContainer("PositionComponent"));
+      console.log('object :', this.ComponentManager.getComponentContainer("PositionComponent").length);
+      // END TEST TODO:
+    }
   }
 
   /**

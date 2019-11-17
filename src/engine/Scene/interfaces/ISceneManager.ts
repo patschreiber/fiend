@@ -15,5 +15,4 @@ export interface ISceneManager {
 
   loadScene<S extends BaseScene>(scene: new () => S): void;
   unloadScene(): void;
-  update(delta: number): void;
 }

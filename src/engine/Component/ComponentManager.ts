@@ -13,6 +13,7 @@ import { ComponentFactory } from './ComponentFactory/ComponentFactory';
 import { PositionComponent } from './PositionComponent';
 import { VelocityComponent } from './VelocityComponent';
 import { RenderComponent } from './../Component';
+import { IComponentManager } from './interfaces/IComponentManager';
 
 /**
  * The Component Pool type definition.
@@ -27,7 +28,7 @@ type Pool = {
  * The ComponentManager is responsible for orchestrating all currently-active
  * Components that belong to [[GameObject]] entities. There are a few
  */
- export class ComponentManager {
+ export class ComponentManager implements IComponentManager {
 
   /**
    * The data structure to house the active Components.
@@ -60,10 +61,6 @@ type Pool = {
     try {
 
       let comp = ComponentFactory.create(component, overrides);
-      console.log('comp :', comp.getTypeId());
-      console.log('goid :', goid);
-      console.log('this._activePools :', this._activePools[comp.getTypeId()]);
-      // console.log('this._activePools[comp.getTypeId()][goid] :', this._activePools[comp.getTypeId()][goid]);
       this._activePools[comp.getTypeId()][goid] = comp;
 
       return comp.getId();
@@ -76,7 +73,27 @@ type Pool = {
   }
 
   /**
-   * Gets a Component attached to this GameActor.
+   * Removes a Component from the GameActor's `ComponentContainer`, if it's
+   * attached.
+   *
+   * @param cid The lookup key for the Component to be removed from this
+   * GameActor. Usually this is the Component's `typeId` as a string.
+   *
+   * @return If the Component was successfully removed or not.
+   */
+   public removeComponent<K extends keyof ComponentTypes>(
+    component: K,
+    goid: GameObjectId
+  ): boolean {
+    let compDataStore = this.getComponentContainer(component);
+    compDataStore[goid] = null;
+    compDataStore.pop();
+
+    return true;
+  }
+
+  /**
+   * Gets a Component attached a GameObject.
    *
    * @see https://stackoverflow.com/questions/58573975
    *
@@ -88,11 +105,13 @@ type Pool = {
   public getComponent<K extends keyof ComponentTypes>(
     component: K,
     goid: GameObjectId
-    // componentTypeId: string
   ): ComponentTypes[K]|null {
 
     let attachedComponent = this.getComponentContainer(component)[goid];
-    if (attachedComponent === undefined) {
+    // `undefined` is a scourge, so we just return null if the object is null
+    // or undefined.
+    if (attachedComponent === undefined || attachedComponent === null) {
+      console.error("Attached component is undefined?");
       return null;
     } else {
       return attachedComponent;
@@ -100,21 +119,25 @@ type Pool = {
   }
 
   /**
-   * Removes a Component from the GameActor's `ComponentContainer`, if it's
-   * attached.
+   * Checks to see if a GameObject instance has an attached Component.
    *
-   * @param cid The lookup key for the Component to be removed from this
-   * GameActor. Usually this is the Component's `typeId` as a string.
+   * @param goid The GameObject to check against the active Components.
+   * @param componentType The Component to check against the entity's instance.
    *
-   * @return If the Component was successfully removed or not.
+   * @return If the GameObject instance has the component already, or false if
+   * it doesnt.
    */
-  public removeComponent<K extends keyof ComponentTypes>(
-    component: K,
+  public hasComponent<K extends keyof ComponentTypes>(
+    componentType: K,
     goid: GameObjectId
   ): boolean {
 
-    delete this.getComponentContainer(component)[goid];
-    return true;
+    let instance = this.getComponent(componentType, goid);
+
+    // If the Compomemt instance exists (is attached), we tell the caller that
+    // this is the case by returning `true`. If the caller requested the full
+    // component, we return it instead of `true`.
+    return instance === null ? false : true;
   }
 
   /**
@@ -124,17 +147,10 @@ type Pool = {
    *
    * @return The container for the Component type.
    */
-  public getComponentContainer<K extends keyof ComponentTypes>(component: K): Array<ComponentTypes[K]> {
+  public getComponentContainer<K extends keyof ComponentTypes>(
+    component: K
+  ): Array<ComponentTypes[K]> {
     return this._activePools[component];
-  }
-
-  /**
-   * Retrieves the active Component pool data structure.
-   *
-   * @return The active pool container.
-   */
-  public getActiveComponentPools(): object {
-    return this._activePools;
   }
 
   /**
