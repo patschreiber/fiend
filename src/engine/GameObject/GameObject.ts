@@ -3,6 +3,7 @@ import {
   GameObjectTemplate
 } from '../types/gameobjects';
 import { IGameObject } from './interfaces/IGameObject';
+import { F_object } from '../structs/F_object';
 
 /**
  * The GameObject abstract class. All game entities inherit from this class.
@@ -43,6 +44,7 @@ export class GameObject implements IGameObject {
    *
    */
   private constructor(template: GameObjectTemplate) {
+    super();
     this._id = GameObject._idIncrementor++;
   }
 
@@ -71,6 +73,15 @@ export class GameObject implements IGameObject {
    */
   public getTags(): Array<string> {
     return this._tags;
+  }
+
+  /**
+   * Retrieves the most recently created GameObject id.
+   *
+   * @return The GameObject id of the youngest GameObject.
+   */
+  public static getMostRecentId(): GameObjectId {
+    return GameObject._idIncrementor;
   }
 
 }

@@ -10,8 +10,10 @@ export interface IRenderComponentMembers extends IComponentMembers {}
  */
 export class RenderComponent extends Component implements IComponent, IRenderComponentMembers {
 
+  // public model: Model;
+
   /**
-   * The LifeforceComponents's component type id.
+   * The RenderComponent's component type id.
    */
   private static readonly _type: string = "RenderComponent";
 

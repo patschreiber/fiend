@@ -92,13 +92,21 @@ export class Renderer {
       let goid = gameObject.getId();
       let renComp = SM.ComponentManager
         .getComponent("RenderComponent", goid);
-      let posComp = SM.ComponentManager.getComponent("PositionComponent", goid)
+      let posComp = SM.ComponentManager
+        .getComponent("PositionComponent", goid);
 
-      if (renComp !== undefined && posComp !== undefined) {
+      // console.log('renComp :', renComp);
+      // console.log('posComp :', posComp);
+
+      if (
+        (renComp !== undefined || renComp !== null)
+        && (posComp !== undefined || posComp !== null)
+      ) {
         renComp.draw(this.ctx, posComp.localPosition);
       }
     }
   }
+
 
   /**
    * Renders a map according to the coordinates given in the map's file by

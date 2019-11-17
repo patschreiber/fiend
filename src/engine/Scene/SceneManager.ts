@@ -109,22 +109,22 @@ export class SceneManager implements ISceneManager {
    */
   public update(delta: number): void {
 
-    for (let go of this.currentScene.activeGameObjects) {
-      if (go === undefined) {
-        throw new Error(
-          `There was an undefined GameObject, they should be contiguous!`
-        );
-      }
+    // for (let go of this.currentScene.activeGameObjects) {
+    //   if (go === undefined) {
+    //     throw new Error(
+    //       `There was an undefined GameObject, they should be contiguous!`
+    //     );
+    //   }
 
-      let posC = this.ComponentManager
-        .getComponent("PositionComponent", go.getId());
+    //   let posC = this.ComponentManager
+    //     .getComponent("PositionComponent", go.getId());
 
-      if (go.getId() === 4) {
-        posC["localPosition"].x = posC["localPosition"].x + (10 * delta);
-      }
-    }
+    //   if (go.getId() === 4) {
+    //     posC["localPosition"].x = posC["localPosition"].x + (10 * delta);
+    //   }
+    // }
 
-    this.currentScene.update(delta);
+    // this.currentScene.update(delta);
   }
 
 }
