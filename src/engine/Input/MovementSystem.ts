@@ -48,31 +48,18 @@ export class MovementSystem {
    * @param go The GameObject entity to handle movement.
    * @param delta The time difference between frames. Provided by the game's
    * main game loop.
-   * @param ih The InputHandler's input state, if applicable
+   * @param inputState The InputHandler's input state, if applicable
    * @see FiendGame.main()
    */
-  public update(go: GameObject, delta: number, is?: IInputMap): void {
-    // console.log('is :', is);
+  public update(go: GameObject, delta: number, inputState?: IInputMap): void {
+    console.log('inputState :', inputState);
 
     if(this._getRequiredComponents(go)) {
-      // do work here...
+      // switch(inputState) {
+      //   case
+      // }
     }
-
-
   }
-
-  /**
-   * Moves the referenced GameObject by updating it's components.
-   *
-   * @param delta The time difference between frames. Provided by the game's
-   * main game loop.
-   */
-  // private _move(delta: number): void {
-  //   this.posComp;
-  //   this.velComp;
-
-  //   // speed * time
-  // }
 
   /**
    * Sets the references if the GameObject has them attached.
@@ -90,20 +77,17 @@ export class MovementSystem {
     //   let container = this._componentManager.getComponentContainer(C);
     //   console.log('container :', container);
 
-      if (this._componentManager.hasComponent("VelocityComponent", goid)) {
-        let comp = this._componentManager
-          .getComponent("VelocityComponent", goid);
-        fetchedComponents[comp.getTypeId()] = comp;
-      } else {
-        return {};
-      }
-    //   console.log('comp :', comp);
-    //   if (comp === null) {
-    //     return false;
-    //  dq
+    if (this._componentManager.hasComponent("VelocityComponent", goid)) {
+      let comp = this._componentManager
+        .getComponent("VelocityComponent", goid);
+      fetchedComponents[comp.getTypeId()] = comp;
+    }
 
-      // attachedComponents[comp.getTypeId()] = comp;
-    // }
+    if (this._componentManager.hasComponent("PositionComponent", goid)) {
+      let comp = this._componentManager
+        .getComponent("PositionComponent", goid);
+      fetchedComponents[comp.getTypeId()] = comp;
+    }
 
     return fetchedComponents;
   }

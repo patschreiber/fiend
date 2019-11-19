@@ -8,32 +8,7 @@ import { MoveEastCommand } from '../Command';
 import { MoveWestCommand } from '../Command';
 import { IInputMap } from './interfaces/IInputMap';
 import { IInputHandler } from './interfaces/IInputHandler';
-
-/**
- * The built-in control scheme types. Allows a user to change the control scheme
- * without remapping all the keys individually.
- */
-export enum ControlSchemes {
-  DEFAULT,
-  FPS,
-  ONEHANDED_RIGHT,
-  ONEHANDED_LEFT,
-}
-
-/**
- * Maps a button to a keyboard input key.
- */
-export enum Button {
-  UP = "ArrowUp",
-  DOWN = "ArrowDown",
-  LEFT = "ArrowLeft",
-  RIGHT = "ArrowRight",
-  E = "e",
-  Q = "q",
-  BSPACE = "Backspace",
-  ENTER = "Enter",
-  SHIFT = "Shift",
-}
+import { IControlSchemePlugin } from './control_scheme_plugins/IInputPlugin';
 
 /**
  * The ButtonStatus enum.
@@ -63,28 +38,29 @@ export class InputHandler implements IInputHandler {
    * buttons
    * @type The inputMap instance.
    */
-  private inputMap: IInputMap;
+  private _inputMap: IInputMap;
+
+  private _controlSchemePlugin: IControlSchemePlugin;
 
   /**
    * @constructor
    * The InputHandler constructor.
    * Attaches the keydown and keyup KeyboardEvent to the document.
    */
-  constructor() {
+  constructor(controlScheme: IControlSchemePlugin) {
 
-    document.getElementById('game-pane').addEventListener(
-      'keydown', (event) => this.buttonPressed(event), false
-    );
+    // document.getElementById('game-pane').addEventListener(
+    //   'keydown', (event) => this.buttonPressed(event), false
+    // );
 
-    document.getElementById('game-pane').addEventListener(
-      'keyup', (event) => this.buttonReleased(event), false
-    );
+    // document.getElementById('game-pane').addEventListener(
+    //   'keyup', (event) => this.buttonReleased(event), false
+    // );
 
-    this.inputMap = this.initInputMap();
+    this._inputMap = this._initInputMap(controlScheme.buttonList);
 
-    // TODO: This should read in user-defined input mappings, otheriwse load
-    // default settings. (if user has saved control scheme, else load default)
-    this.loadControlScheme(ControlSchemes.DEFAULT);
+    // The default button mapping is always loaded initially.
+    this.loadControlScheme(controlScheme.availableControlSchemes);
   }
 
   /**
@@ -106,7 +82,7 @@ export class InputHandler implements IInputHandler {
    */
   public buttonPressed(event: KeyboardEvent): void {
     event.preventDefault();
-
+    console.log("pressed");
     if (this.inputMap[event.key]) {
       this.inputMap[event.key].status = ButtonStatus.PRESSED;
     }
@@ -119,7 +95,7 @@ export class InputHandler implements IInputHandler {
    */
   public buttonReleased(event: KeyboardEvent): void {
     event.preventDefault();
-
+    console.log("released");
     if (this.inputMap[event.key]) {
       this.inputMap[event.key].status = ButtonStatus.RAISED;
     }
@@ -172,13 +148,15 @@ export class InputHandler implements IInputHandler {
   /**
    * Initializes an input map so the structure is available when needed.
    *
-   * @return {IInputMap} The IInputMap interface.
+   * @param buttonList The buttons provided by the control scheme plugin.
+   *
+   * @return The constructed Input map interface.
    */
-  private initInputMap(): IInputMap {
+  private _initInputMap(buttonList: ButtonList): IInputMap {
     let ip = {};
 
-    for(let buttonKey in Button) {
-      ip[Button[buttonKey]] = {
+    for(let button in buttonList) {
+      ip[button] = {
         command: NullCommand,
         status: ButtonStatus.RAISED
       }
@@ -199,16 +177,30 @@ export class InputHandler implements IInputHandler {
       case 1:
         break;
       default:
-        this.inputMap[Button.UP].command = new MoveNorthCommand();
-        this.inputMap[Button.DOWN].command = new MoveSouthCommand();
-        this.inputMap[Button.LEFT].command = new MoveWestCommand();
-        this.inputMap[Button.RIGHT].command = new MoveEastCommand();
-        this.inputMap[Button.E].command = new NullCommand();
-        this.inputMap[Button.Q].command = new NullCommand();
-        this.inputMap[Button.BSPACE].command = new NullCommand();
-        this.inputMap[Button.ENTER].command = new NullCommand();
-        this.inputMap[Button.SHIFT].command = new NullCommand();
+        // this.inputMap[Button.UP].command = new MoveNorthCommand();
+        // this.inputMap[Button.DOWN].command = new MoveSouthCommand();
+        // this.inputMap[Button.LEFT].command = new MoveWestCommand();
+        // this.inputMap[Button.RIGHT].command = new MoveEastCommand();
+        // this.inputMap[Button.E].command = new NullCommand();
+        // this.inputMap[Button.Q].command = new NullCommand();
+        // this.inputMap[Button.BSPACE].command = new NullCommand();
+        // this.inputMap[Button.ENTER].command = new NullCommand();
+        // this.inputMap[Button.SHIFT].command = new NullCommand();
+
+        // this.inputMap[Button.UP].command = "MoveN";
+        // this.inputMap[Button.DOWN].command = "MoveS";
+        // this.inputMap[Button.LEFT].command = "MoveE";
+        // this.inputMap[Button.RIGHT].command = new MoveEastCommand();
+        // this.inputMap[Button.E].command = "Use";
+        // this.inputMap[Button.Q].command = new NullCommand();
+        // this.inputMap[Button.BSPACE].command = new NullCommand();
+        // this.inputMap[Button.ENTER].command = new NullCommand();
+        // this.inputMap[Button.SHIFT].command = new NullCommand();
     }
+  }
+
+  public update(delta: number): void {
+
   }
 }
 

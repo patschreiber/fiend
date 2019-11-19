@@ -170,16 +170,16 @@ export class FiendGame {
     for (let go of this.SceneManager.currentScene.activeGameObjects) {
       this.MovementSystem.update(go, delta, this.InputHandler.getInputState());
 
-      // BEGIN TEST TODO:
-      if (GameObject.getMostRecentId() < 1999) {
-        console.log('GameObject.getMostRecentId() :', GameObject.getMostRecentId());
-      }
+      // // BEGIN TEST TODO:
+      // if (GameObject.getMostRecentId() < 1999) {
+      //   console.log('GameObject.getMostRecentId() :', GameObject.getMostRecentId());
+      // }
 
 
-      this.ComponentManager.removeComponent("PositionComponent", go.getId());
-      console.log('this.Com :', this.ComponentManager.getComponentContainer("PositionComponent"));
-      console.log('object :', this.ComponentManager.getComponentContainer("PositionComponent").length);
-      // END TEST TODO:
+      // this.ComponentManager.removeComponent("PositionComponent", go.getId());
+      // console.log('this.Com :', this.ComponentManager.getComponentContainer("PositionComponent"));
+      // console.log('object :', this.ComponentManager.getComponentContainer("PositionComponent").length);
+      // // END TEST TODO:
     }
   }
 
