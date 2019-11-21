@@ -150,26 +150,6 @@ export class KeyboardPlugin implements IInputOutputPlugin {
     }
   }
 
-  // /**
-  //  * Initializes an input map so the structure is available when needed.
-  //  *
-  //  * @param buttonList The buttons provided by the control scheme plugin.
-  //  *
-  //  * @return The constructed Input map interface.
-  //  */
-  //  private _initInputMap(buttonList: ButtonList): IInputMap {
-  //   let ip: IInputMap = {};
-
-  //   for(let i in this.buttonList) {
-  //     ip[this.buttonList[i]] = {
-  //       command: Actions.NullCommand,
-  //       status: ButtonStatus.RAISED
-  //     }
-  //   }
-
-  //   return ip;
-  // }
-
 }
 
 // var key = {

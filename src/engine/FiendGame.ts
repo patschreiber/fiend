@@ -99,6 +99,8 @@ export class FiendGame {
 
     this.lastFrameTime = 0;
 
+    this.Renderer = new Renderer(this.canvas);
+    this.InputHandler = new InputHandler(new KeyboardPlugin());
     this.GameObjectManager = new GameObjectManager();
     this.ComponentManager = new ComponentManager();
     this.SceneManager = new SceneManager(
@@ -110,10 +112,6 @@ export class FiendGame {
       this.ComponentManager,
       this.InputHandler
     );
-
-    this.Renderer = new Renderer(this.canvas);
-
-    this.InputHandler = new InputHandler(new KeyboardPlugin());
 
     // TODO: Try and remove the player from this class. They should exist as an
     // entity in a scene, same as everything else. Pain points: InputHandler.
