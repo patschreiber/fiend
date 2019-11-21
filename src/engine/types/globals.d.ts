@@ -1,3 +1,4 @@
+
 /**
  * Removes the `readonly` attribute from a member.
  */
@@ -40,7 +41,3 @@ type Coordinate = {
 type EventContainer = {
   [eventName: string]: Event|CustomEvent;
 };
-
-type ButtonList = {
-  [key: string]: string;
-}

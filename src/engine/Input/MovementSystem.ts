@@ -1,8 +1,8 @@
-import { VelocityComponent, PositionComponent, Component } from '../Component';
+import { VelocityComponent, PositionComponent } from '../Component';
 import { GameObject } from '../GameObject';
-import { IInputMap } from './interfaces/IInputMap';
-import { IComponentManager } from '../Component/interfaces/IComponentManager';
 import { ComponentManager } from '../Component/ComponentManager';
+import { InputHandler } from './InputHandler';
+import { ButtonStatus, Button } from './control_scheme_plugins/enums';
 
 /**
  * The MovementSystem system class.
@@ -19,6 +19,8 @@ export class MovementSystem {
     VelocityComponent,
     PositionComponent
   ];
+
+  public Input: InputHandler;
 
   private _componentManager: ComponentManager;
 
@@ -38,8 +40,9 @@ export class MovementSystem {
    *
    * @param cm Dependency injection for a ComponentManager.
    */
-  public constructor(cm: ComponentManager) {
+  public constructor(cm: ComponentManager, ih: InputHandler) {
     this._componentManager = cm;
+    this.Input = ih;
   }
 
   /**
@@ -51,8 +54,12 @@ export class MovementSystem {
    * @param inputState The InputHandler's input state, if applicable
    * @see FiendGame.main()
    */
-  public update(go: GameObject, delta: number, inputState?: IInputMap): void {
-    console.log('inputState :', inputState);
+  public update(go: GameObject, delta: number): void {
+    let key = this.Input.getButtonState(Button.DOWN);
+
+    if (key.status === ButtonStatus.PRESSED) {
+      console.log("PRe$$ed");
+    }
 
     if(this._getRequiredComponents(go)) {
       // switch(inputState) {

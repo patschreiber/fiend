@@ -1,5 +1,4 @@
-import { Command } from '../../Command';
-import { ButtonStatus } from '../InputHandler';
+import { ButtonState } from '../InputHandler';
 
 /**
  * The IInputMap interface.
@@ -10,8 +9,5 @@ import { ButtonStatus } from '../InputHandler';
  * [status]: The button's current status
  */
 export interface IInputMap {
-  [key: string]: {
-    command: Command,
-    status: ButtonStatus
-  }
+  [key: string]: ButtonState
 }
