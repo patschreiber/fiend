@@ -1,27 +1,28 @@
-import { IInputMap } from './interfaces/IInputMap';
 import { IInputHandler } from './interfaces/IInputHandler';
-import { IInputOutputPlugin } from './interfaces/IInputOutputPlugin';
-import { Actions, ButtonStatus, Button } from './control_scheme_plugins/enums';
-
-export type ButtonState = {
-  command: Actions
-  status: ButtonStatus
-}
+import { IInputOutputDevicePlugin } from './interfaces/IInputOutputDevicePlugin';
+import {
+  Button,
+  Action
+} from '../structs/enums/input_enums';
+import {
+  ButtonState,
+  InputState
+} from '../types/inputs';
 
 /**
  * The InputHandler class.
  */
 export class InputHandler implements IInputHandler {
 
-  public IO: IInputOutputPlugin;
+  public controller: IInputOutputDevicePlugin;
 
   /**
    * @constructor
    * The InputHandler constructor.
    * Attaches the keydown and keyup KeyboardEvent to the document.
    */
-  constructor(ioPlugin: IInputOutputPlugin) {
-    this.IO = ioPlugin;
+  constructor(ioPlugin: IInputOutputDevicePlugin) {
+    this.controller = ioPlugin;
   }
 
   /**
@@ -31,15 +32,25 @@ export class InputHandler implements IInputHandler {
    *
    * @return The current state of the input.
    */
-  public getInputState(): IInputMap {
-    return this.IO.getInputState();
+  public getInputState(): InputState {
+    return this.controller.getInputState();
   }
 
-  public getButtonState(button: Button): ButtonState {
-    return this.IO.getInputState()[button];
+  public getButtonState(needle: Button|Action): ButtonState {
+    switch (needle) {
+      case (needle as Button):
+        // Since the needle is a Button already, we can just go get the input
+        // state directly.
+        return this.controller.getInputState()[needle];
+      case (needle as Action):
+        let action = (needle as Action);
+        // We get a handle on the Button assigned to the Action.
+        let button = this.controller.getInputSignalMap()[action];
+        // Then we grab the input state using our new Button.
+        return this.controller.getInputState()[button];
+      default:
+        return;
+    }
   }
 
-  public update(delta: number): void {
-
-  }
 }

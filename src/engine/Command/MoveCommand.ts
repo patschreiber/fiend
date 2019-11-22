@@ -1,10 +1,11 @@
 import { Command } from './Command';
 import { GameObject } from '../GameObject';
+import { ICommand } from './interfaces/ICommand';
 
 /**
  * The WalkCommand class.
  */
-export class MoveEastCommand extends Command {
+export class MoveEastCommand extends Command implements ICommand {
 
   public static directions: Array<any>;
 

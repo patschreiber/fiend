@@ -166,7 +166,7 @@ export class FiendGame {
   private _update(delta: number): void {
 
     // TODO: Remove clog.
-    console.log('delta :', delta);
+    // console.log('delta :', delta);
 
     for (let go of this.SceneManager.currentScene.activeGameObjects) {
       this.MovementSystem.update(go, delta);

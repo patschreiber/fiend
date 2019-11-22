@@ -97,8 +97,8 @@ type Pool = {
    *
    * @see https://stackoverflow.com/questions/58573975
    *
-   * @param goid The GameObject id.
    * @param component The Component to use as a look up.
+   * @param goid The GameObject id.
    *
    * @return The desired attached Component, or null if it's not attached.
    */
@@ -121,8 +121,8 @@ type Pool = {
   /**
    * Checks to see if a GameObject instance has an attached Component.
    *
-   * @param goid The GameObject to check against the active Components.
    * @param componentType The Component to check against the entity's instance.
+   * @param goid The GameObject to check against the active Components.
    *
    * @return If the GameObject instance has the component already, or false if
    * it doesnt.

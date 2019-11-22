@@ -2,7 +2,7 @@ import { VelocityComponent, PositionComponent } from '../Component';
 import { GameObject } from '../GameObject';
 import { ComponentManager } from '../Component/ComponentManager';
 import { InputHandler } from './InputHandler';
-import { ButtonStatus, Button } from './control_scheme_plugins/enums';
+import { Action, ButtonStatus } from '../structs/enums/input_enums';
 
 /**
  * The MovementSystem system class.
@@ -20,7 +20,16 @@ export class MovementSystem {
     PositionComponent
   ];
 
-  public Input: InputHandler;
+  // private readonly movementDirections: MovementDirections = [
+  //   {x:0,y:1},    // North
+  //   {x:0,y:-1},   // South
+  //   {x:1,y:0},    // East
+  //   {x:-1,y:0},   // West
+  // ];
+
+  // TODO: https://github.com/patschreiber/fiend/issues/47 Create different
+  // control components for each type of movable entity
+  public InputHandler: InputHandler;
 
   private _componentManager: ComponentManager;
 
@@ -42,11 +51,11 @@ export class MovementSystem {
    */
   public constructor(cm: ComponentManager, ih: InputHandler) {
     this._componentManager = cm;
-    this.Input = ih;
+    this.InputHandler = ih;
   }
 
   /**
-   * Handles user input and movement of players. Runs once per game loop.
+   * Handles user input and movement of GameObjects. Runs once per game loop.
    *
    * @param go The GameObject entity to handle movement.
    * @param delta The time difference between frames. Provided by the game's
@@ -55,48 +64,50 @@ export class MovementSystem {
    * @see FiendGame.main()
    */
   public update(go: GameObject, delta: number): void {
-    let key = this.Input.getButtonState(Button.DOWN);
-
-    if (key.status === ButtonStatus.PRESSED) {
-      console.log("PRe$$ed");
+    // Don't move an entity without the required components.
+    if(this._setRequiredComponents(go) === false) {
+      return;
     }
 
-    if(this._getRequiredComponents(go)) {
-      // switch(inputState) {
-      //   case
-      // }
+    // this.InputHandler.getButtonState()
+
+
+
+    let directions = [
+      this.InputHandler.getButtonState(Action.MoveS),
+      this.InputHandler.getButtonState(Action.MoveN),
+      this.InputHandler.getButtonState(Action.MoveE),
+      this.InputHandler.getButtonState(Action.MoveW),
+    ];
+
+    for (let direction of directions) {
+      if (direction.status === ButtonStatus.PRESSED) {
+        console.log('this.InputHandler.getInputState() :', this.InputHandler.getInputState());
+        console.log("PRe$$ed: ", delta);
+        console.log('direction.status :', direction.command);
+      }
     }
   }
 
   /**
    * Sets the references if the GameObject has them attached.
    *
-   * @param go The GameObject in which to retrieve the components.
+   * @param go The GameObject whos Components we retrieve the components.
    *
-   * @return The required Components, if they're attached, if they're not, we
-   * return an empty object.
+   * @return If the Components were attached or not.
    */
-  private _getRequiredComponents(go: GameObject): object {
+  private _setRequiredComponents(go: GameObject): boolean {
     let goid = go.getId();
-    let fetchedComponents = {};
+    this.posComp = this._componentManager
+      .getComponent("PositionComponent", goid);
+    this.velComp = this._componentManager
+      .getComponent("VelocityComponent", goid);
 
-    // for (let C of MovementSystem.requiredComponents) {
-    //   let container = this._componentManager.getComponentContainer(C);
-    //   console.log('container :', container);
-
-    if (this._componentManager.hasComponent("VelocityComponent", goid)) {
-      let comp = this._componentManager
-        .getComponent("VelocityComponent", goid);
-      fetchedComponents[comp.getTypeId()] = comp;
+    if (this.posComp === null || this.velComp === null) {
+      return false;
+    } else {
+      return true;
     }
-
-    if (this._componentManager.hasComponent("PositionComponent", goid)) {
-      let comp = this._componentManager
-        .getComponent("PositionComponent", goid);
-      fetchedComponents[comp.getTypeId()] = comp;
-    }
-
-    return fetchedComponents;
   }
 
 }

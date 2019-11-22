@@ -1,136 +1,158 @@
-import { IInputOutputPlugin } from '../interfaces/IInputOutputPlugin';
-import { InputEvent } from '../../types/events';
-import { IInputMap } from '../interfaces/IInputMap';
+import { IInputOutputDevicePlugin } from '../interfaces/IInputOutputDevicePlugin';
 import {
-  Actions,
+  Action,
   DefaultControlSchemes,
   ButtonStatus,
   Button
-} from './enums';
+} from '../../structs/enums/input_enums';
+import { InputSignalMap, InputState } from '../../types/inputs';
 
 /**
  * The KeyboardInputMap class.
  *
  */
-export class KeyboardPlugin implements IInputOutputPlugin {
+export class KeyboardPlugin implements IInputOutputDevicePlugin {
+
+  /**
+   * Maps an input from an I/O device to an internal Button used by the engine.
+   * This is necessary for when the engine needs to know when to change the
+   * state of an internal button, and must lookup the input that came through to
+   * do it.
+   *
+   * @internal This will be I/O device dependent.
+   */
+  private _inputSignalMap: InputSignalMap = {
+    "ArrowUp": Button.B1,
+    "ArrowDown": Button.B2,
+    "ArrowLeft": Button.B3,
+    "ArrowRight": Button.B4,
+    "e": Button.B5,
+    "q": Button.B6,
+    "Backspace": Button.B7,
+    "Enter": Button.B8,
+    "Shift": Button.B9
+  }
 
   /**
    * TODO: Structure should add ["context"] so we can have context-independent
    * buttons
    * @type The inputMap instance.
    */
-  private _inputMap: IInputMap = {
-    "ArrowUp": {
-      command: Actions.NullCommand,
+  private _currentControllerMap: InputState = [
+    // Button.B_1
+    {
+      command: Action.NullCommand,
       status: ButtonStatus.RAISED
     },
-    "ArrowDown": {
-      command: Actions.NullCommand,
+    // Button.B_2
+    {
+      command: Action.NullCommand,
       status: ButtonStatus.RAISED
     },
-    "ArrowLeft": {
-      command: Actions.NullCommand,
+    // Button.B_3
+    {
+      command: Action.NullCommand,
       status: ButtonStatus.RAISED
     },
-    "ArrowRight": {
-      command: Actions.NullCommand,
+    // Button.B_4
+    {
+      command: Action.NullCommand,
       status: ButtonStatus.RAISED
     },
-    "e": {
-      command: Actions.NullCommand,
+    // Button.B_5
+    {
+      command: Action.NullCommand,
       status: ButtonStatus.RAISED
     },
-    "q": {
-      command: Actions.NullCommand,
+    // Button.B_6
+    {
+      command: Action.NullCommand,
       status: ButtonStatus.RAISED
     },
-    "Backspace": {
-      command: Actions.NullCommand,
+    // Button.B_7
+    {
+      command: Action.NullCommand,
       status: ButtonStatus.RAISED
     },
-    "Enter": {
-      command: Actions.NullCommand,
+    // Button.B_8
+    {
+      command: Action.NullCommand,
       status: ButtonStatus.RAISED
     },
-    "Shift": {
-      command: Actions.NullCommand,
+    // Button.B_9
+    {
+      command: Action.NullCommand,
       status: ButtonStatus.RAISED
     },
-  };
-
-  // public readonly buttonList: ButtonList = {
-  //   UP: "ArrowUp",
-  //   DOWN: "ArrowDown",
-  //   LEFT: "ArrowLeft",
-  //   RIGHT: "ArrowRight",
-  //   E: "e",
-  //   Q: "q",
-  //   BSPACE:"Backspace",
-  //   ENTER: "Enter",
-  //   SHIFT: "Shift",
-  // }
+  ];
 
   /**
    * @constructor
    * The InputHandler constructor.
    * Attaches the keydown and keyup KeyboardEvent to the document.
    *
-   * @param controlScheme optional The control scheme to load. If none is give, the
-   * default will be used.
+   * @param controlScheme optional The control scheme to load. If none is give,
+   * the default will be used.
    */
   constructor(controlScheme?: DefaultControlSchemes) {
     // this._inputMap = this._initInputMap(this.buttonList);
-    this.loadControlScheme();
+    this._loadControlScheme(controlScheme);
 
     document.getElementById('game-pane').addEventListener(
-      'keydown', (event) => this.buttonPressed(event), false
+      'keydown', (event) => this.handleInputEvent(
+        event,
+        ButtonStatus.PRESSED
+      ),
+      false
     );
 
     document.getElementById('game-pane').addEventListener(
-      'keyup', (event) => this.buttonReleased(event), false
+      'keyup', (event) => this.handleInputEvent(
+        event,
+        ButtonStatus.RAISED
+      ),
+      false
     );
-  }
-
-
-  public getInputState(): IInputMap {
-    return this._inputMap;
   }
 
   /**
-   * Determins if a button was pressed. Callback for when a button is pressed by
-   * the user.
+   * Callback for when an input event fires.
    *
-   * @param event The user interaction with a keyboard.
+   * @param event The event representing the user interaction with a keyboard.
+   * @param buttonStatus The status the button should be sent to when the event
+   * fires.
    */
-   public buttonPressed(event: InputEvent, ): void {
+   public handleInputEvent(event: KeyboardEvent, buttonStatus: ButtonStatus): void {
     event.preventDefault();
-    console.log("pressed");
-    if (this._inputMap[event.key]) {
-      this._inputMap[event.key].status = ButtonStatus.PRESSED;
+
+    let button = this._inputSignalMap[event.key];
+
+    if (this._currentControllerMap[button]) {
+      this._currentControllerMap[button].status = buttonStatus;
     }
   }
 
   /**
-   * Callback for when a button is released by the user.
+   * Gets the current state of the Buttons at the time of invocation.
    *
-   * @param event The user interaction with a keyboard.
+   * @return The current state of the controller.
    */
-   public buttonReleased( event: KeyboardEvent): void {
-    event.preventDefault();
-    console.log("released");
-    if (this._inputMap[event.key]) {
-      this._inputMap[event.key].status = ButtonStatus.RAISED;
-    }
+  public getInputState(): InputState {
+    return this._currentControllerMap;
+  }
+
+  public getInputSignalMap(): InputSignalMap {
+    return this._inputSignalMap;
   }
 
   /**
-   * Loads a control scheme when the game first initializes, so the player can
-   * have some input. Supports multiple control schemes so players can re-map
-   * controls without having to re-map each button individually.
+   * Maps Action to the current in-use input controller. Supports multiple
+   * control schemes so players can choose sensible default controls without
+   * having to re-map each button individually.
    *
    * @param controlScheme optional The control scheme to attach.
    */
-  public loadControlScheme(
+  public _loadControlScheme(
     controlScheme?: DefaultControlSchemes
   ): void {
 
@@ -138,37 +160,16 @@ export class KeyboardPlugin implements IInputOutputPlugin {
       case 1:
         break;
       default:
-        this._inputMap[Button.UP].command = Actions.MoveN;
-        this._inputMap[Button.DOWN].command = Actions.MoveS;
-        this._inputMap[Button.LEFT].command = Actions.MoveE;
-        this._inputMap[Button.RIGHT].command = Actions.MoveW;
-        this._inputMap[Button.E].command = Actions.Use;
-        this._inputMap[Button.Q].command = Actions.NullCommand;
-        this._inputMap[Button.BSPACE].command = Actions.NullCommand;
-        this._inputMap[Button.ENTER].command = Actions.NullCommand;
-        this._inputMap[Button.SHIFT].command = Actions.NullCommand;
+        this._currentControllerMap[Button.B1].command = Action.MoveN;
+        this._currentControllerMap[Button.B2].command = Action.MoveS;
+        this._currentControllerMap[Button.B3].command = Action.MoveE;
+        this._currentControllerMap[Button.B4].command = Action.MoveW;
+        this._currentControllerMap[Button.B5].command = Action.Use;
+        this._currentControllerMap[Button.B6].command = Action.NullCommand;
+        this._currentControllerMap[Button.B7].command = Action.NullCommand;
+        this._currentControllerMap[Button.B8].command = Action.NullCommand;
+        this._currentControllerMap[Button.B9].command = Action.NullCommand;
     }
   }
 
 }
-
-// var key = {
-//   BACKSPACE: 8,
-//   TAB:       9,
-//   RETURN:   13,
-//   ESC:      27,
-//   SPACE:    32,
-//   PAGEUP:   33,
-//   PAGEDOWN: 34,
-//   END:      35,
-//   HOME:     36,
-//   LEFT:     37,
-//   UP:       38,
-//   RIGHT:    39,
-//   DOWN:     40,
-//   INSERT:   45,
-//   DELETE:   46,
-//   ZERO:     48, ONE: 49, TWO: 50, THREE: 51, FOUR: 52, FIVE: 53, SIX: 54, SEVEN: 55, EIGHT: 56, NINE: 57,
-//   A:        65, B: 66, C: 67, D: 68, E: 69, F: 70, G: 71, H: 72, I: 73, J: 74, K: 75, L: 76, M: 77, N: 78, O: 79, P: 80, Q: 81, R: 82, S: 83, T: 84, U: 85, V: 86, W: 87, X: 88, Y: 89, Z: 90,
-//   TILDA:    192
-// };
