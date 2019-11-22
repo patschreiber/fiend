@@ -10,22 +10,20 @@ import { Action, ButtonStatus } from '../structs/enums/input_enums';
 export class MovementSystem {
 
   /**
-   * A list of required Components for this system.`
-   * @internal
-   * Intentionally left as `any` since its static and making an array of
-   * disparate types is a PITA.
+   * Applies a force to the player. The cardinality is reversed since we're
+   * using a programmatically created grid for the game world. `[0,0]` will be
+   * in the top-left corner. Put another way, we're only operating in quadrant
+   * IV of a grid.
    */
-  public static requiredComponents: Array<any> = [
-    VelocityComponent,
-    PositionComponent
+  private _forces: Array<Coordinate> = [
+    // North (Action.MoveN === 0)
+    // Y is -1 to move north since we're using a grid constructed from Arrays.
+    // This means
+    {x:0,y:-1},    // North (Action.MoveN === 0)
+    {x:0,y:1},   // South (Action.MoveN === 1)
+    {x:-1,y:0},    // East  (Action.MoveN === 2)
+    {x:1,y:0},   // West  (Action.MoveN === 0)
   ];
-
-  // private readonly movementDirections: MovementDirections = [
-  //   {x:0,y:1},    // North
-  //   {x:0,y:-1},   // South
-  //   {x:1,y:0},    // East
-  //   {x:-1,y:0},   // West
-  // ];
 
   // TODO: https://github.com/patschreiber/fiend/issues/47 Create different
   // control components for each type of movable entity
@@ -69,10 +67,6 @@ export class MovementSystem {
       return;
     }
 
-    // this.InputHandler.getButtonState()
-
-
-
     let directions = [
       this.InputHandler.getButtonState(Action.MoveS),
       this.InputHandler.getButtonState(Action.MoveN),
@@ -82,6 +76,14 @@ export class MovementSystem {
 
     for (let direction of directions) {
       if (direction.status === ButtonStatus.PRESSED) {
+        // direction.command.execute(go, delta);
+
+        let force = this._forces[direction.command];
+
+        this.posComp.worldPosition.x = this.posComp.worldPosition.x += (force.x * 10) * delta;
+        this.posComp.worldPosition.y = this.posComp.worldPosition.y += (force.y * 10) * delta;
+
+
         console.log('this.InputHandler.getInputState() :', this.InputHandler.getInputState());
         console.log("PRe$$ed: ", delta);
         console.log('direction.status :', direction.command);

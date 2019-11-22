@@ -19,7 +19,7 @@ export enum Action {
   MoveE = 2,
   MoveW = 3,
   Use = 4,
-  TODO: Finish
+  // TODO: Finish
 }
 
 /**

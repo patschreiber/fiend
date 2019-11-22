@@ -36,7 +36,17 @@ export class InputHandler implements IInputHandler {
     return this.controller.getInputState();
   }
 
-  public getButtonState(needle: Button|Action): ButtonState {
+  /**
+   * Helps retrieve a specific Button's state. Can be searched for using eith
+   * the engine's internal Button id, or the Action currently mapped to the
+   * button.
+   *
+   * @param needle The type of the needle. Dictates what strategy to use to get
+   * a handle on a Button's state.
+   *
+   * @retrun The state of the button or null if no button was found.
+   */
+  public getButtonState(needle: Button|Action): ButtonState|null {
     switch (needle) {
       case (needle as Button):
         // Since the needle is a Button already, we can just go get the input
@@ -49,7 +59,7 @@ export class InputHandler implements IInputHandler {
         // Then we grab the input state using our new Button.
         return this.controller.getInputState()[button];
       default:
-        return;
+        return null;
     }
   }
 

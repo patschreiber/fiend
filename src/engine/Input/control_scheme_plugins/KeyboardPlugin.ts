@@ -6,6 +6,7 @@ import {
   Button
 } from '../../structs/enums/input_enums';
 import { InputSignalMap, InputState } from '../../types/inputs';
+// import { MoveNorthCommand, MoveSouthCommand, MoveEastCommand, MoveWestCommand, NullCommand } from '../../Command';
 
 /**
  * The KeyboardInputMap class.
@@ -96,7 +97,7 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
    */
   constructor(controlScheme?: DefaultControlSchemes) {
     // this._inputMap = this._initInputMap(this.buttonList);
-    this._loadControlScheme(controlScheme);
+    this.loadControlScheme(controlScheme);
 
     document.getElementById('game-pane').addEventListener(
       'keydown', (event) => this.handleInputEvent(
@@ -141,6 +142,19 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
     return this._currentControllerMap;
   }
 
+  /**
+   * Retrieves the mapping of input signal from the active I/O device to an
+   * internal [[Button]].
+   *
+   * @return THe mapping of input signal.
+   */
+
+  /**
+   * Accessor for the private member `id`.
+   *
+   * @returns the mapping of input signal from the active I/O device to an
+   * internal [[Button]].
+   */
   public getInputSignalMap(): InputSignalMap {
     return this._inputSignalMap;
   }
@@ -152,7 +166,7 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
    *
    * @param controlScheme optional The control scheme to attach.
    */
-  public _loadControlScheme(
+  public loadControlScheme(
     controlScheme?: DefaultControlSchemes
   ): void {
 
