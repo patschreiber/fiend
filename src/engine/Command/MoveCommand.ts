@@ -1,11 +1,13 @@
-import { Command } from "./Command";
-import { GameObject } from "../GameObject";
+import { Command } from './Command';
+import { GameObject } from '../GameObject';
 import { ICommand } from './interfaces/ICommand';
 
 /**
- * The MoveNorthCommand class.
+ * The WalkCommand class.
  */
-export class MoveNorthCommand extends Command implements ICommand {
+export class MoveEastCommand extends Command implements ICommand {
+
+  public static directions: Array<any>;
 
   /**
    * Executes the command.
@@ -15,6 +17,6 @@ export class MoveNorthCommand extends Command implements ICommand {
    */
   public execute(actor: GameObject, delta: number): void {
     // TODO: get movement comp
-    // actor.moveN(delta);
+    //actor.moveE(delta);
   }
 }

@@ -1,8 +1,8 @@
-import { VelocityComponent, PositionComponent, Component } from '../Component';
+import { VelocityComponent, PositionComponent } from '../Component';
 import { GameObject } from '../GameObject';
-import { IInputMap } from './interfaces/IInputMap';
-import { IComponentManager } from '../Component/interfaces/IComponentManager';
 import { ComponentManager } from '../Component/ComponentManager';
+import { InputHandler } from './InputHandler';
+import { Action, ButtonStatus } from '../structs/enums/input_enums';
 
 /**
  * The MovementSystem system class.
@@ -10,15 +10,24 @@ import { ComponentManager } from '../Component/ComponentManager';
 export class MovementSystem {
 
   /**
-   * A list of required Components for this system.`
-   * @internal
-   * Intentionally left as `any` since its static and making an array of
-   * disparate types is a PITA.
+   * Applies a force to the player. The cardinality is reversed since we're
+   * using a programmatically created grid for the game world. `[0,0]` will be
+   * in the top-left corner. Put another way, we're only operating in quadrant
+   * IV of a grid.
    */
-  public static requiredComponents: Array<any> = [
-    VelocityComponent,
-    PositionComponent
+  private _forces: Array<Coordinate> = [
+    // North (Action.MoveN === 0)
+    // Y is -1 to move north since we're using a grid constructed from Arrays.
+    // This means
+    {x:0,y:-1},    // North (Action.MoveN === 0)
+    {x:0,y:1},   // South (Action.MoveN === 1)
+    {x:-1,y:0},    // East  (Action.MoveN === 2)
+    {x:1,y:0},   // West  (Action.MoveN === 0)
   ];
+
+  // TODO: https://github.com/patschreiber/fiend/issues/47 Create different
+  // control components for each type of movable entity
+  public InputHandler: InputHandler;
 
   private _componentManager: ComponentManager;
 
@@ -38,74 +47,69 @@ export class MovementSystem {
    *
    * @param cm Dependency injection for a ComponentManager.
    */
-  public constructor(cm: ComponentManager) {
+  public constructor(cm: ComponentManager, ih: InputHandler) {
     this._componentManager = cm;
+    this.InputHandler = ih;
   }
 
   /**
-   * Handles user input and movement of players. Runs once per game loop.
+   * Handles user input and movement of GameObjects. Runs once per game loop.
    *
    * @param go The GameObject entity to handle movement.
    * @param delta The time difference between frames. Provided by the game's
    * main game loop.
-   * @param ih The InputHandler's input state, if applicable
+   * @param inputState The InputHandler's input state, if applicable
    * @see FiendGame.main()
    */
-  public update(go: GameObject, delta: number, is?: IInputMap): void {
-    // console.log('is :', is);
-
-    if(this._getRequiredComponents(go)) {
-      // do work here...
+  public update(go: GameObject, delta: number): void {
+    // Don't move an entity without the required components.
+    if(this._setRequiredComponents(go) === false) {
+      return;
     }
 
+    let directions = [
+      this.InputHandler.getButtonState(Action.MoveS),
+      this.InputHandler.getButtonState(Action.MoveN),
+      this.InputHandler.getButtonState(Action.MoveE),
+      this.InputHandler.getButtonState(Action.MoveW),
+    ];
 
+    for (let direction of directions) {
+      if (direction.status === ButtonStatus.PRESSED) {
+        // direction.command.execute(go, delta);
+
+        let force = this._forces[direction.command];
+
+        this.posComp.worldPosition.x = this.posComp.worldPosition.x += (force.x * 10) * delta;
+        this.posComp.worldPosition.y = this.posComp.worldPosition.y += (force.y * 10) * delta;
+
+
+        console.log('this.InputHandler.getInputState() :', this.InputHandler.getInputState());
+        console.log("PRe$$ed: ", delta);
+        console.log('direction.status :', direction.command);
+      }
+    }
   }
-
-  /**
-   * Moves the referenced GameObject by updating it's components.
-   *
-   * @param delta The time difference between frames. Provided by the game's
-   * main game loop.
-   */
-  // private _move(delta: number): void {
-  //   this.posComp;
-  //   this.velComp;
-
-  //   // speed * time
-  // }
 
   /**
    * Sets the references if the GameObject has them attached.
    *
-   * @param go The GameObject in which to retrieve the components.
+   * @param go The GameObject whos Components we retrieve the components.
    *
-   * @return The required Components, if they're attached, if they're not, we
-   * return an empty object.
+   * @return If the Components were attached or not.
    */
-  private _getRequiredComponents(go: GameObject): object {
+  private _setRequiredComponents(go: GameObject): boolean {
     let goid = go.getId();
-    let fetchedComponents = {};
+    this.posComp = this._componentManager
+      .getComponent("PositionComponent", goid);
+    this.velComp = this._componentManager
+      .getComponent("VelocityComponent", goid);
 
-    // for (let C of MovementSystem.requiredComponents) {
-    //   let container = this._componentManager.getComponentContainer(C);
-    //   console.log('container :', container);
-
-      if (this._componentManager.hasComponent("VelocityComponent", goid)) {
-        let comp = this._componentManager
-          .getComponent("VelocityComponent", goid);
-        fetchedComponents[comp.getTypeId()] = comp;
-      } else {
-        return {};
-      }
-    //   console.log('comp :', comp);
-    //   if (comp === null) {
-    //     return false;
-    //  dq
-
-      // attachedComponents[comp.getTypeId()] = comp;
-    // }
-
-    return fetchedComponents;
+    if (this.posComp === null || this.velComp === null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
 }

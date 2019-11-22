@@ -99,7 +99,7 @@ export class Renderer {
         (renComp !== undefined && renComp !== null)
         && (posComp !== undefined && posComp !== null)
       ) {
-        renComp.draw(this.ctx, posComp.localPosition);
+        renComp.draw(this.ctx, posComp.worldPosition);
       }
     }
   }
