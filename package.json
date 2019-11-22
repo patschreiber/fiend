@@ -1,6 +1,6 @@
 {
   "name": "fiend",
-  "version": "v0.1.1-pre-alpha",
+  "version": "v0.1.2-pre-alpha",
   "description": "Browser-based game and engine.",
   "main": "main.js",
   "scripts": {
