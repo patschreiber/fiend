@@ -7,7 +7,7 @@ import { Renderer } from './Render/Renderer';
 import { GameObject } from './GameObject';
 import { Template } from './templates/Template';
 import { MovementSystem } from './Input/MovementSystem';
-import { BrainComponent } from './Component';
+import { KeyboardPlugin } from './Input/control_scheme_plugins/KeyboardPlugin';
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -99,6 +99,8 @@ export class FiendGame {
 
     this.lastFrameTime = 0;
 
+    this.Renderer = new Renderer(this.canvas);
+    this.InputHandler = new InputHandler(new KeyboardPlugin());
     this.GameObjectManager = new GameObjectManager();
     this.ComponentManager = new ComponentManager();
     this.SceneManager = new SceneManager(
@@ -106,11 +108,10 @@ export class FiendGame {
       this.ComponentManager
     );
 
-    this.MovementSystem = new MovementSystem(this.ComponentManager);
-
-    this.Renderer = new Renderer(this.canvas);
-
-    this.InputHandler = new InputHandler();
+    this.MovementSystem = new MovementSystem(
+      this.ComponentManager,
+      this.InputHandler
+    );
 
     // TODO: Try and remove the player from this class. They should exist as an
     // entity in a scene, same as everything else. Pain points: InputHandler.
@@ -146,7 +147,7 @@ export class FiendGame {
    * TODO: Handle input should be InputComponent and be attached to GameActors.
    */
   private _handleInput(delta: number): void {
-    // this.InputHandler.handleInput(this.Player, delta);
+    // this.InputHandler.
   }
 
   /**
@@ -165,21 +166,21 @@ export class FiendGame {
   private _update(delta: number): void {
 
     // TODO: Remove clog.
-    console.log('delta :', delta);
+    // console.log('delta :', delta);
 
     for (let go of this.SceneManager.currentScene.activeGameObjects) {
-      this.MovementSystem.update(go, delta, this.InputHandler.getInputState());
+      this.MovementSystem.update(go, delta);
 
-      // BEGIN TEST TODO:
-      if (GameObject.getMostRecentId() < 1999) {
-        console.log('GameObject.getMostRecentId() :', GameObject.getMostRecentId());
-      }
+      // // BEGIN TEST TODO:
+      // if (GameObject.getMostRecentId() < 1999) {
+      //   console.log('GameObject.getMostRecentId() :', GameObject.getMostRecentId());
+      // }
 
 
-      this.ComponentManager.removeComponent("PositionComponent", go.getId());
-      console.log('this.Com :', this.ComponentManager.getComponentContainer("PositionComponent"));
-      console.log('object :', this.ComponentManager.getComponentContainer("PositionComponent").length);
-      // END TEST TODO:
+      // this.ComponentManager.removeComponent("PositionComponent", go.getId());
+      // console.log('this.Com :', this.ComponentManager.getComponentContainer("PositionComponent"));
+      // console.log('object :', this.ComponentManager.getComponentContainer("PositionComponent").length);
+      // // END TEST TODO:
     }
   }
 

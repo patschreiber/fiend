@@ -34,7 +34,7 @@ export class Template {
       components: [
         [ColliderComponent],
         [LifeforceComponent, {currentHP: 100, maxHP: 100}],
-        [PositionComponent, {localPosition: {x:200,y:200}}],
+        [PositionComponent, {worldPosition: {x:200,y:200}}],
         [RenderComponent],
         [VelocityComponent],
       ]
