@@ -8,6 +8,7 @@ import { GameObject } from './GameObject';
 import { Template } from './templates/Template';
 import { MovementSystem } from './Input/MovementSystem';
 import { KeyboardPlugin } from './Input/control_scheme_plugins/KeyboardPlugin';
+import { DebugKeyboardPlugin } from './Input/control_scheme_plugins/DebugKeyboardPlugin';
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
@@ -100,7 +101,7 @@ export class FiendGame {
     this.lastFrameTime = 0;
 
     this.Renderer = new Renderer(this.canvas);
-    this.InputHandler = new InputHandler(new KeyboardPlugin());
+    this.InputHandler = new InputHandler(new DebugKeyboardPlugin());
     this.GameObjectManager = new GameObjectManager();
     this.ComponentManager = new ComponentManager();
     this.SceneManager = new SceneManager(
