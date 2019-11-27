@@ -22,6 +22,13 @@ export enum Action {
   // TODO: Finish
 }
 
+export enum DebugAction {
+  SpawnPlayer,
+  SpawnOrdinaryFolk,
+  SwitchInput,
+
+}
+
 /**
  * The ButtonStatus enum.
  * @values

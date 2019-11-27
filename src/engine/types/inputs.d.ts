@@ -1,4 +1,4 @@
-import { Button, Action, ButtonStatus } from '../structs/enums/input_enums'
+import { Button, Action, ButtonStatus, DebugAction } from '../structs/enums/input_enums'
 import { Command } from '../Command';
 import { ICommand } from '../Command/interfaces/ICommand';
 
@@ -25,7 +25,7 @@ export type InputSignalMap = {
  */
 export type ButtonState = {
   // command: ICommand,
-  command: Action,
+  command: Action|DebugAction,
   status: ButtonStatus
 }
 
