@@ -1,5 +1,6 @@
 import { Component } from './Component';
 import { IComponent } from './interfaces/IComponent';
+import { ITexture } from '../Render/ITexture';
 
 export interface IRenderComponentMembers extends IComponentMembers {}
 
@@ -10,7 +11,7 @@ export interface IRenderComponentMembers extends IComponentMembers {}
  */
 export class RenderComponent extends Component implements IComponent, IRenderComponentMembers {
 
-  // public model: Model;
+  public Sprite: ITexture;
 
   /**
    * The RenderComponent's component type id.
@@ -19,33 +20,21 @@ export class RenderComponent extends Component implements IComponent, IRenderCom
 
   private static defaults: IRenderComponentMembers = {};
 
-  /**
-   * @constructor
-   * @internal We use [[Partial]] to declare every
-   * @param args (optional) The members of the class.
-   */
-  public constructor(overrides?: Partial<IRenderComponentMembers>) {
+  public constructor(
+    texture?: ITexture,
+    overrides?: Partial<IRenderComponentMembers>
+  ) {
     super();
+    this.Sprite = texture;
     Object.assign(this, RenderComponent.defaults);
     Object.assign(this, overrides);
   }
 
-  /**
-   * Retrieves the type id of the component. Used when fetching or checking a
-   * specific component for a [[GameObject]].
-   */
   public getTypeId(): string {
     return RenderComponent._type;
   }
 
-  /**
-   * Draws the Player entity
-   *
-   * @param ctx The canvas context.
-   * @param posX The current X-asis position for the model.
-   * @param posY The current Y-axis position for the model.
-   */
-  public draw(ctx: CanvasRenderingContext2D, position: Coordinate) {
+  public draw(ctx: CanvasRenderingContext2D, position: Coordinate): void {
     ctx.beginPath();
     ctx.arc(position.x, position.y, 10, 0, Math.PI*2);
     ctx.fillStyle = "#0095DD";
