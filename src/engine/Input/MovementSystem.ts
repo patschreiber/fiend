@@ -68,8 +68,8 @@ export class MovementSystem {
     }
 
     let directions = [
-      this.InputHandler.getButtonState(Action.MoveS),
       this.InputHandler.getButtonState(Action.MoveN),
+      this.InputHandler.getButtonState(Action.MoveS),
       this.InputHandler.getButtonState(Action.MoveE),
       this.InputHandler.getButtonState(Action.MoveW),
     ];

@@ -79,6 +79,7 @@ export class Renderer {
    * // https://gamedev.stackexchange.com/questions/153879/scene-components-and-renderer
    */
   public draw(SM: SceneManager): void {
+
     // Clear the screen on every frame so our entities don't have trails.
     // TODO: Internet says clearing the screen on every draw might be a bad idea.
     this._clrScreen();
