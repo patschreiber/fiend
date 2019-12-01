@@ -1,6 +1,6 @@
+import { ITexture } from '../Render/ITexture';
 import { Component } from './Component';
 import { IComponent } from './interfaces/IComponent';
-import { ITexture } from '../Render/ITexture';
 
 export interface IRenderComponentMembers extends IComponentMembers {}
 
@@ -9,7 +9,10 @@ export interface IRenderComponentMembers extends IComponentMembers {}
  *
  * @extends [[Component]]
  */
-export class RenderComponent extends Component implements IComponent, IRenderComponentMembers {
+export class RenderComponent
+  extends Component
+  implements IComponent, IRenderComponentMembers
+{
 
   public Sprite: ITexture;
 
