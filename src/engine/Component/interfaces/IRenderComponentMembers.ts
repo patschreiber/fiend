@@ -1,11 +1,11 @@
-import { ITexture } from '../../Render/ITexture';
+import { ITexture } from '../../Render/textures/interfaces/ITexture';
 import { IRenderComponentMembers } from '../RenderComponent';
-import { Component } from '../Component';
+import { IComponent } from './IComponent';
 
 /**
  * The IRederComponentMembers interface.
  */
-interface IRederComponentMembers extends Component {
+export interface IRederComponentMembers extends IComponent {
 
   /**
    * @var Sprite The texture to render.

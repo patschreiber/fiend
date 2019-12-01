@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { ITexture } from '../Render/ITexture';
-=======
 import { ITexture } from '../Render/textures/interfaces/ITexture';
->>>>>>> Shifted some comments around
 import { Component } from './Component';
 import { IComponent } from './interfaces/IComponent';
 
