@@ -1,3 +1,4 @@
+import { GameObject } from '../../GameObject';
 import { ITexture } from '../../Render/textures/interfaces/ITexture';
 import { GameObjectManifest } from '../../types/gameobjects';
 
@@ -40,11 +41,37 @@ export interface IScene {
   tileMap: any;
 
   /**
+   * Game objects that are considered “active” in the current Scene. Active
+   * GameObjects will update and render every frame.
+   */
+  activeGameObjects: Array<GameObject>;
+
+  /**
+   * Contains game objects that are present in the scene, but are not being
+   * rendered. They are being updated every frame, however. These might be
+   * objects that are just out of frame, but may need to be rendered in the near
+   * future.
+   */
+  culledGameObjects: Array<GameObject>;
+
+
+  /**
+   * Contains game objects that are present in the scene, but are not be
+   * rendered or updated for whatever reason.
+   */
+  sleepingGameObjects: Array<GameObject>;
+
+  /**
+   * GameObjects that have been killed, destroyed, or otherwise incapacitated,
+   * but shouldn’t be deleted yet will be stored here.
+   */
+  sceneGraveyard: Array<GameObject>;
+
+  /**
    * The pool of textures to use for GameObjects. Having textures pre-loaded in
    * a pool enables us to implement the "flyweight" pattern, where each
    * GameObject that shares a texture with another GameObject uses the reference
    * to an already-loaded texture, instead of instantiating a new Texture.
-   *
    */
   texturePool: Array<ITexture>;
 
