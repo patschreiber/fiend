@@ -1,10 +1,10 @@
 import { ITexture } from './interfaces/ITexture';
 
 /**
- * The PlayerTexture class.
+ * The OrdinaryFolkTexture class.
  * @implements ITexture
  */
-export class PlayerTexture implements ITexture {
+export class OrdinaryFolkTexture implements ITexture {
 
   public readonly Texture: HTMLImageElement;
 
@@ -12,7 +12,7 @@ export class PlayerTexture implements ITexture {
    * @constructor
    */
   constructor() {
-    this.Texture = window.F_LOADER.getImage("character_stand_in");
+    this.Texture = window.F_LOADER.getImage("npc_stand_in");
   }
 
 }
