@@ -1,4 +1,18 @@
-export abstract class BaseAtlas {
+import { IAtlas } from './interfaces/IAtlas';
+
+/**
+ * The BaseAtlas class.
+ * @abstract
+ * @implements [[IAtlas]]
+ */
+export abstract class BaseAtlas implements IAtlas {
+
+  /**
+   * How large each grid element is, in pixels. This corresponds to how large
+   * a grid element is in it's asset file. The [[Renderer]] will handle
+   * scaling/manipulation.
+   */
+  public gridElemPixelSize: number;
 
   /**
    * The tile map image to be used.
@@ -14,6 +28,10 @@ export abstract class BaseAtlas {
    * The number of grid rows.
    */
   protected gridRows: number;
+
+  /**
+   * The layers of the atlas.
+   */
   protected layers: Array<any>;
 
   /**
@@ -27,17 +45,6 @@ export abstract class BaseAtlas {
   protected mapGrid: Array<number>;
 
   /**
-   * How large each grid element is, in pixels. This corresponds to how large
-   * a grid element is in it's asset file. The [[Renderer]] will handle
-   * scaling/manipulation.
-   */
-  public abstract gridElemPixelSize: number;
-
-  /**
-   * Gets the tile value located by the column and row (x,y) coordinates.
-   * This is trivial with a 2D array, but this method allows us to use a 1D
-   * array instead.
-   *
    * @param x The x-axis position of the requested tile.
    * @param y The y-axis position of the requested tile.
    */
@@ -56,21 +63,10 @@ export abstract class BaseAtlas {
     return this.tileMapImg;
   }
 
-  /**
-   * Returns how many elements are in one row of the grid.
-   *
-   * @return The number of columns in the grid.
-   */
   public getGridWidth(): number {
     return this.gridCols;
   }
 
-  /**
-   * Returns how many rows are in the grid. Rows stacked on top of one another
-   * produce a height.
-   *
-   * @return The number of rows in the grid.
-   */
   public getGridHeight(): number {
     return this.gridRows;
   }
