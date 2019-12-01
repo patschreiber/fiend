@@ -1,5 +1,5 @@
-import { GameObjectId } from '../../types/gameobjects';
 import { ComponentId } from '../../types/components';
+import { GameObjectId } from '../../types/gameobjects';
 
 /**
  * The IComponent interface.
