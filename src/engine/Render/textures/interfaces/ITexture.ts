@@ -5,15 +5,15 @@
 export interface ITexture {
 
   /**
-   * The raw texture image.
+   * The raw texture resource.
    */
-  Texture: HTMLImageElement;
+  resource: HTMLImageElement;
 
   /**
-   * Accessor for the private member `id`.
+   * Accessor for the private member `_resourceName`.
    *
-   * @returns The id of the instance of the Texture.
+   * @returns The name of the external asset resource.
    */
-  getTypeId(): string;
+  getResourceName(): string;
 
 }

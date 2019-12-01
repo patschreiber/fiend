@@ -1,4 +1,3 @@
-import { ITexture } from '../../Render/textures/interfaces/ITexture';
 import { IRenderComponentMembers } from '../RenderComponent';
 import { IComponent } from './IComponent';
 
@@ -8,19 +7,11 @@ import { IComponent } from './IComponent';
 export interface IRederComponentMembers extends IComponent {
 
   /**
-   * @var Sprite The texture to render.
-   */
-  Sprite: ITexture;
-
-  /**
    * @constructor
    * @internal We use [[Partial]] to declare every
-   * @param args (optional) The members of the class.
+   * @param overrides (optional) Values that will override the defaults.
    */
-  constructor(
-    texture?: ITexture,
-    overrides?: Partial<IRenderComponentMembers>
-  ): void;
+  constructor(overrides?: Partial<IRenderComponentMembers>): void;
 
   /**
    * Retrieves the type id of the component. Used when fetching or checking a
@@ -28,12 +19,4 @@ export interface IRederComponentMembers extends IComponent {
    */
   getTypeId(): string;
 
-  /**
-   * Draws the Player entity
-   *
-   * @param ctx The canvas context.
-   * @param posX The current X-asis position for the model.
-   * @param posY The current Y-axis position for the model.
-   */
-  draw(ctx: CanvasRenderingContext2D, position: Coordinate): void;
 }

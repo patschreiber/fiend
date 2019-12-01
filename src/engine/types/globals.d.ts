@@ -1,4 +1,3 @@
-
 /**
  * Removes the `readonly` attribute from a member.
  */
@@ -7,8 +6,8 @@ type Mutable<T> = {
 };
 
 /**
- * Provides an x,y coordinate tuple.
- * [x,y]: The coordinate tuple.
+ * Provides an x,y coordinate type.
+ * [x:number,y:number]: The coordinate type.
  *
  * @example
  * position = {x:132,y:0}
@@ -16,6 +15,23 @@ type Mutable<T> = {
 type Coordinate = {
   x: number,
   y: number,
+};
+
+/**
+ * Provides a width/height/length dimension type.
+ *
+ * @param w The width.
+ * @param h The height.
+ * @param l (optional) The length.
+ *
+ * @example
+ * dimensions = {w:32,h:32,l:32}
+ * dimensions = {w:100,h:125}
+ */
+type Dimension = {
+  w: number,
+  h: number,
+  l?: number,
 };
 
 /**

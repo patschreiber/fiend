@@ -1,7 +1,7 @@
 import { BaseAtlas } from '../../../atlases/BaseAtlas';
 import { GameObject } from '../../GameObject';
-import { ITexture } from '../../Render/textures/interfaces/ITexture';
 import { GameObjectManifest } from '../../types/gameobjects';
+import { TexturePoolItem } from '../../types/rendering';
 import { IScene } from '../interfaces/IScene';
 
 /**
@@ -16,7 +16,7 @@ export abstract class BaseScene implements IScene {
 
   public tileMap: BaseAtlas;
 
-  public texturePool: Array<ITexture>;
+  public texturePool: Array<TexturePoolItem>;
 
   public activeGameObjects: Array<GameObject>;
 
@@ -35,7 +35,7 @@ export abstract class BaseScene implements IScene {
     this.culledGameObjects = new Array<GameObject>();
     this.sleepingGameObjects = new Array<GameObject>();
     this.sceneGraveyard = new Array<GameObject>();
-    this.texturePool = new Array<ITexture>();
+    this.texturePool = new Array<TexturePoolItem>();
   }
 
 }

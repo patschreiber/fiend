@@ -1,6 +1,6 @@
 import { GameObject } from '../../GameObject';
-import { ITexture } from '../../Render/textures/interfaces/ITexture';
 import { GameObjectManifest } from '../../types/gameobjects';
+import { TexturePoolItem } from '../../types/rendering';
 
 /**
  * The IScene interface. All Scenes will implement this interface.
@@ -65,6 +65,6 @@ export interface IScene {
    * GameObject that shares a texture with another GameObject uses the reference
    * to an already-loaded texture, instead of instantiating a new Texture.
    */
-  texturePool: Array<ITexture>;
+  texturePool: Array<TexturePoolItem>;
 
 }

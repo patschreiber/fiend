@@ -1,3 +1,4 @@
+import { Asset } from '../../structs/enums/rendering_enums';
 import { ITexture } from './interfaces/ITexture';
 
 /**
@@ -7,25 +8,24 @@ import { ITexture } from './interfaces/ITexture';
  */
 export abstract class BaseTexture implements ITexture {
 
-  public readonly Texture: HTMLImageElement;
+  public readonly resource: HTMLImageElement;
 
   /**
    * The Texture's type id.
    */
-  protected readonly _type: string;
+  protected readonly _resourceName: string;
 
   /**
    * @constructor
    *
-   * @param typeId The string name identifier of the texture.
-   * @param imgElem The image element to use as the texture.
+   * @param assetId The string name identifier of the external asset resource.
    */
-  constructor(typeId: string, imgElem: HTMLImageElement) {
-    this._type = typeId;
-    this.Texture = imgElem;
+  constructor(assetId: Asset) {
+    this._resourceName = assetId;
+    this.resource = window.F_LOADER.getImage(assetId);
   }
 
-  public getTypeId(): string {
-    return this._type;
+  public getResourceName(): string {
+    return this._resourceName;
   }
 }

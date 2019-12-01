@@ -89,31 +89,4 @@ export class SceneManager implements ISceneManager {
    */
   public unloadScene(): void {}
 
-  /**
-   * Updates the Scene's GameObjects.
-   *
-   * @param delta The time difference between frames. Provided by the game's
-   * main game loop.
-   * @see FiendGame.main()
-   */
-  public update(delta: number): void {
-
-    // for (let go of this.currentScene.activeGameObjects) {
-    //   if (go === undefined) {
-    //     throw new Error(
-    //       `There was an undefined GameObject, they should be contiguous!`
-    //     );
-    //   }
-
-    //   let posC = this.ComponentManager
-    //     .getComponent("PositionComponent", go.getId());
-
-    //   if (go.getId() === 4) {
-    //     posC["localPosition"].x = posC["localPosition"].x + (10 * delta);
-    //   }
-    // }
-
-    // this.currentScene.update(delta);
-  }
-
 }
