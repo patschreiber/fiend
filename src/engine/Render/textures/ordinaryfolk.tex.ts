@@ -1,18 +1,16 @@
-import { ITexture } from './interfaces/ITexture';
+import { BaseTexture } from './base.tex';
 
 /**
  * The OrdinaryFolkTexture class.
  * @implements ITexture
  */
-export class OrdinaryFolkTexture implements ITexture {
-
-  public readonly Texture: HTMLImageElement;
+export class OrdinaryFolkTexture extends BaseTexture {
 
   /**
    * @constructor
    */
   constructor() {
-    this.Texture = window.F_LOADER.getImage("npc_stand_in");
+    super("ordinary_folk", window.F_LOADER.getImage("npc_stand_in"));
   }
 
 }

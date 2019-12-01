@@ -1,18 +1,16 @@
-import { ITexture } from './interfaces/ITexture';
+import { BaseTexture } from './base.tex';
 
 /**
  * The PlayerTexture class.
  * @implements ITexture
  */
-export class PlayerTexture implements ITexture {
-
-  public readonly Texture: HTMLImageElement;
+export class PlayerTexture extends BaseTexture {
 
   /**
    * @constructor
    */
   constructor() {
-    this.Texture = window.F_LOADER.getImage("character_stand_in");
+    super("player", window.F_LOADER.getImage("character_stand_in"));
   }
 
 }
