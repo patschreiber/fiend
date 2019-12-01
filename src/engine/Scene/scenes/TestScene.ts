@@ -1,9 +1,8 @@
+import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
+import { Template } from '../../templates/Template';
+import { GameObjectManifest, TemplateType } from '../../types/gameobjects';
 import { IScene } from '../interfaces/IScene';
 import { BaseScene } from './BaseScene';
-import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
-import { GameObjectManifest, TemplateType } from '../../types/gameobjects';
-import { Template } from '../../templates/Template';
-import { GameObject } from '../../GameObject';
 
 /**
  * The TestScene class.

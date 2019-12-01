@@ -1,9 +1,8 @@
-import {
-  GameObject
-} from '../../GameObject';
-import { IScene } from '../interfaces/IScene';
 import { BaseAtlas } from '../../../atlases/BaseAtlas';
+import { GameObject } from '../../GameObject';
+import { ITexture } from '../../Render/textures/interfaces/ITexture';
 import { GameObjectManifest } from '../../types/gameobjects';
+import { IScene } from '../interfaces/IScene';
 
 /**
  * The BaseScene class.
@@ -11,37 +10,12 @@ import { GameObjectManifest } from '../../types/gameobjects';
  */
 export abstract class BaseScene implements IScene {
 
-  /**
-   * The max amount of active GameObjects that can be present in the Scene. Some
-   * Scenes will have a smaller max entity count if the Scene is smaller e.g. if
-   * the scene is a room in a house. We generally only care about "active"
-   * GameObjects since there will be overhead when maintaining their state and
-   * redrawing them.
-   * TODO: Figure out what happens if this limit is reached.
-   *
-   * @internal This could be an "importance weight" where less important game
-   * objects are purged.
-   */
   public maxActiveEntities: number;
 
-  /**
-   * A list of the GameObjects that should be initially present when the Scene
-   * loads. Contains templates so the factory classes can build the GameObjects.
-   */
   public readonly initialGameObjectManifest: GameObjectManifest;
 
-  /**
-   * The list of active GameObjects. Every game object in this list will have
-   * their state updated every frame, if possible.
-   * TODO: Make the type a Union like with Components.
-   */
   public gameObjects: Array<any>;
 
-  /**
-   * The tilemap associated with this Scene.
-   * TODO: Make this of type TileMap when it's created. Edit: Change this to be
-   * "atlas"
-   */
   public tileMap: BaseAtlas;
 
   /**
@@ -70,6 +44,8 @@ export abstract class BaseScene implements IScene {
    * but shouldn’t be deleted yet will be stored here.
    */
   public sceneGraveyard: Array<GameObject>;
+
+  public texturePool: Array<ITexture>;
 
   /**
    * @constructor
