@@ -27,13 +27,6 @@ export interface IScene {
   readonly initialGameObjectManifest: GameObjectManifest;
 
   /**
-   * The list of active GameObjects. Every game object in this list will have
-   * their state updated every frame, if possible.
-   * TODO: Make the type a Union like with Components.
-   */
-  gameObjects: Array<any>;
-
-  /**
    * The tilemap associated with this Scene.
    * TODO: Make this of type TileMap when it's created. Edit: Change this to be
    * "atlas"
@@ -53,7 +46,6 @@ export interface IScene {
    * future.
    */
   culledGameObjects: Array<GameObject>;
-
 
   /**
    * Contains game objects that are present in the scene, but are not be
@@ -75,5 +67,4 @@ export interface IScene {
    */
   texturePool: Array<ITexture>;
 
-  update(delta: number): void;
 }
