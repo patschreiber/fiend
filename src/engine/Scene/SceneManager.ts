@@ -56,6 +56,11 @@ export class SceneManager implements ISceneManager {
    * @param scene The Scene to load.
    */
   public loadScene<S extends BaseScene>(scene: new () => S): void {
+    // Don't try and load a scene if the SceneManager is busy.
+    if (this.state !== SceneManagerState.Ready) {
+      return;
+    }
+
     this.state = SceneManagerState.Loading;
 
     // Load the scene/
