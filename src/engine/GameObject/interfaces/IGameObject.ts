@@ -1,16 +1,14 @@
 /**
- * The interface for the [[GameObject]] class.
- *
  * @interface IGameObject
  */
- export interface IGameObject {
+export interface IGameObject {
 
   /**
    * Accessor for the private member `id`.
    *
-   * @returns The id of the GameObject
+   * @return The id of the GameObject.
    */
-   getId(): number;
+  getId(): number;
 
   /**
    * Defines the signature for the update method for the GameActor.

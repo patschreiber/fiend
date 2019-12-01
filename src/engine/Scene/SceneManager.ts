@@ -1,8 +1,8 @@
-import { ISceneManager } from './interfaces/ISceneManager';
-import { BaseScene } from './index';
-import { TestScene } from './scenes/TestScene';
-import { GameObjectManager } from '../GameObject/GameObjectManager';
+import { BaseScene } from '.';
 import { ComponentManager } from '../Component/ComponentManager';
+import { GameObjectManager } from '../GameObject/GameObjectManager';
+import { ISceneManager } from './interfaces/ISceneManager';
+import { TestScene } from './scenes/TestScene';
 
 /**
  * Defines the different states that the SceneManager can be in.
@@ -29,24 +29,12 @@ export enum SceneManagerState {
  */
 export class SceneManager implements ISceneManager {
 
-  /**
-   * The current state of the SceneManager.
-   */
   public state: SceneManagerState;
 
-  /**
-   * The [[GameObjectManager]].
-   */
   public GameObjectManager: GameObjectManager;
 
-  /**
-   * The [[ComponentManager]].
-   */
   public ComponentManager: ComponentManager;
 
-  /**
-   * The currently-loaded Scene.
-   */
   public currentScene: BaseScene;
 
   /**
@@ -65,11 +53,14 @@ export class SceneManager implements ISceneManager {
   }
 
   /**
-   * Loads a new Scene.
-   *
    * @param scene The Scene to load.
    */
   public loadScene<S extends BaseScene>(scene: new () => S): void {
+    // Don't try and load a scene if the SceneManager is busy.
+    if (this.state !== SceneManagerState.Ready) {
+      return;
+    }
+
     this.state = SceneManagerState.Loading;
 
     // Load the scene/
@@ -94,37 +85,8 @@ export class SceneManager implements ISceneManager {
   }
 
   /**
-   * Unloads a Scene.
-   *
    * @param scene The Scene to unload.
    */
   public unloadScene(): void {}
-
-  /**
-   * Updates the Scene's GameObjects.
-   *
-   * @param delta The time difference between frames. Provided by the game's
-   * main game loop.
-   * @see FiendGame.main()
-   */
-  public update(delta: number): void {
-
-    // for (let go of this.currentScene.activeGameObjects) {
-    //   if (go === undefined) {
-    //     throw new Error(
-    //       `There was an undefined GameObject, they should be contiguous!`
-    //     );
-    //   }
-
-    //   let posC = this.ComponentManager
-    //     .getComponent("PositionComponent", go.getId());
-
-    //   if (go.getId() === 4) {
-    //     posC["localPosition"].x = posC["localPosition"].x + (10 * delta);
-    //   }
-    // }
-
-    // this.currentScene.update(delta);
-  }
 
 }
