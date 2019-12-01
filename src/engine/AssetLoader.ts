@@ -13,6 +13,7 @@ export class AssetLoader {
       this.loadImage("TESTNUMBERED", "./data/assets/pixel_art_tileset_test.png"),
       this.loadImage("character_stand_in", "./data/assets/textures/actors/character-stand-in.png"),
       this.loadImage("npc_stand_in", "./data/assets/textures/actors/npc-stand-in.png"),
+      this.loadImage("NULL", "./data/assets/textures/null-texture-no-white.png"),
     ];
   }
 
