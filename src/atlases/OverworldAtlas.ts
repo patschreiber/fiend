@@ -1,13 +1,10 @@
-import { BaseAtlas } from "./BaseAtlas";
+import { BaseAtlas } from './BaseAtlas';
 
+/**
+ * The OverworldAtlas class.
+ * @extends BaseAtlas
+ */
 export class OverworldAtlas extends BaseAtlas {
-
-  /**
-   * How large each grid element is, in pixels. This corresponds to how large
-   * a grid element is in it's asset file. The [[Renderer]] will handle
-   * scaling/manipulation.
-   */
-  public gridElemPixelSize: number;
 
   /**
    * @constructor
