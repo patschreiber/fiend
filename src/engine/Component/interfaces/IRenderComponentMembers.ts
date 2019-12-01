@@ -1,26 +1,17 @@
-import { ITexture } from '../../Render/ITexture';
 import { IRenderComponentMembers } from '../RenderComponent';
-import { Component } from '../Component';
+import { IComponent } from './IComponent';
 
 /**
  * The IRederComponentMembers interface.
  */
-interface IRederComponentMembers extends Component {
-
-  /**
-   * @var Sprite The texture to render.
-   */
-  Sprite: ITexture;
+export interface IRederComponentMembers extends IComponent {
 
   /**
    * @constructor
    * @internal We use [[Partial]] to declare every
-   * @param args (optional) The members of the class.
+   * @param overrides (optional) Values that will override the defaults.
    */
-  constructor(
-    texture?: ITexture,
-    overrides?: Partial<IRenderComponentMembers>
-  ): void;
+  constructor(overrides?: Partial<IRenderComponentMembers>): void;
 
   /**
    * Retrieves the type id of the component. Used when fetching or checking a
@@ -28,12 +19,4 @@ interface IRederComponentMembers extends Component {
    */
   getTypeId(): string;
 
-  /**
-   * Draws the Player entity
-   *
-   * @param ctx The canvas context.
-   * @param posX The current X-asis position for the model.
-   * @param posY The current Y-axis position for the model.
-   */
-  draw(ctx: CanvasRenderingContext2D, position: Coordinate): void;
 }

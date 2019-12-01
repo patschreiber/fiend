@@ -11,7 +11,9 @@ export class AssetLoader {
       this.loadImage("testTileset2", "./data/assets/psychic-swamp.png"),
       this.loadImage("TESTORIG", "./data/assets/low-res-spritesheet.png"),
       this.loadImage("TESTNUMBERED", "./data/assets/pixel_art_tileset_test.png"),
-      this.loadImage("character_stand_in", "./data/assets/textures/actors/character-stand-in.png"),
+      this.loadImage("player_stand_in", "./data/assets/textures/actors/character-stand-in.png"),
+      this.loadImage("npc_stand_in", "./data/assets/textures/actors/npc-stand-in.png"),
+      this.loadImage("NULL_TEX", "./data/assets/textures/null-texture-no-white.png"),
     ];
   }
 

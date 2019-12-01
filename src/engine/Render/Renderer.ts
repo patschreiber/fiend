@@ -1,8 +1,10 @@
 // TODO: Remove all this scene-specific shit out of here. Ex. EMPTY_TILE.
-
-import { OverworldAtlas } from "../../atlases/OverworldAtlas";
-import { BaseAtlas } from "../../atlases/BaseAtlas";
+import { BaseAtlas } from '../../atlases/BaseAtlas';
+import { OverworldAtlas } from '../../atlases/OverworldAtlas';
+import { RenderComponent } from '../Component';
 import { SceneManager } from '../Scene';
+import { ITexture } from './textures/interfaces/ITexture';
+import { NullTexture } from './textures/null.tex';
 
 export class Renderer {
   // TODO: Add object culling to not render items which can't be seen
@@ -17,12 +19,21 @@ export class Renderer {
   SceneManager: SceneManager;
 
   /**
+   * If a texture can't be loaded for whatever reason, the engine will display
+   * this texture. We load it here so we can still use the "flyweight" pattern
+   * and avoid instantiating a new NullTexture each time we need one.
+   */
+  public readonly TEXTURE_NOT_FOUND: ITexture;
+
+  /**
    * TODO: Change this to be the scene. Recreate the Renderer when a new scene
    * is loaded. Edit: Maybe keep the renderer independent of the Scene.
    */
   protected _currentMap: BaseAtlas;
 
   constructor(canvas: HTMLCanvasElement) {
+
+    this.TEXTURE_NOT_FOUND = new NullTexture();
 
     this.canvas = canvas;
 
@@ -52,9 +63,7 @@ export class Renderer {
     /**
      * Multiplier for x,y position to pixels. What size the tiles for the game
      * will be rendered at. Always use a power of 2 so the scaling prevents
-     * blurring.
-     *
-     * @var {integer}
+     * blurring. This number squared is the tile size.
      */
     this.pixels = 32;
 
@@ -91,20 +100,84 @@ export class Renderer {
     // TODO: Make this use a hasComponent() function for readability.
     for (let gameObject of SM.currentScene.activeGameObjects) {
       let goid = gameObject.getId();
-      let renComp = SM.ComponentManager
+      let renderComp = SM.ComponentManager
         .getComponent("RenderComponent", goid);
       let posComp = SM.ComponentManager
         .getComponent("PositionComponent", goid);
 
       if (
-        (renComp !== undefined && renComp !== null)
+        (renderComp !== undefined && renderComp !== null)
         && (posComp !== undefined && posComp !== null)
       ) {
-        renComp.draw(this.ctx, posComp.worldPosition);
+        let renderableTexture = this._getRenderableTexture(SM, renderComp);
+        // let dimensions = {w: this.pixels, h: this.pixels};
+        // this._drawAsset(renderableTexture, posComp.worldPosition, dimensions);
+        this._drawAsset(renderableTexture, posComp.worldPosition);
       }
     }
   }
 
+  /**
+   * Retrieves a renderable texture resource from the current scene's texture
+   * pool. If one can't be found, the NullTexture is loaded.
+   *
+   * @param SM The SceneManager.
+   * @param renderComp The RenderComponent.
+   *
+   * @return The asset to render.
+   */
+  private _getRenderableTexture(
+    SM: SceneManager,
+    renderComp: RenderComponent
+  ): HTMLImageElement {
+    let renderableTexture = SM.currentScene.texturePool[renderComp.textureId];
+
+    // Renders the NullTexture if a texture resource can't be found in the pool.
+    if (renderableTexture === undefined) {
+      return this.TEXTURE_NOT_FOUND.resource;
+    }
+
+    return renderableTexture.resource;
+  }
+
+  /**
+   * Draws a renderable resource (asset) to the screen.
+   *
+   * @param resource The asset to render.
+   * @param position Where to render the asset.
+   * @param transform The dimensions of the asset to render. Defaults to the
+   * current tilesize.
+   */
+  private _drawAsset(
+    resource: HTMLImageElement,
+    position: Coordinate,
+    transform: Dimension = {w: this.pixels, h: this.pixels},
+    sourceTransform?: Dimension
+  ): void {
+    let sourceWidth: number;
+    let sourceHeight: number;
+
+    // Use the resource's width and height unless it's otherwise been specified.
+    if (sourceTransform == undefined) {
+      sourceWidth = resource.width;
+      sourceHeight = resource.height;
+    } else {
+      sourceWidth = sourceTransform.w;
+      sourceHeight = sourceTransform.h;
+    }
+
+    this.ctx.drawImage(
+      resource,         // image
+      0,                // sx
+      0,                // sy
+      sourceWidth,      // sWidth
+      sourceHeight,     // sHeight
+      position.x,       // dx
+      position.y,       // dy
+      transform.w,      // dWidth
+      transform.h       // dHeight
+    );
+  }
 
   /**
    * Renders a map according to the coordinates given in the map's file by

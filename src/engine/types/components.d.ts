@@ -1,14 +1,12 @@
 import {
+  BrainComponent,
+  ColliderComponent,
   Component,
   EventComponent,
   LifeforceComponent,
-  BrainComponent,
-  ColliderComponent,
-  ILifeforceComponentMembers,
   PositionComponent,
-  VelocityComponent
+  VelocityComponent,
 } from '../Component';
-import { IComponent } from '../Component/interfaces/IComponent';
 import { RenderComponent } from '../Component/RenderComponent';
 
 /**
@@ -62,7 +60,6 @@ export type ComponentId = number;
    * 1001:[0,22,0,37,0,104,0,53]
    * ```
    */
-   // TODO:
   type GameObjectComponentReference<C extends Component> = {
     [gameObjectId: number]: ComponentId;
   };
@@ -81,6 +78,14 @@ export type ComponentId = number;
  * Player's life is at 100/999 since the default currentHP wasn't overwritten.
  */
 export type ComponentTemplate = [typeof Component, ComponentOverrides?];
+
+/**
+ * The Component Pool type definition.
+ * TODO: Come up with something better than 'any'.
+ */
+export type ComponentPool = {
+  [key: string]: Array<any>;
+}
 
 /**
  * The Component values to override. We don't typecheck here, but do when the

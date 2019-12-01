@@ -17,7 +17,8 @@
     "./src/engine/types/globals.d.ts",
     "./src/engine/types/components.d.ts",
     "./src/engine/types/gameobjects.d.ts",
-    "./src/engine/types/events.d.ts"
+    "./src/engine/types/events.d.ts",
+    "./src/engine/types/rendering.d.ts"
   ],
   "include": ["./src/**/*.ts"],
   "exclude": ["node_modules", "build", "**/*.spec.ts"]

@@ -1,27 +1,15 @@
-import {
-  ComponentId,
-  ComponentTemplate,
-  ComponentTypes
-} from '../types/components';
-import { Component } from './Component';
+import { ComponentId, ComponentPool, ComponentTemplate, ComponentTypes } from '../types/components';
+import { GameObjectId } from '../types/gameobjects';
+import { RenderComponent } from './../Component';
 import { BrainComponent } from './BrainComponent';
 import { ColliderComponent } from './ColliderComponent';
-import { EventComponent } from './EventComponent';
-import { LifeforceComponent } from './LifeforceComponent';
-import { GameObjectId } from '../types/gameobjects';
+import { Component } from './Component';
 import { ComponentFactory } from './ComponentFactory/ComponentFactory';
+import { EventComponent } from './EventComponent';
+import { IComponentManager } from './interfaces/IComponentManager';
+import { LifeforceComponent } from './LifeforceComponent';
 import { PositionComponent } from './PositionComponent';
 import { VelocityComponent } from './VelocityComponent';
-import { RenderComponent } from './../Component';
-import { IComponentManager } from './interfaces/IComponentManager';
-
-/**
- * The Component Pool type definition.
- * TODO: Come up with something better than 'any'.
- */
-type Pool = {
-  [key: string]: Array<any>;
-}
 
 /**
  * The ComponentManager class.
@@ -33,10 +21,10 @@ type Pool = {
   /**
    * The data structure to house the active Components.
    */
-  private _activePools:Pool = {
+  private _activePools: ComponentPool = {
     BrainComponent: new Array<BrainComponent>(),
     ColliderComponent: new Array<ColliderComponent>(),
-    EventComponent: Array<EventComponent>(),
+    EventComponent: new Array<EventComponent>(),
     LifeforceComponent: new Array<LifeforceComponent>(),
     PositionComponent: new Array<PositionComponent>(),
     RenderComponent: new Array<RenderComponent>(),
@@ -48,9 +36,14 @@ type Pool = {
    * already attached.
    *
    * @param compType The Component type to be attached.
+   * @param goid The id of the GameObject that owns these Components.
+   * @param overrides (optional) The arguments to pass to the Component
+   * constructor. The constructor will compare the arguments against the
+   * Component type's [[IComponentMembers]] interface, and map any values
+   * that match.
    *
    * @return The Component's id if it was successfully created and attached, or
-   null if it wasn't.
+   * null if it wasn't.
    */
   public addComponent<T extends IComponentMembers>(
     component: new (overrides?: Partial<T>) => Component,
@@ -59,13 +52,11 @@ type Pool = {
   ): ComponentId|null {
 
     try {
-
       let comp = ComponentFactory.create(component, overrides);
       this._activePools[comp.getTypeId()][goid] = comp;
 
       return comp.getId();
     } catch (e) {
-
       console.error(e, {type: "ComponentCreationError"});
 
       return null;
@@ -167,18 +158,19 @@ type Pool = {
    */
    public spawnFromTemplate(
     templateComponentCollection: Array<ComponentTemplate>,
-    goid: ComponentId
+    goid: GameObjectId
   ): boolean {
-    let cid: ComponentId;
 
     // Creates a new Component instance for every Component template we receive.
     for (let componentTemplate of templateComponentCollection) {
       let compType = componentTemplate[0];
       let overrides = componentTemplate[1];
-      cid = this.addComponent(compType, goid, overrides);
+      let cid = this.addComponent(compType, goid, overrides);
 
       // If the comp was created, it was added to the appropriate list,
-      // otherwise, let's log the error but continue to minimize damages.
+      // otherwise, let's log the error but continue, so we minimize damages. A
+      // faulty component shouldn't necessarily crash the game with an
+      // exception.
       if (cid === null) {
         console.log('component_creation_warning :', `There was a problem when
         creating Component of type ${compType} for GameObject (id:${goid}).

@@ -1,16 +1,14 @@
-import { ObjectMutator as OM } from '../utilities/ObjectMutator';
 import {
-  GameObjectTemplate,
-  TemplateType
-} from '../types/gameobjects';
-import {
-  LifeforceComponent,
-  ColliderComponent,
-  PositionComponent,
-  VelocityComponent,
   BrainComponent,
-  RenderComponent
+  ColliderComponent,
+  LifeforceComponent,
+  PositionComponent,
+  RenderComponent,
+  VelocityComponent,
 } from '../Component';
+import { Asset } from '../structs/enums/rendering_enums';
+import { GameObjectTemplate, TemplateType } from '../types/gameobjects';
+import { ObjectMutator as OM } from '../utilities/ObjectMutator';
 
 /**
  * The structure of a template collection.
@@ -35,7 +33,7 @@ export class Template {
         [ColliderComponent],
         [LifeforceComponent, {currentHP: 100, maxHP: 100}],
         [PositionComponent, {worldPosition: {x:200,y:200}}],
-        [RenderComponent],
+        [RenderComponent, {textureId: Asset.Player}], // The value for key "Sprite" is the type id of the texture.
         [VelocityComponent],
       ]
       // TODO: Add default model option
@@ -46,7 +44,7 @@ export class Template {
         [BrainComponent],
         [LifeforceComponent],
         [PositionComponent],
-        [RenderComponent],
+        [RenderComponent, {textureId: Asset.OrdinaryFolk}],
         [VelocityComponent],
       ],
       tags: ["ghost", "no collider"]
@@ -94,26 +92,3 @@ export class Template {
     return mutantTemplate;
   }
 }
-
-// ORDINARY FOLK
-//   public draw(ctx: CanvasRenderingContext2D): void {
-//     ctx.beginPath();
-//     ctx.rect(this.position.x, this.position.y, 20, 20);
-//     ctx.fillStyle = "#FF0000";
-//     ctx.fill();
-//     ctx.closePath();
-//   }
-
-//   /**
-//    * Draws the Player entity
-//    *
-//    * @param ctx The canvas context.
-//    */
-//    public draw(ctx: CanvasRenderingContext2D) {
-
-//     ctx.beginPath();
-//     ctx.arc(this.position.x, this.position.y, 10, 0, Math.PI*2);
-//     ctx.fillStyle = "#0095DD";
-//     ctx.fill();
-//     ctx.closePath();
-//   }

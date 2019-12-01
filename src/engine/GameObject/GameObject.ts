@@ -1,7 +1,4 @@
-import {
-  GameObjectId,
-  GameObjectTemplate
-} from '../types/gameobjects';
+import { GameObjectId, GameObjectTemplate } from '../types/gameobjects';
 import { IGameObject } from './interfaces/IGameObject';
 
 /**
@@ -46,31 +43,21 @@ export class GameObject implements IGameObject {
     this._id = GameObject._idIncrementor++;
   }
 
+  public getId(): GameObjectId {
+    return this._id;
+  }
+
+  public getTags(): Array<string> {
+    return this._tags;
+  }
+
   /**
    * Creates a new instance of a GameObject based on the given template.
    *
    * @param template The template to base the new GameObject on.
    */
-  public static create(template?: GameObjectTemplate): GameObject {
+   public static create(template?: GameObjectTemplate): GameObject {
     return new GameObject(template);
-  }
-
-  /**
-   * Accessor for the private member `id`.
-   *
-   * @returns The id of the instance of the GameObject.
-   */
-  public getId(): GameObjectId {
-    return this._id;
-  }
-
-  /**
-   * Accessor for the private member `tags`.
-   *
-   * @return The Array of tags on the GameObject.
-   */
-  public getTags(): Array<string> {
-    return this._tags;
   }
 
   /**

@@ -2,15 +2,15 @@ import { Asset } from '../../structs/enums/rendering_enums';
 import { BaseTexture } from './base.tex';
 
 /**
- * The PlayerTexture class.
+ * The NullTexture class. Used when a texture cannot be loaded/found.
  */
-export class PlayerTexture extends BaseTexture {
+export class NullTexture extends BaseTexture {
 
   /**
    * @constructor
    */
   constructor() {
-    super(Asset.Player);
+    super(Asset.NullTexture);
   }
 
 }

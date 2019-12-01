@@ -1,9 +1,6 @@
-import { IGameObjectManager } from './interfaces/IGameObjectManager';
-import {
-  GameObjectId,
-  GameObjectTemplate
-} from '../types/gameobjects';
+import { GameObjectId, GameObjectTemplate } from '../types/gameobjects';
 import { GameObject } from './GameObject';
+import { IGameObjectManager } from './interfaces/IGameObjectManager';
 
 /**
  * The GameObjectManager class.
@@ -11,11 +8,6 @@ import { GameObject } from './GameObject';
  */
 export class GameObjectManager implements IGameObjectManager {
 
-  /**
-   * Game objects that are not present in the scene, but who’s state needs to be
-   * maintained, go here. When a scene is unloaded, an entity marked with the
-   * “persist” flag will be added to this container.
-   */
   public inactiveGameObjects: Array<GameObjectId>;
 
   /**
@@ -26,6 +18,7 @@ export class GameObjectManager implements IGameObjectManager {
    * soft-deleted in the system; new Components of that type cannot be added to
    * the GameObject.
    */
+   // TODO: YAGNI...
   //  private _attachedComponents: Array<ComponentId> = new Array(8);
 
   /**
@@ -33,6 +26,7 @@ export class GameObjectManager implements IGameObjectManager {
    * appear once in any given save file. A lot of the time, the state of these
    * unique entities needs to be maintained for reference.
    */
+   // TODO: YAGNI...
   // private _worldGraveyard: GameObjectContainer;
 
   /**
@@ -42,34 +36,15 @@ export class GameObjectManager implements IGameObjectManager {
     this.inactiveGameObjects = Array<GameObjectId>();
   }
 
-  /**
-   * Getter for the inactive GameObject container.
-   *
-   * @return The Array of inactive GameObjects.
-   */
   public getInactiveGameObjects(): Array<GameObjectId> {
     return this.inactiveGameObjects;
   }
 
   /**
-   * Removes a GameObject from being tracked by the game state. Depending on the
-   * status, the GameObject will either be hard deleted, or moved to an
-   * "inactive pool" where it will be tracked by the game engine, but not
-   * implemented.
+   * @param template The archetype to use when instantiating a new GameObject.
+   * @param container The container to add the GameObject to.
    *
-   * @param goid The instance id of the GameObject to remove.
-   *
-   * @return If the GameObject was successfully dealt with or not.
-   */
-  public removeGameObject(goid: GameObjectId): boolean {
-    // TODO:
-    return true;
-  }
-
-  /**
-   *
-   * @param template
-   * @param container
+   * @return The GameObject ID if it was successfully created, or false if not.
    */
   public spawnFromTemplate(
     template: GameObjectTemplate,
@@ -87,25 +62,13 @@ export class GameObjectManager implements IGameObjectManager {
   }
 
   /**
-   * Adds a GameObject to one of the `_activeGameObjects`, `_culledGameObjects`,
-   * `_sleepingGameObjects`, `sceneGraveyard`, `_inactiveGameObjects`, or
-   * `_worldGraveyard` GameObject containers.
-   * TODO: Don't always add to active.
+   * @param goid The instance id of the GameObject to remove.
    *
-   * @param gameObject The GameObject to add.
-   * @param scene The Scene that houses the containers that hold the
-   * GameObjects.
-   *
-   * @return If the game object was successfully added or not.
+   * @return If the GameObject was successfully dealt with or not.
    */
-  // private _addToContainer<S extends BaseScene>() {
-  //   goid: GameObjectId,
-  //   scene: S
-  // ): boolean {
-
-  //   scene.activeGameObjects.push(gameObject);
-
-  //   return true;
-  // }
+   public removeGameObject(goid: GameObjectId): boolean {
+    // TODO:
+    return true;
+  }
 
 }

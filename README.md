@@ -23,3 +23,36 @@ command from the root of the project.
 ```
 $ docgen
 ```
+
+# VS Code Handy Commands
+
+Remove unused imports:
+`option` + `shift` + `O`
+
+# Code Style Guide
+
+## Naming Files
+
+### Class File
+
+## Directory Structure
+
+A core engine feature should have a capitalized name and be a direct child of
+the `engine/` directory.
+
+### Good
+```
+.src/
+├── engine/
+│   ├── GameObject
+│   │   ├── GameObject.ts
+```
+### Bad
+```
+.src/
+├── engine/
+│   ├── gameobj/
+│   │   ├── GameActor/
+│   │   │   ├── GameActorGameObject.ts
+│   │   │   └── Player.ts
+```
