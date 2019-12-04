@@ -1,18 +1,12 @@
-import { IInputOutputDevicePlugin } from '../interfaces/IInputOutputDevicePlugin';
-import {
-  Action,
-  DefaultControlSchemes,
-  ButtonStatus,
-  Button
-} from '../../structs/enums/input_enums';
+import { IIODevicePlugin } from '../../Input';
+import { Action, Button, ButtonStatus, DefaultControlSchemes } from '../../structs/enums/input_enums';
 import { InputSignalMap, InputState } from '../../types/inputs';
-// import { MoveNorthCommand, MoveSouthCommand, MoveEastCommand, MoveWestCommand, NullCommand } from '../../Command';
 
 /**
- * The KeyboardInputMap class.
- *
+ * The KeyboardPlugin class.
+ * @implements [[IIODevicePlugin]]
  */
-export class KeyboardPlugin implements IInputOutputDevicePlugin {
+export class KeyboardPlugin implements IIODevicePlugin {
 
   /**
    * Maps an input from an I/O device to an internal Button used by the engine.
@@ -37,7 +31,11 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
   /**
    * TODO: Structure should add ["context"] so we can have context-independent
    * buttons
-   * @type The inputMap instance.
+   * The inputMap instance.
+   *
+   * @internal Each array index maps to a specific button. We do this so the
+   * Button enum value can map to a specific array index. Therefore, these
+   * should always be in the same order for every plugin.
    */
   private _currentControllerMap: InputState = [
     // Button.B_1
@@ -100,7 +98,7 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
     this.loadControlScheme(controlScheme);
 
     document.getElementById('game-pane').addEventListener(
-      'keydown', (event) => this.handleInputEvent(
+      'keydown', (event) => this.inputEventFired(
         event,
         ButtonStatus.PRESSED
       ),
@@ -108,7 +106,7 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
     );
 
     document.getElementById('game-pane').addEventListener(
-      'keyup', (event) => this.handleInputEvent(
+      'keyup', (event) => this.inputEventFired(
         event,
         ButtonStatus.RAISED
       ),
@@ -116,56 +114,24 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
     );
   }
 
-  /**
-   * Callback for when an input event fires.
-   *
-   * @param event The event representing the user interaction with a keyboard.
-   * @param buttonStatus The status the button should be sent to when the event
-   * fires.
-   */
-   public handleInputEvent(event: KeyboardEvent, buttonStatus: ButtonStatus): void {
+  public inputEventFired(event: KeyboardEvent, btnStatus: ButtonStatus): void {
     event.preventDefault();
 
     let button = this._inputSignalMap[event.key];
 
     if (this._currentControllerMap[button]) {
-      this._currentControllerMap[button].status = buttonStatus;
+      this._currentControllerMap[button].status = btnStatus;
     }
   }
 
-  /**
-   * Gets the current state of the Buttons at the time of invocation.
-   *
-   * @return The current state of the controller.
-   */
   public getInputState(): InputState {
     return this._currentControllerMap;
   }
 
-  /**
-   * Retrieves the mapping of input signal from the active I/O device to an
-   * internal [[Button]].
-   *
-   * @return THe mapping of input signal.
-   */
-
-  /**
-   * Accessor for the private member `id`.
-   *
-   * @returns the mapping of input signal from the active I/O device to an
-   * internal [[Button]].
-   */
   public getInputSignalMap(): InputSignalMap {
     return this._inputSignalMap;
   }
 
-  /**
-   * Maps Action to the current in-use input controller. Supports multiple
-   * control schemes so players can choose sensible default controls without
-   * having to re-map each button individually.
-   *
-   * @param controlScheme optional The control scheme to attach.
-   */
   public loadControlScheme(
     controlScheme?: DefaultControlSchemes
   ): void {
