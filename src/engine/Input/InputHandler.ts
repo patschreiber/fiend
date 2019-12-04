@@ -1,27 +1,21 @@
+import { Action, Button } from '../structs/enums/input_enums';
+import { ButtonState, InputState } from '../types/inputs';
 import { IInputHandler } from './interfaces/IInputHandler';
-import { IInputOutputDevicePlugin } from './interfaces/IInputOutputDevicePlugin';
-import {
-  Button,
-  Action
-} from '../structs/enums/input_enums';
-import {
-  ButtonState,
-  InputState
-} from '../types/inputs';
+import { IIODevicePlugin } from './interfaces/IIODevicePlugin';
 
 /**
  * The InputHandler class.
  */
 export class InputHandler implements IInputHandler {
 
-  public controller: IInputOutputDevicePlugin;
+  public controller: IIODevicePlugin;
 
   /**
    * @constructor
    * The InputHandler constructor.
    * Attaches the keydown and keyup KeyboardEvent to the document.
    */
-  constructor(ioPlugin: IInputOutputDevicePlugin) {
+  constructor(ioPlugin: IIODevicePlugin) {
     this.controller = ioPlugin;
   }
 

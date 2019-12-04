@@ -1,7 +1,7 @@
 import { InputState } from '../../types/inputs';
 
 /**
- * The interface for the InputHandler.
+ * The InputHandler interface.
  */
 export interface IInputHandler {
 

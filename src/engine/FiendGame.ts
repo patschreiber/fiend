@@ -1,14 +1,12 @@
-import { SceneManager } from './Scene/SceneManager';
-import { GameObjectManager } from './GameObject/GameObjectManager';
 import { ComponentManager } from './Component/ComponentManager';
-import { InputHandler } from './Input/InputHandler';
-import { Renderer } from './Render/Renderer';
-
 import { GameObject } from './GameObject';
-import { Template } from './templates/Template';
+import { GameObjectManager } from './GameObject/GameObjectManager';
+import { InputHandler } from './Input/InputHandler';
+import { DebugKeyboardPlugin } from './Input/io_device_plugins/DebugKeyboardPlugin';
 import { MovementSystem } from './Input/MovementSystem';
-import { KeyboardPlugin } from './Input/control_scheme_plugins/KeyboardPlugin';
-import { DebugKeyboardPlugin } from './Input/control_scheme_plugins/DebugKeyboardPlugin';
+import { Renderer } from './Render/Renderer';
+import { SceneManager } from './Scene/SceneManager';
+import { Template } from './templates/Template';
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found

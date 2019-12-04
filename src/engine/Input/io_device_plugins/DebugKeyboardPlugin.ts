@@ -1,18 +1,19 @@
-import { IInputOutputDevicePlugin } from '../interfaces/IInputOutputDevicePlugin';
-import {
-  Action,
-  DefaultControlSchemes,
-  ButtonStatus,
-  Button
-} from '../../structs/enums/input_enums';
+/**
+ * @file This KeyboardPlugin offers a lot of functionality and debug mappings
+ * not found in normal InputOutputDevicePlugins.
+ *
+ * ONLY USE FOR ACTIVE DEVELOPMENT!
+ */
+import { Action, Button, ButtonStatus, DebugAction, DefaultControlSchemes } from '../../structs/enums/input_enums';
 import { InputSignalMap, InputState } from '../../types/inputs';
-// import { MoveNorthCommand, MoveSouthCommand, MoveEastCommand, MoveWestCommand, NullCommand } from '../../Command';
+import { IIODevicePlugin } from '../interfaces/IIODevicePlugin';
+
 
 /**
- * The KeyboardInputMap class.
+ * The DebugKeyboardInputMap class.
  *
  */
-export class KeyboardPlugin implements IInputOutputDevicePlugin {
+export class DebugKeyboardPlugin implements IIODevicePlugin {
 
   /**
    * Maps an input from an I/O device to an internal Button used by the engine.
@@ -31,7 +32,13 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
     "q": Button.B6,
     "Backspace": Button.B7,
     "Enter": Button.B8,
-    "Shift": Button.B9
+    "Shift": Button.B9,
+    "F1": Button.ALT_B1,
+    "F2": Button.ALT_B2,
+    "F3": Button.ALT_B2,
+    "F4": Button.ALT_B2,
+    "F5": Button.ALT_B2,
+    "F6": Button.ALT_B2,
   }
 
   /**
@@ -85,6 +92,21 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
       command: Action.NullCommand,
       status: ButtonStatus.RAISED
     },
+    // Button.ALT_B1
+    {
+      command: Action.NullCommand,
+      status: ButtonStatus.RAISED
+    },
+    // Button.ALT_B2
+    {
+      command: Action.NullCommand,
+      status: ButtonStatus.RAISED
+    },
+    // Button.ALT_B3
+    {
+      command: Action.NullCommand,
+      status: ButtonStatus.RAISED
+    },
   ];
 
   /**
@@ -96,7 +118,6 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
    * the default will be used.
    */
   constructor(controlScheme?: DefaultControlSchemes) {
-    // this._inputMap = this._initInputMap(this.buttonList);
     this.loadControlScheme(controlScheme);
 
     document.getElementById('game-pane').addEventListener(
@@ -125,6 +146,7 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
    */
    public handleInputEvent(event: KeyboardEvent, buttonStatus: ButtonStatus): void {
     event.preventDefault();
+    console.log(event);
 
     let button = this._inputSignalMap[event.key];
 
@@ -171,8 +193,6 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
   ): void {
 
     switch(controlScheme) {
-      case 1:
-        break;
       default:
         this._currentControllerMap[Button.B1].command = Action.MoveN;
         this._currentControllerMap[Button.B2].command = Action.MoveS;
@@ -183,6 +203,9 @@ export class KeyboardPlugin implements IInputOutputDevicePlugin {
         this._currentControllerMap[Button.B7].command = Action.NullCommand;
         this._currentControllerMap[Button.B8].command = Action.NullCommand;
         this._currentControllerMap[Button.B9].command = Action.NullCommand;
+        this._currentControllerMap[Button.ALT_B1].command = DebugAction.SpawnPlayer;
+        this._currentControllerMap[Button.ALT_B2].command = DebugAction.SpawnOrdinaryFolk;
+        this._currentControllerMap[Button.ALT_B3].command = DebugAction.SwitchInput;
     }
   }
 
