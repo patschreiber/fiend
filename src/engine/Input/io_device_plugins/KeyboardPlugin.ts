@@ -1,6 +1,6 @@
+import { IIODevicePlugin } from '../../Input';
 import { Action, Button, ButtonStatus, DefaultControlSchemes } from '../../structs/enums/input_enums';
 import { InputSignalMap, InputState } from '../../types/inputs';
-import { IIODevicePlugin } from '../interfaces/IIODevicePlugin';
 
 /**
  * The KeyboardInputMap class.

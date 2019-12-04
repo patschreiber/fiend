@@ -1,7 +1,6 @@
+import { IInputHandler, IIODevicePlugin } from '../Input';
 import { Action, Button } from '../structs/enums/input_enums';
 import { ButtonState, InputState } from '../types/inputs';
-import { IInputHandler } from './interfaces/IInputHandler';
-import { IIODevicePlugin } from './interfaces/IIODevicePlugin';
 
 /**
  * The InputHandler class.
