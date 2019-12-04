@@ -11,7 +11,7 @@ import { InputSignalMap, InputState } from '../../types/inputs';
 
 /**
  * The DebugKeyboardInputMap class.
- *
+ * @implements [[IIODevicePlugin]]
  */
 export class DebugKeyboardPlugin implements IIODevicePlugin {
 
@@ -43,8 +43,14 @@ export class DebugKeyboardPlugin implements IIODevicePlugin {
 
   /**
    * TODO: Structure should add ["context"] so we can have context-independent
-   * buttons
-   * @type The inputMap instance.
+   * buttons.
+   * TODO: This should probably live in InputHandler and be exposed via a public
+   * method.
+   * The inputMap instance.
+   *
+   * @internal Each array index maps to a specific button. We do this so the
+   * Button enum value can map to a specific array index. Therefore, these
+   * should always be in the same order for every plugin.
    */
   private _currentControllerMap: InputState = [
     // Button.B_1
@@ -121,7 +127,7 @@ export class DebugKeyboardPlugin implements IIODevicePlugin {
     this.loadControlScheme(controlScheme);
 
     document.getElementById('game-pane').addEventListener(
-      'keydown', (event) => this.handleInputEvent(
+      'keydown', (event) => this.inputEventFired(
         event,
         ButtonStatus.PRESSED
       ),
@@ -129,7 +135,7 @@ export class DebugKeyboardPlugin implements IIODevicePlugin {
     );
 
     document.getElementById('game-pane').addEventListener(
-      'keyup', (event) => this.handleInputEvent(
+      'keyup', (event) => this.inputEventFired(
         event,
         ButtonStatus.RAISED
       ),
@@ -137,46 +143,21 @@ export class DebugKeyboardPlugin implements IIODevicePlugin {
     );
   }
 
-  /**
-   * Callback for when an input event fires.
-   *
-   * @param event The event representing the user interaction with a keyboard.
-   * @param buttonStatus The status the button should be sent to when the event
-   * fires.
-   */
-   public handleInputEvent(event: KeyboardEvent, buttonStatus: ButtonStatus): void {
+  public inputEventFired(event: KeyboardEvent, btnStatus: ButtonStatus): void {
     event.preventDefault();
     console.log(event);
 
     let button = this._inputSignalMap[event.key];
 
     if (this._currentControllerMap[button]) {
-      this._currentControllerMap[button].status = buttonStatus;
+      this._currentControllerMap[button].status = btnStatus;
     }
   }
 
-  /**
-   * Gets the current state of the Buttons at the time of invocation.
-   *
-   * @return The current state of the controller.
-   */
   public getInputState(): InputState {
     return this._currentControllerMap;
   }
 
-  /**
-   * Retrieves the mapping of input signal from the active I/O device to an
-   * internal [[Button]].
-   *
-   * @return THe mapping of input signal.
-   */
-
-  /**
-   * Accessor for the private member `id`.
-   *
-   * @returns the mapping of input signal from the active I/O device to an
-   * internal [[Button]].
-   */
   public getInputSignalMap(): InputSignalMap {
     return this._inputSignalMap;
   }
