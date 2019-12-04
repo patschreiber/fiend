@@ -1,13 +1,14 @@
-import { VelocityComponent, PositionComponent } from '../Component';
-import { GameObject } from '../GameObject';
+import { PositionComponent, VelocityComponent } from '../Component';
 import { ComponentManager } from '../Component/ComponentManager';
-import { InputHandler } from './InputHandler';
+import { GameObject } from '../GameObject';
+import { IMovementSystem } from '../Input';
 import { Action, ButtonStatus } from '../structs/enums/input_enums';
+import { InputHandler } from './InputHandler';
 
 /**
  * The MovementSystem system class.
  */
-export class MovementSystem {
+export class MovementSystem implements IMovementSystem {
 
   /**
    * Applies a force to the player. The cardinality is reversed since we're

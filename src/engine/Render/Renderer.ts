@@ -73,7 +73,7 @@ export class Renderer {
      *
      * @var {integer}
      */
-    this.scale = 1;
+    this.scale = 2;
 
     this._currentMap = new OverworldAtlas();
   }
@@ -174,8 +174,8 @@ export class Renderer {
       sourceHeight,     // sHeight
       position.x,       // dx
       position.y,       // dy
-      transform.w,      // dWidth
-      transform.h       // dHeight
+      transform.w * this.scale,      // dWidth
+      transform.h * this.scale       // dHeight
     );
   }
 
