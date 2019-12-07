@@ -1,8 +1,23 @@
 {
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    // Extends base config so we don't have to redefine the compilerOptions.
+    "extends": "./tsconfig.json"
+  },
   "plugins": ["@typescript-eslint"],
-  "extends": ["plugin:@typescript-eslint/recommended"],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:eslint-comments/recommended",
+    "plugin:jest/recommended",
+    "airbnb-base"
+  ],
+  "env": {
+    "browser": true,
+    "jest": true
+  },
   "rules": {
     "@typescript-eslint/rule-name": "error"
   }
+
 }
