@@ -5,7 +5,7 @@
  ) /     _(__(/_/ (_(_(_
 (_/ ====================
 ```
-A browser based game.
+A browser-based game with a custom engine. Written in TypeScript.
 
 # Spin up
 
