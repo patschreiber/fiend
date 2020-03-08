@@ -12,6 +12,7 @@ export class VelocityComponent extends Component implements IComponent, IVelocit
    */
   public speed: number;
 
+
   /**
    * The max speed.
    */
@@ -19,7 +20,7 @@ export class VelocityComponent extends Component implements IComponent, IVelocit
 
   /**
    * The direction and rate the GameObject is changing it's position. Velocity
-   * implies speed and direction
+   * implies speed and direction.
    */
   public velocity: number;
 
@@ -29,25 +30,23 @@ export class VelocityComponent extends Component implements IComponent, IVelocit
   public acceleration: number;
 
   /**
-   * The decay and deceleration applied to the velocity.
+   * The decay and deceleration applied when already in motion.
    */
-  public damping: number;
+  public decayRate: number;
 
   /**
-   * The impulse applied to the GameObject.
+   * The current direction of travel.
    */
-  public impulse: number;
+  public currDot: number;
 
   /**
 
    */
   private static defaults: IVelocityComponentMembers = {
     maxSpeed: 40,
-    velocity: 0,
-    momentum: 0,
-    speed: 1,
-    damping: 1,
-    thrust: 0
+    currSpeed: 0,
+    decayRate: 0,
+    currDot: 0,
   };
 
   /**

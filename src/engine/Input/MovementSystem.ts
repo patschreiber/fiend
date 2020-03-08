@@ -59,7 +59,6 @@ export class MovementSystem implements IMovementSystem {
    * @param go The GameObject entity to handle movement.
    * @param delta The time difference between frames. Provided by the game's
    * main game loop.
-   * @param inputState The InputHandler's input state, if applicable
    * @see FiendGame.main()
    */
   public update(go: GameObject, delta: number): void {
@@ -68,26 +67,31 @@ export class MovementSystem implements IMovementSystem {
       return;
     }
 
-    let directions = [
+    let requestedMovementDirections = [
       this.InputHandler.getButtonState(Action.MoveN),
       this.InputHandler.getButtonState(Action.MoveS),
       this.InputHandler.getButtonState(Action.MoveE),
       this.InputHandler.getButtonState(Action.MoveW),
     ];
 
-    for (let direction of directions) {
+    for (let direction of requestedMovementDirections) {
       if (direction.status === ButtonStatus.PRESSED) {
-        // direction.command.execute(go, delta);
 
-        let force = this._forces[direction.command];
+        // If already a current direction of travel and speed, different things happen depending.
+        // is direction opposite of the currDot? 
+          // 
 
-        this.posComp.worldPosition.x = this.posComp.worldPosition.x += (force.x * 10) * delta;
-        this.posComp.worldPosition.y = this.posComp.worldPosition.y += (force.y * 10) * delta;
+        let directionalForce = this._forces[direction.command];
+        let decayTick = 0.5;
+        let speed = 0;
+
+        this.posComp.worldPosition.x = this.posComp.worldPosition.x += (directionalForce.x * 50) * delta;
+        this.posComp.worldPosition.y = this.posComp.worldPosition.y += (directionalForce.y * 50) * delta;
 
 
         console.log('this.InputHandler.getInputState() :', this.InputHandler.getInputState());
         console.log("PRe$$ed: ", delta);
-        console.log('direction.status :', direction.command);
+        console.log('direction.status :', direction. command);
       }
     }
   }

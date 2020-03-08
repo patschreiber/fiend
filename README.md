@@ -9,9 +9,9 @@ A browser based game.
 
 # Spin up
 
-```
-$ npm install
-$ gulp
+```npm
+npm install
+gulp
 ```
 
 Files are generated in the `dist/` directory.
@@ -40,15 +40,48 @@ Remove unused imports:
 A core engine feature should have a capitalized name and be a direct child of
 the `engine/` directory.
 
-### Good
+```ts
+import { IComponent } from './interfaces/IComponent';
+import { Component } from './Component';
+
+/**
+ * The ColliderComponent component class.
+ * Allows a [[GameActor]] to collide with other objects.
+ *
+ * This component is part of the physics system.
+ *
+ * @extends [[Component]]
+ */
+export class ColliderComponent extends Component implements IComponent {
+
+  /**
+   * The Lifeforce component.
+   */
+  private static readonly _typeId = "ColliderComponent";
+
+  /**
+   * Retrieves the type id of the component. Used when fetching or checking a
+   * specific component for a [[GameObject]].
+   */
+  public getTypeId(): string {
+    return ColliderComponent._typeId;
+  }
+
+}
+
 ```
+
+
+### Good
+```fs
 .src/
 ├── engine/
 │   ├── GameObject
 │   │   ├── GameObject.ts
 ```
 ### Bad
-```
+
+```fs
 .src/
 ├── engine/
 │   ├── gameobj/

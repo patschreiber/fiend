@@ -30,9 +30,9 @@ export class InputHandler implements IInputHandler {
         // state directly.
         return this.controller.getInputState()[needle];
       case (needle as Action):
-        let action = (needle as Action);
+        const action = (needle as Action);
         // We get a handle on the Button assigned to the Action.
-        let button = this.controller.getInputSignalMap()[action];
+        const button = this.controller.getInputSignalMap()[action];
         // Then we grab the input state using our new Button.
         return this.controller.getInputState()[button];
       default:
