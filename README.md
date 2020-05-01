@@ -115,3 +115,19 @@ export class ColliderComponent extends Component implements IComponent {
 │   │   │   ├── GameActorGameObject.ts
 │   │   │   └── Player.ts
 ```
+
+## Info
+
+# Lines of code (generated with loc)
+--------------------------------------------------------------------------------
+ Language             Files        Lines        Blank      Comment         Code
+--------------------------------------------------------------------------------
+ HTML                   157        39920            5            3        39912
+ CSS                      1         2321          448          172         1701
+ TypeScript              83         4152          549         2050         1553
+ Markdown                 1          117           30            0           87
+ JSON                     2           78            0            0           78
+ JavaScript               4           75            5            3           67
+--------------------------------------------------------------------------------
+ Total                  248        46663         1037         2228        43398
+--------------------------------------------------------------------------------
