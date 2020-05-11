@@ -1,6 +1,6 @@
 
-import { GameObject } from '../engine/GameObject';
-import { Template } from '../engine/templates/Template';
+import { GameObject } from '../src/engine/GameObject';
+import { Template } from '../src/engine/templates/Template';
 
 describe("GameObjects validity", () => {
 
