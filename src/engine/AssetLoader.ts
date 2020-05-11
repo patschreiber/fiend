@@ -7,10 +7,13 @@ export class AssetLoader {
 
   public initAssets(): Array<any> {
     return [
-      this.loadImage("testTileset", "./DAT/1bittest.png"),
-      this.loadImage("testTileset2", "./DAT/psychic-swamp.png"),
-      this.loadImage("TESTORIG", "./DAT/low-res-spritesheet.png"),
-      this.loadImage("TESTNUMBERED", "./DAT/pixel_art_tileset_test.png"),
+      this.loadImage("testTileset", "./data/assets/1bittest.png"),
+      this.loadImage("testTileset2", "./data/assets/psychic-swamp.png"),
+      this.loadImage("TESTORIG", "./data/assets/low-res-spritesheet.png"),
+      this.loadImage("TESTNUMBERED", "./data/assets/pixel_art_tileset_test.png"),
+      this.loadImage("player_stand_in", "./data/assets/textures/actors/character-stand-in.png"),
+      this.loadImage("npc_stand_in", "./data/assets/textures/actors/npc-stand-in.png"),
+      this.loadImage("NULL_TEX", "./data/assets/textures/null-texture-no-white.png"),
     ];
   }
 
@@ -27,9 +30,9 @@ export class AssetLoader {
         reject('Could not load image: ' + src);
       };
     }.bind(this));
-  
+
     img.src = src;
-  
+
     return d;
   }
 

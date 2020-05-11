@@ -1,108 +1,72 @@
-/**
- * The interface for the [[GameActor]] class.
- *
- * @interface IGameActor
- */
-interface IGameObject {
-
-  /**
-   * Keeps track of the `id` of the last GameObject instantiated.
-   *
-   * @static
-   * @type {number}
-   */
-  idIncrementor: number;
-
-  /**
-   * The `id` of the GameObject.
-   *
-   * @type {number}
-   */
-  id: number;
-
-  /**
-   * The type of the GameObject.
-   *
-   * @type {string}
-   */
-  type: string;
-
-  /**
-   * The human-readable name of the GameObject. This will appear in-game.
-   *
-   * @type {string}
-   */
-  name: string;
-
-  /**
-   * Defines the signature for the update method for the GameActor.
-   *
-   * @abstract
-   * @param delta The time difference between frames. Provided by the game's
-   * main game loop.
-   * @see FiendGame.main()
-   */
-  update(delta: number): void;
-}
+import { GameObjectId, GameObjectTemplate } from '../types/gameobjects';
+import { IGameObject } from './interfaces/IGameObject';
 
 /**
  * The GameObject abstract class. All game entities inherit from this class.
  * On instantiation, the class will generate an auto-incrementing id for use
  * in identifying the newly-created GameObject.
  *
- * @abstract
+ * TODO: Consider we might not even NEED to create an instance of a GameObject
+ * if we play our cards right. We could just generate the auto-incrementing ID.
  */
-export abstract class GameObject {
+export class GameObject implements IGameObject {
 
   /**
    * Keeps track of the `id` of the last GameObject instantiated.
    *
    * @static
-   * @type {number}
    */
-  private static idIncrementor: number = 1;
+  private static _idIncrementor: number = 1;
 
   /**
    * The id of the instance of the GameObject.
+   * TODO: Switch this to use a Symbol (https://www.sitepen.com/blog/advanced-typescript-concepts-classes-and-types/)
+   */
+  private readonly _id: GameObjectId;
+
+  /**
+   * GameObject tags can be added to a GameObject to facilitate the
+   * identification of an Object. They should not be used as the law on what the
+   * GameObject type actually is, since they can be changed on the fly. Think of
+   * Tags as more of a quality-of-life feature for the developer.
+   */
+  private _tags: Array<string>;
+
+  /**
+   * @constructor
+   * Auto-increments the GameOject id for the new GameObject being created.
+   * TODO: Make sure to save the number we left off on when we quit so we can
+   * resume auto-incrementing when we save/load the game.
    *
-   * @type {number}
    */
-  private id: number;
+  private constructor(template?: GameObjectTemplate) {
+    this._id = GameObject._idIncrementor++;
+  }
 
-  /**
-    * @var type The name of the type of the GameObject.
-    */
-  protected type: string;
+  public getId(): GameObjectId {
+    return this._id;
+  }
 
-  /**
-   * @var name The humanized name of the GameObject.
-   */
-  public name: string;
-
-  /**
-   * The GameObject constructor. Auto-increments the GameOject id for the new
-   * GameObject being created.
-   */
-  public constructor() {
-    this.id = GameObject.idIncrementor++;
+  public getTags(): Array<string> {
+    return this._tags;
   }
 
   /**
-   * Accessor for the private member `id`.
+   * Creates a new instance of a GameObject based on the given template.
    *
-   * @returns The id of the GameObject
+   * @param template The template to base the new GameObject on.
    */
-  public getId(): number {
-    return this.id;
+   public static create(template?: GameObjectTemplate): GameObject {
+    return new GameObject(template);
   }
 
   /**
-   * Updates the GameObject's state. Intended to be run in the main game loop.
+   * Retrieves the most recently created GameObject id.
    *
-   * @abstract
-   * @param delta The time difference between frames. Provided by the game's
-   * main game loop.
-   * @see FiendGame.main()
+   * @return The GameObject id of the youngest GameObject.
    */
-  protected abstract update(delta: number): void;
+  public static getMostRecentId(): GameObjectId {
+    return GameObject._idIncrementor;
+  }
+
 }

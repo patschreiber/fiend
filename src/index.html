@@ -5,6 +5,16 @@
     <meta charset="utf-8">
     <title>Fiend</title>
     <style>
+        body {
+            font-family: "Palatino", "Times New Roman", serif;
+            font-size: 14px;
+            line-height: 1.8rem;
+            font-weight: 400;
+            color: #2e3b4e;
+        }
+        .caption {
+            text-align: center;
+        }
         canvas{
             border: 1px solid #000;
             display: block;
@@ -12,10 +22,13 @@
         }
     </style>
 </head>
-<body>
-    <div id="fiend-game"></div>
-    <div id="fiend-input"></div>
+<body class="fiend-ornamental-viewport">
+    <div id="fiend-game">
 
+        <!-- The game canvas gets dynamically generated and placed here. -->
+
+        <div class="caption">pre-alpha build</div>
+    </div>
     <!-- Init -->
     <!-- <script src="src/game.js"></script> -->
     <script src="bundle.js"></script>
