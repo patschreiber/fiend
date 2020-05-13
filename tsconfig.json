@@ -1,18 +1,4 @@
 {
-  "compileOnSave": true,
-  "compilerOptions": {
-    "outDir": "./dist/",        // path to output directory
-    "sourceMap": true,          // allow sourcemap support
-    "strictNullChecks": false,   // enable strict null checks as a best practice
-    "module": "es6",            // specify module code generation
-    "target": "es2015",            // specify ECMAScript target version
-    "allowJs": true,             // allow a partial TypeScript and JavaScript codebase
-    "moduleResolution": "node",  // helps with "barrel" files (index.ts)
-    "extendedDiagnostics": true,   // Show verbose diagnostic information
-    "forceConsistentCasingInFileNames": true   // Disallow inconsistently-cased references to the same file
-    // "noUnusedLocals": true,    // Won't compile if there are unused vars
-    // "noUnusedParameters": true // Won't compile if there are unused params
-  },
   "files": [
     "./src/engine/types/globals.d.ts",
     "./src/engine/types/components.d.ts",
@@ -20,6 +6,47 @@
     "./src/engine/types/events.d.ts",
     "./src/engine/types/rendering.d.ts"
   ],
-  "include": ["./src/**/*.ts"],
-  "exclude": ["node_modules", "build", "**/*.spec.ts"]
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "**/*.spec.ts"
+  ],
+  "compileOnSave": true,
+  "compilerOptions": {
+    "allowUnreachableCode": false,
+    "alwaysStrict": true,
+    "allowJs": true,
+    "charset": "utf8",
+    // "declaration": false,
+    // "declarationDir": "./src/engine/types",
+    "diagnostics": true,
+    "extendedDiagnostics": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "keyofStringsOnly": true,
+    "listFiles": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "newLine": "lf",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "target": "es2015",
+    "tsBuildInfoFile": "./build/.tsbuildinfo",
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  }
 }
