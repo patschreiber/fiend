@@ -68,6 +68,7 @@ export class GameObjectManager implements IGameObjectManager {
    */
    public removeGameObject(goid: GameObjectId): boolean {
     // TODO:
+     console.log('goid', goid);
     return true;
   }
 

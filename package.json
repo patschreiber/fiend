@@ -1,9 +1,19 @@
 {
   "name": "fiend",
-  "displayName": "Fiend, a Macabre Tale",
   "version": "1.0.0",
-  "description": "A fiend is out tonight. Will you save the town? ...or let the fiend destroy it, in this macabre \"sandbox with structure\" adventure.",
   "type": "project",
+  "displayName": "Fiend, a Macabre Tale",
+  "description": "A fiend is out tonight. Will you save the town? ...or let the fiend destroy it, in this macabre \"sandbox with structure\" adventure.",
+  "license": "CC-BY-NC-4.0",
+  "author": "Patrick Schreiber",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patschreiber/fiend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/patschreiber/fiend/issues",
+    "email": "patrick@goes.click"
+  },
   "main": "main.js",
   "directories": {
     "dist": "./dist",
@@ -16,25 +26,17 @@
     "docgen": "yarn run gulp docgen",
     "test": "jest",
     "test-types": "tsc -p tsconfig.json",
-    "test-coverage": "jest --coverage"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/patschreiber/fiend.git"
-  },
-  "author": "Patrick Schreiber",
-  "license": "CC-BY-NC-4.0",
-  "bugs": {
-    "url": "https://github.com/patschreiber/fiend/issues",
-    "email": "patrick@goes.click"
+    "test-coverage": "jest --coverage",
+    "upgrade-all-dependencies": "yarn upgrade-interactive --latest"
   },
   "homepage": "https://github.com/patschreiber/fiend#readme",
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
-    "@types/jest": "^25.2.1",
-    "@typescript-eslint/eslint-plugin": "^2.31.0",
-    "@typescript-eslint/parser": "^2.31.0",
+    "@types/jest": "^25.2.3",
+    "@types/node": "^14.0.5",
+    "@typescript-eslint/eslint-plugin": "^3.0.0",
+    "@typescript-eslint/parser": "^3.0.0",
     "babelify": "^10.0.0",
     "browserify": "^16.5.1",
     "eslint": "^7.0.0",
@@ -51,10 +53,10 @@
     "jest-cli": "^26.0.1",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
-    "ts-jest": "^25.5.1",
+    "ts-jest": "^26.0.0",
     "tsify": "^4.0.1",
-    "typedoc": "^0.17.6",
-    "typescript": "^3.8.3",
+    "typedoc": "^0.17.7",
+    "typescript": "^3.9.3",
     "typescript-logging": "^0.6.4",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
