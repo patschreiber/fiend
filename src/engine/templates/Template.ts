@@ -35,7 +35,8 @@ export class Template {
         [PositionComponent, {worldPosition: {x:200,y:200}}],
         [RenderComponent, {textureId: Asset.Player}], // The value for key "Sprite" is the type id of the texture.
         [VelocityComponent],
-      ]
+      ],
+      tags: []
       // TODO: Add default model option
     },
     "OrdinaryFolk": {

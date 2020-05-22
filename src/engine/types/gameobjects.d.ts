@@ -55,7 +55,7 @@ export const enum TemplateType {
 export type GameObjectTemplate = {
   type: TemplateType,
   components: Array<ComponentTemplate>;
-  tags?: Array<string>;
+  tags: Array<string>;
 }
 
 /**
