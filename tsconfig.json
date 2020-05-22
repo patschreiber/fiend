@@ -10,8 +10,8 @@
     "./src/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "build",
+    "./node_modules",
+    "./build",
     "**/*.spec.ts"
   ],
   "compileOnSave": true,
@@ -20,8 +20,8 @@
     "alwaysStrict": true,
     "allowJs": true,
     "charset": "utf8",
-    // "declaration": false,
-    // "declarationDir": "./src/engine/types",
+    "declaration": false,
+    "declarationDir": "./src/engine/types",
     "diagnostics": true,
     "extendedDiagnostics": true,
     "forceConsistentCasingInFileNames": true,
