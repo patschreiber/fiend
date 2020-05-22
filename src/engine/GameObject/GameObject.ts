@@ -41,6 +41,13 @@ export class GameObject implements IGameObject {
    */
   private constructor(template?: GameObjectTemplate) {
     this._id = GameObject._idIncrementor++;
+
+    this._tags = [];
+
+    // TODO: More templating stuff needs to happen.
+    if (template) {
+      this._tags = template.tags;
+    }
   }
 
   public getId(): GameObjectId {
@@ -52,9 +59,11 @@ export class GameObject implements IGameObject {
   }
 
   /**
-   * Creates a new instance of a GameObject based on the given template.
+   * Factory class that creates a new instance of a GameObject based on the
+   * given template.
    *
    * @param template The template to base the new GameObject on.
+   * @return GameObject The newly-created GameObject.
    */
    public static create(template?: GameObjectTemplate): GameObject {
     return new GameObject(template);
