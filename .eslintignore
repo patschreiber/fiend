@@ -4,3 +4,7 @@ node_modules
 dist
 # don't lint nyc coverage output
 coverage
+# Don't lint build output (make sure it's set to your correct build folder name)
+build
+# Don't lint auto-generated docs
+docs
