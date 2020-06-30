@@ -7,19 +7,19 @@
 /**
  * The interface for GameObject.
  */
-export * from './interfaces/IGameObject';
+export * from "./interfaces/IGameObject";
 
 /**
  * The interface for GameObjectManager.
  */
-export * from './interfaces/IGameObjectManager'
+export * from "./interfaces/IGameObjectManager";
 
 /**
  * The GameObjectManager class.
  */
-export * from './GameObjectManager';
+export * from "./GameObjectManager";
 
 /**
  * Progenitor classes for all entities in the game.
  */
-export * from './GameObject';
+export * from "./GameObject";

@@ -1,5 +1,5 @@
-import { Component } from './Component';
-import { IComponent } from './interfaces/IComponent';
+import { Component } from "./Component";
+import { IComponent } from "./interfaces/IComponent";
 
 /**
  * The PositionComponent class.
@@ -7,8 +7,8 @@ import { IComponent } from './interfaces/IComponent';
  * @implements IPositionComponentMembers
  * TODO:: Flesh this out
  */
-export class PositionComponent extends Component implements IComponent, IPositionComponentMembers {
-
+export class PositionComponent extends Component
+  implements IComponent, IPositionComponentMembers {
   /**
    The position of the related GameObject relative to it's parent's position.
    */
@@ -33,17 +33,17 @@ export class PositionComponent extends Component implements IComponent, IPositio
    * The PositionComponent's default values.
    */
   private static defaults: IPositionComponentMembers = {
-    localPosition: {x:0,y:0},
-    worldPosition: {x:0,y:0},
-    gridLocation: {x:0,y:0},
-  }
+    localPosition: { x: 0, y: 0 },
+    worldPosition: { x: 0, y: 0 },
+    gridLocation: { x: 0, y: 0 },
+  };
 
   /**
    * @constructor
    * @internal We use [[Partial]] to declare every
    * @param args (optional) The members of the class.
    */
-   public constructor(overrides?: Partial<IPositionComponentMembers>) {
+  public constructor(overrides?: Partial<IPositionComponentMembers>) {
     super();
     Object.assign(this, PositionComponent.defaults);
     Object.assign(this, overrides);
@@ -53,8 +53,7 @@ export class PositionComponent extends Component implements IComponent, IPositio
    * Retrieves the type id of the component. Used when fetching or checking a
    * specific component for a [[GameObject]].
    */
-   public getTypeId(): string {
+  public getTypeId(): string {
     return PositionComponent._typeId;
   }
-
 }

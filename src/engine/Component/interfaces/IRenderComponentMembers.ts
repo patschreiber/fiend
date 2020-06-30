@@ -1,11 +1,10 @@
-import { IRenderComponentMembers } from '../RenderComponent';
-import { IComponent } from './IComponent';
+import { IRenderComponentMembers } from "../RenderComponent";
+import { IComponent } from "./IComponent";
 
 /**
  * The IRederComponentMembers interface.
  */
 export interface IRederComponentMembers extends IComponent {
-
   /**
    * @constructor
    * @internal We use [[Partial]] to declare every
@@ -18,5 +17,4 @@ export interface IRederComponentMembers extends IComponent {
    * specific component for a [[GameObject]].
    */
   getTypeId(): string;
-
 }

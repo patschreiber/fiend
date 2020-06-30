@@ -7,46 +7,42 @@
 /**
  * The InputHandler interface.
  */
-export * from './InputHandler';
+export * from "./InputHandler";
 
 /**
  * The MovementSystem interface.
  */
-export * from './MovementSystem';
-
+export * from "./MovementSystem";
 
 /**
  * Interfaces
  */
 
-
 /**
  * The InputHandler interface.
  */
-export * from './interfaces/IInputHandler';
+export * from "./interfaces/IInputHandler";
 
 /**
  * The IODevicePlugin interface.
  */
-export * from './interfaces/IIODevicePlugin';
+export * from "./interfaces/IIODevicePlugin";
 
 /**
  * The MovementSystem interface.
  */
-export * from './interfaces/IMovementSystem';
-
+export * from "./interfaces/IMovementSystem";
 
 /**
  * I/O Device Plugins
  */
 
-
 /**
  * The DebugKeyboardPlugin interface.
  */
-export * from './io_device_plugins/DebugKeyboardPlugin';
+export * from "./io_device_plugins/DebugKeyboardPlugin";
 
 /**
  * The KeyboardPlugin interface.
  */
-export * from './io_device_plugins/KeyboardPlugin';
+export * from "./io_device_plugins/KeyboardPlugin";

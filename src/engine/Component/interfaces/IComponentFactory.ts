@@ -1,10 +1,9 @@
-import { Component } from '../Component';
+import { Component } from "../Component";
 
 /**
  * The IEventComponent interface.
  */
 export interface IComponentFactory {
-
   /**
    * Creates a new object instance based on the passed in component type. Note:
    * The Component must inherit from the base `Component` class.

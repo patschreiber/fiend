@@ -1,11 +1,10 @@
-import { GameObject } from '../GameObject';
+import { GameObject } from "../GameObject";
 
 /**
  * The Command base class.
  * @abstract
  */
 export abstract class Command {
-
   /**
    * Executes the command.
    *

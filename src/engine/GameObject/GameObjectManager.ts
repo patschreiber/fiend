@@ -1,13 +1,12 @@
-import { GameObjectId, GameObjectTemplate } from '../types/gameobjects';
-import { GameObject } from './GameObject';
-import { IGameObjectManager } from './interfaces/IGameObjectManager';
+import { GameObjectId, GameObjectTemplate } from "../types/gameobjects";
+import { GameObject } from "./GameObject";
+import { IGameObjectManager } from "./interfaces/IGameObjectManager";
 
 /**
  * The GameObjectManager class.
  * Manages GameObjects and the containers they belong to.
  */
 export class GameObjectManager implements IGameObjectManager {
-
   public inactiveGameObjects: Array<GameObjectId>;
 
   /**
@@ -18,7 +17,7 @@ export class GameObjectManager implements IGameObjectManager {
    * soft-deleted in the system; new Components of that type cannot be added to
    * the GameObject.
    */
-   // TODO: YAGNI...
+  // TODO: YAGNI...
   //  private _attachedComponents: Array<ComponentId> = new Array(8);
 
   /**
@@ -26,7 +25,7 @@ export class GameObjectManager implements IGameObjectManager {
    * appear once in any given save file. A lot of the time, the state of these
    * unique entities needs to be maintained for reference.
    */
-   // TODO: YAGNI...
+  // TODO: YAGNI...
   // private _worldGraveyard: GameObjectContainer;
 
   /**
@@ -49,8 +48,7 @@ export class GameObjectManager implements IGameObjectManager {
   public spawnFromTemplate(
     template: GameObjectTemplate,
     container?: Array<GameObject>
-  ): GameObjectId|false {
-
+  ): GameObjectId | false {
     let newGameObject = GameObject.create(template);
     if (container === undefined) {
       this.inactiveGameObjects.push(newGameObject.getId());
@@ -66,10 +64,9 @@ export class GameObjectManager implements IGameObjectManager {
    *
    * @return If the GameObject was successfully dealt with or not.
    */
-   public removeGameObject(goid: GameObjectId): boolean {
+  public removeGameObject(goid: GameObjectId): boolean {
     // TODO:
-     console.log('goid', goid);
+    console.log("goid", goid);
     return true;
   }
-
 }

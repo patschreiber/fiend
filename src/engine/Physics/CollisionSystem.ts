@@ -1,10 +1,9 @@
-import { GameObject } from '../GameObject';
+import { GameObject } from "../GameObject";
 
 /**
  * The CollisionSystem class.
  */
 export class CollisionSystem {
-
   // private requiredComponents:
 
   /**

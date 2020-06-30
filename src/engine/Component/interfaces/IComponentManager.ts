@@ -1,21 +1,23 @@
-import { GameObjectId } from '../../types/gameobjects';
-import { ComponentId, ComponentTypes, ComponentTemplate } from '../../types/components';
-import { Component } from '../Component';
-
+import { GameObjectId } from "../../types/gameobjects";
+import {
+  ComponentId,
+  ComponentTypes,
+  ComponentTemplate,
+} from "../../types/components";
+import { Component } from "../Component";
 
 export interface IComponentManager {
-
   addComponent<T extends IComponentMembers>(
     component: new (overrides?: Partial<T>) => Component,
     goid: GameObjectId,
     overrides?: Partial<T>
-  ): ComponentId|null;
+  ): ComponentId | null;
 
   getComponent<K extends keyof ComponentTypes>(
     component: K,
     goid: GameObjectId
     // componentTypeId: string
-  ): ComponentTypes[K]|null;
+  ): ComponentTypes[K] | null;
 
   removeComponent<K extends keyof ComponentTypes>(
     component: K,
@@ -35,5 +37,4 @@ export interface IComponentManager {
     componentType: K,
     goid: GameObjectId
   ): boolean;
-
 }

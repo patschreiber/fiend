@@ -1,10 +1,10 @@
 // TODO: Remove all this scene-specific shit out of here. Ex. EMPTY_TILE.
-import { BaseAtlas } from '../../atlases/BaseAtlas';
-import { OverworldAtlas } from '../../atlases/OverworldAtlas';
-import { RenderComponent } from '../Component';
-import { SceneManager } from '../Scene';
-import { ITexture } from './textures/interfaces/ITexture';
-import { NullTexture } from './textures/null.tex';
+import { BaseAtlas } from "../../atlases/BaseAtlas";
+import { OverworldAtlas } from "../../atlases/OverworldAtlas";
+import { RenderComponent } from "../Component";
+import { SceneManager } from "../Scene";
+import { ITexture } from "./textures/interfaces/ITexture";
+import { NullTexture } from "./textures/null.tex";
 
 export class Renderer {
   // TODO: Add object culling to not render items which can't be seen
@@ -32,7 +32,6 @@ export class Renderer {
   protected _currentMap: BaseAtlas;
 
   constructor(canvas: HTMLCanvasElement) {
-
     this.TEXTURE_NOT_FOUND = new NullTexture();
 
     this.canvas = canvas;
@@ -42,14 +41,14 @@ export class Renderer {
      *
      * @var {CanvasRenderingContext2D}
      */
-     this.ctx = this.canvas.getContext('2d');
+    this.ctx = this.canvas.getContext("2d");
 
     /**
      * Prevent anti-aliasing in the event a tile gets scaled.
      *
      * @property {CanvasRenderingContext2D.imageSmoothingEnabled}
      */
-     this.ctx.imageSmoothingEnabled = false;
+    this.ctx.imageSmoothingEnabled = false;
 
     /**
      * The empty tile value. If this value is set for a position in a map's
@@ -88,7 +87,6 @@ export class Renderer {
    * // https://gamedev.stackexchange.com/questions/153879/scene-components-and-renderer
    */
   public draw(SM: SceneManager): void {
-
     // Clear the screen on every frame so our entities don't have trails.
     // TODO: Internet says clearing the screen on every draw might be a bad idea.
     this._clrScreen();
@@ -100,14 +98,17 @@ export class Renderer {
     // TODO: Make this use a hasComponent() function for readability.
     for (let gameObject of SM.currentScene.activeGameObjects) {
       let goid = gameObject.getId();
-      let renderComp = SM.ComponentManager
-        .getComponent("RenderComponent", goid);
-      let posComp = SM.ComponentManager
-        .getComponent("PositionComponent", goid);
+      let renderComp = SM.ComponentManager.getComponent(
+        "RenderComponent",
+        goid
+      );
+      let posComp = SM.ComponentManager.getComponent("PositionComponent", goid);
 
       if (
-        (renderComp !== undefined && renderComp !== null)
-        && (posComp !== undefined && posComp !== null)
+        renderComp !== undefined &&
+        renderComp !== null &&
+        posComp !== undefined &&
+        posComp !== null
       ) {
         let renderableTexture = this._getRenderableTexture(SM, renderComp);
         // let dimensions = {w: this.pixels, h: this.pixels};
@@ -151,7 +152,7 @@ export class Renderer {
   private _drawAsset(
     resource: HTMLImageElement,
     position: Coordinate,
-    transform: Dimension = {w: this.pixels, h: this.pixels},
+    transform: Dimension = { w: this.pixels, h: this.pixels },
     sourceTransform?: Dimension
   ): void {
     let sourceWidth: number;
@@ -167,15 +168,15 @@ export class Renderer {
     }
 
     this.ctx.drawImage(
-      resource,         // image
-      0,                // sx
-      0,                // sy
-      sourceWidth,      // sWidth
-      sourceHeight,     // sHeight
-      position.x,       // dx
-      position.y,       // dy
-      transform.w * this.scale,      // dWidth
-      transform.h * this.scale       // dHeight
+      resource, // image
+      0, // sx
+      0, // sy
+      sourceWidth, // sWidth
+      sourceHeight, // sHeight
+      position.x, // dx
+      position.y, // dy
+      transform.w * this.scale, // dWidth
+      transform.h * this.scale // dHeight
     );
   }
 
@@ -205,8 +206,8 @@ export class Renderer {
     let mapWidth = map.getGridWidth();
     let mapHeight = map.getGridHeight();
 
-    for (let x=0; x<mapWidth; x++) {
-      for (let y=0; y<mapHeight; y++) {
+    for (let x = 0; x < mapWidth; x++) {
+      for (let y = 0; y < mapHeight; y++) {
         let tile = map.getTile(x, y);
 
         // Let's skip rendering empty tiles.
@@ -217,7 +218,7 @@ export class Renderer {
             // Source x (See example in comment block)
             ((tile - 1) % mapWidth) * this.pixels,
             // Source y (See example in comment block)
-            Math.floor(((tile - 1) / mapHeight)) * this.pixels,
+            Math.floor((tile - 1) / mapHeight) * this.pixels,
             // Source width
             this.pixels,
             // Source height
@@ -228,8 +229,8 @@ export class Renderer {
             y * (this.pixels * this.scale),
             // Target width
             this.pixels * this.scale,
-             // Target height
-            this.pixels * this.scale,
+            // Target height
+            this.pixels * this.scale
           );
         }
       }
@@ -241,12 +242,6 @@ export class Renderer {
    * TODO: We probably don't want to clear and redraw items outside of view.
    */
   private _clrScreen(): void {
-    this.ctx.clearRect(
-      0,
-      0,
-      this.canvas.width,
-      this.canvas.height
-    );
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
-
 }

@@ -26,7 +26,6 @@ export enum DebugAction {
   SpawnPlayer,
   SpawnOrdinaryFolk,
   SwitchInput,
-
 }
 
 /**
@@ -39,7 +38,7 @@ export enum DebugAction {
  * [RELEASED]: The button has been released from a pressed state.
  * [DISABLED]: The button has been disabled and will not fire events.
  */
- export enum ButtonStatus {
+export enum ButtonStatus {
   PRESSED,
   RAISED,
   HELD,

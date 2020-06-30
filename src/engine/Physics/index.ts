@@ -7,4 +7,4 @@
 /**
  * The collision detection system.
  */
-export * from './CollisionSystem';
+export * from "./CollisionSystem";

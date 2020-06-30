@@ -7,24 +7,24 @@
 /**
  * The SceneManager interface.
  */
-export * from './interfaces/ISceneManager';
+export * from "./interfaces/ISceneManager";
 
 /**
  * The Scene interface.
  */
- export * from './interfaces/IScene';
+export * from "./interfaces/IScene";
 
 /**
  * The scene manager system.
  */
-export * from './SceneManager';
+export * from "./SceneManager";
 
 /**
  * The base scene.
  */
-export * from './scenes/BaseScene';
+export * from "./scenes/BaseScene";
 
 /**
  * The test scene. DO NOT USE IN PROD.
  */
-export * from './scenes/TestScene';
+export * from "./scenes/TestScene";

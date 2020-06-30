@@ -1,12 +1,11 @@
-import { GameObject } from '../../GameObject';
-import { GameObjectManifest } from '../../types/gameobjects';
-import { TexturePoolItem } from '../../types/rendering';
+import { GameObject } from "../../GameObject";
+import { GameObjectManifest } from "../../types/gameobjects";
+import { TexturePoolItem } from "../../types/rendering";
 
 /**
  * The IScene interface. All Scenes will implement this interface.
  */
 export interface IScene {
-
   /**
    * The max amount of active GameObjects that can be present in the Scene. Some
    * Scenes will have a smaller max entity count if the Scene is smaller e.g. if
@@ -66,5 +65,4 @@ export interface IScene {
    * to an already-loaded texture, instead of instantiating a new Texture.
    */
   texturePool: Array<TexturePoolItem>;
-
 }

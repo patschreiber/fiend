@@ -1,13 +1,17 @@
-import { IIODevicePlugin } from '../../Input';
-import { Action, Button, ButtonStatus, DefaultControlSchemes } from '../../structs/enums/input_enums';
-import { InputSignalMap, InputState } from '../../types/inputs';
+import { IIODevicePlugin } from "../../Input";
+import {
+  Action,
+  Button,
+  ButtonStatus,
+  DefaultControlSchemes,
+} from "../../structs/enums/input_enums";
+import { InputSignalMap, InputState } from "../../types/inputs";
 
 /**
  * The KeyboardPlugin class.
  * @implements [[IIODevicePlugin]]
  */
 export class KeyboardPlugin implements IIODevicePlugin {
-
   /**
    * Maps an input from an I/O device to an internal Button used by the engine.
    * This is necessary for when the engine needs to know when to change the
@@ -17,16 +21,16 @@ export class KeyboardPlugin implements IIODevicePlugin {
    * @internal This will be I/O device dependent.
    */
   private _inputSignalMap: InputSignalMap = {
-    "ArrowUp": Button.B1,
-    "ArrowDown": Button.B2,
-    "ArrowLeft": Button.B3,
-    "ArrowRight": Button.B4,
-    "e": Button.B5,
-    "q": Button.B6,
-    "Backspace": Button.B7,
-    "Enter": Button.B8,
-    "Shift": Button.B9
-  }
+    ArrowUp: Button.B1,
+    ArrowDown: Button.B2,
+    ArrowLeft: Button.B3,
+    ArrowRight: Button.B4,
+    e: Button.B5,
+    q: Button.B6,
+    Backspace: Button.B7,
+    Enter: Button.B8,
+    Shift: Button.B9,
+  };
 
   /**
    * TODO: Structure should add ["context"] so we can have context-independent
@@ -41,47 +45,47 @@ export class KeyboardPlugin implements IIODevicePlugin {
     // Button.B_1
     {
       command: Action.NullCommand,
-      status: ButtonStatus.RAISED
+      status: ButtonStatus.RAISED,
     },
     // Button.B_2
     {
       command: Action.NullCommand,
-      status: ButtonStatus.RAISED
+      status: ButtonStatus.RAISED,
     },
     // Button.B_3
     {
       command: Action.NullCommand,
-      status: ButtonStatus.RAISED
+      status: ButtonStatus.RAISED,
     },
     // Button.B_4
     {
       command: Action.NullCommand,
-      status: ButtonStatus.RAISED
+      status: ButtonStatus.RAISED,
     },
     // Button.B_5
     {
       command: Action.NullCommand,
-      status: ButtonStatus.RAISED
+      status: ButtonStatus.RAISED,
     },
     // Button.B_6
     {
       command: Action.NullCommand,
-      status: ButtonStatus.RAISED
+      status: ButtonStatus.RAISED,
     },
     // Button.B_7
     {
       command: Action.NullCommand,
-      status: ButtonStatus.RAISED
+      status: ButtonStatus.RAISED,
     },
     // Button.B_8
     {
       command: Action.NullCommand,
-      status: ButtonStatus.RAISED
+      status: ButtonStatus.RAISED,
     },
     // Button.B_9
     {
       command: Action.NullCommand,
-      status: ButtonStatus.RAISED
+      status: ButtonStatus.RAISED,
     },
   ];
 
@@ -93,25 +97,23 @@ export class KeyboardPlugin implements IIODevicePlugin {
    * @param controlScheme optional The control scheme to load. If none is give,
    * the default will be used.
    */
-  constructor(controlScheme?: DefaultControlSchemes) {
+  constructor(gamePane: HTMLElement, controlScheme?: DefaultControlSchemes) {
     // this._inputMap = this._initInputMap(this.buttonList);
     this.loadControlScheme(controlScheme);
 
-    document.getElementById('game-pane').addEventListener(
-      'keydown', (event) => this.inputEventFired(
-        event,
-        ButtonStatus.PRESSED
-      ),
-      false
-    );
+    gamePane
+      .addEventListener(
+        "keydown",
+        (event) => this.inputEventFired(event, ButtonStatus.PRESSED),
+        false
+      );
 
-    document.getElementById('game-pane').addEventListener(
-      'keyup', (event) => this.inputEventFired(
-        event,
-        ButtonStatus.RAISED
-      ),
-      false
-    );
+    gamePane
+      .addEventListener(
+        "keyup",
+        (event) => this.inputEventFired(event, ButtonStatus.RAISED),
+        false
+      );
   }
 
   public inputEventFired(event: KeyboardEvent, btnStatus: ButtonStatus): void {
@@ -132,11 +134,8 @@ export class KeyboardPlugin implements IIODevicePlugin {
     return this._inputSignalMap;
   }
 
-  public loadControlScheme(
-    controlScheme?: DefaultControlSchemes
-  ): void {
-
-    switch(controlScheme) {
+  public loadControlScheme(controlScheme?: DefaultControlSchemes): void {
+    switch (controlScheme) {
       case 1:
         break;
       default:
@@ -151,5 +150,4 @@ export class KeyboardPlugin implements IIODevicePlugin {
         this._currentControllerMap[Button.B9].command = Action.NullCommand;
     }
   }
-
 }

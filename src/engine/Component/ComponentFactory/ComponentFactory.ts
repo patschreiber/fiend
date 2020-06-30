@@ -1,4 +1,4 @@
-import { Component } from '../Component';
+import { Component } from "../Component";
 
 /**
  * The Component Factory. Allows dynamic creation of a Component at runtime.
@@ -6,7 +6,6 @@ import { Component } from '../Component';
  * the defaults if any overrides were provided.
  */
 export class ComponentFactory {
-
   /**
    * Creates a new component instance based on the passed in type. Optionally-
    * provided Component value overrides will
@@ -32,10 +31,9 @@ export class ComponentFactory {
   // }
 
   public static create<C extends Component, T extends IComponentMembers>(
-    component:  new(overrides?: Partial<T>) => C,
+    component: new (overrides?: Partial<T>) => C,
     overrides?: Partial<T>
   ): Component {
     return new component(overrides);
   }
-
 }

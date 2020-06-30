@@ -1,12 +1,12 @@
-import { Component } from './Component';
-import { IComponent } from './interfaces/IComponent';
+import { Component } from "./Component";
+import { IComponent } from "./interfaces/IComponent";
 
 /**
  * The VelocityComponent class.
  * @implements IVelocityComponentMembers
  */
-export class VelocityComponent extends Component implements IComponent, IVelocityComponentMembers {
-
+export class VelocityComponent extends Component
+  implements IComponent, IVelocityComponentMembers {
   /**
    * Speed is total pixels moved in a second.
    */
@@ -47,7 +47,7 @@ export class VelocityComponent extends Component implements IComponent, IVelocit
     momentum: 0,
     speed: 1,
     damping: 1,
-    thrust: 0
+    thrust: 0,
   };
 
   /**
@@ -60,7 +60,7 @@ export class VelocityComponent extends Component implements IComponent, IVelocit
    * @internal We use [[Partial]] to declare every
    * @param args (optional) The members of the class.
    */
-   public constructor(overrides?: Partial<IVelocityComponentMembers>) {
+  public constructor(overrides?: Partial<IVelocityComponentMembers>) {
     super();
     Object.assign(this, VelocityComponent.defaults);
     Object.assign(this, overrides);
@@ -73,5 +73,4 @@ export class VelocityComponent extends Component implements IComponent, IVelocit
   public getTypeId(): string {
     return VelocityComponent._typeId;
   }
-
 }

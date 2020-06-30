@@ -1,12 +1,11 @@
-import { Command } from './Command';
-import { GameObject } from '../GameObject';
-import { ICommand } from './interfaces/ICommand';
+import { Command } from "./Command";
+import { GameObject } from "../GameObject";
+import { ICommand } from "./interfaces/ICommand";
 
 /**
  * The MoveEastCommand class.
  */
 export class MoveEastCommand extends Command implements ICommand {
-
   /**
    * Executes the command.
    *

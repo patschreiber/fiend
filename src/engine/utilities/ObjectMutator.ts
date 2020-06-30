@@ -2,7 +2,6 @@
  * The ObjectMutator utility class.
  */
 export class ObjectMutator {
-
   /**
    * Clones an entity and returns the mutable copy of the entity.
    *

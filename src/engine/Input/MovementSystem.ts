@@ -1,15 +1,14 @@
-import { PositionComponent, VelocityComponent } from '../Component';
-import { ComponentManager } from '../Component/ComponentManager';
-import { GameObject } from '../GameObject';
-import { IMovementSystem } from '../Input';
-import { Action, ButtonStatus } from '../structs/enums/input_enums';
-import { InputHandler } from './InputHandler';
+import { PositionComponent, VelocityComponent } from "../Component";
+import { ComponentManager } from "../Component/ComponentManager";
+import { GameObject } from "../GameObject";
+import { IMovementSystem } from "../Input";
+import { Action, ButtonStatus } from "../structs/enums/input_enums";
+import { InputHandler } from "./InputHandler";
 
 /**
  * The MovementSystem system class.
  */
 export class MovementSystem implements IMovementSystem {
-
   /**
    * Applies a force to the player. The cardinality is reversed since we're
    * using a programmatically created grid for the game world. `[0,0]` will be
@@ -20,10 +19,10 @@ export class MovementSystem implements IMovementSystem {
     // North (Action.MoveN === 0)
     // Y is -1 to move north since we're using a grid constructed from Arrays.
     // This means
-    {x:0,y:-1},    // North (Action.MoveN === 0)
-    {x:0,y:1},   // South (Action.MoveN === 1)
-    {x:-1,y:0},    // East  (Action.MoveN === 2)
-    {x:1,y:0},   // West  (Action.MoveN === 0)
+    { x: 0, y: -1 }, // North (Action.MoveN === 0)
+    { x: 0, y: 1 }, // South (Action.MoveN === 1)
+    { x: -1, y: 0 }, // East  (Action.MoveN === 2)
+    { x: 1, y: 0 }, // West  (Action.MoveN === 0)
   ];
 
   // TODO: https://github.com/patschreiber/fiend/issues/47 Create different
@@ -64,7 +63,7 @@ export class MovementSystem implements IMovementSystem {
    */
   public update(go: GameObject, delta: number): void {
     // Don't move an entity without the required components.
-    if(this._setRequiredComponents(go) === false) {
+    if (this._setRequiredComponents(go) === false) {
       return;
     }
 
@@ -81,13 +80,17 @@ export class MovementSystem implements IMovementSystem {
 
         let force = this._forces[direction.command];
 
-        this.posComp.worldPosition.x = this.posComp.worldPosition.x += (force.x * 10) * delta;
-        this.posComp.worldPosition.y = this.posComp.worldPosition.y += (force.y * 10) * delta;
+        this.posComp.worldPosition.x = this.posComp.worldPosition.x +=
+          force.x * 10 * delta;
+        this.posComp.worldPosition.y = this.posComp.worldPosition.y +=
+          force.y * 10 * delta;
 
-
-        console.log('this.InputHandler.getInputState() :', this.InputHandler.getInputState());
+        console.log(
+          "this.InputHandler.getInputState() :",
+          this.InputHandler.getInputState()
+        );
         console.log("PRe$$ed: ", delta);
-        console.log('direction.status :', direction.command);
+        console.log("direction.status :", direction.command);
       }
     }
   }
@@ -101,10 +104,14 @@ export class MovementSystem implements IMovementSystem {
    */
   private _setRequiredComponents(go: GameObject): boolean {
     let goid = go.getId();
-    this.posComp = this._componentManager
-      .getComponent("PositionComponent", goid);
-    this.velComp = this._componentManager
-      .getComponent("VelocityComponent", goid);
+    this.posComp = this._componentManager.getComponent(
+      "PositionComponent",
+      goid
+    );
+    this.velComp = this._componentManager.getComponent(
+      "VelocityComponent",
+      goid
+    );
 
     if (this.posComp === null || this.velComp === null) {
       return false;
@@ -112,5 +119,4 @@ export class MovementSystem implements IMovementSystem {
       return true;
     }
   }
-
 }

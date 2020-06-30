@@ -1,5 +1,5 @@
-import { Asset } from '../../structs/enums/rendering_enums';
-import { ITexture } from './interfaces/ITexture';
+import { Asset } from "../../structs/enums/rendering_enums";
+import { ITexture } from "./interfaces/ITexture";
 
 /**
  * The BaseTexture class. All textures will extend this class.
@@ -7,7 +7,6 @@ import { ITexture } from './interfaces/ITexture';
  * @implements ITexture
  */
 export abstract class BaseTexture implements ITexture {
-
   public readonly resource: HTMLImageElement;
 
   /**

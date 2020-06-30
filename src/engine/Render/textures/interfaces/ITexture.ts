@@ -3,7 +3,6 @@
  * directly or through inheritance.
  */
 export interface ITexture {
-
   /**
    * The raw texture resource.
    */
@@ -15,5 +14,4 @@ export interface ITexture {
    * @returns The name of the external asset resource.
    */
   getResourceName(): string;
-
 }

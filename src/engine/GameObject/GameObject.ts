@@ -1,5 +1,5 @@
-import { GameObjectId, GameObjectTemplate } from '../types/gameobjects';
-import { IGameObject } from './interfaces/IGameObject';
+import { GameObjectId, GameObjectTemplate } from "../types/gameobjects";
+import { IGameObject } from "./interfaces/IGameObject";
 
 /**
  * The GameObject abstract class. All game entities inherit from this class.
@@ -10,7 +10,6 @@ import { IGameObject } from './interfaces/IGameObject';
  * if we play our cards right. We could just generate the auto-incrementing ID.
  */
 export class GameObject implements IGameObject {
-
   /**
    * Keeps track of the `id` of the last GameObject instantiated.
    *
@@ -65,7 +64,7 @@ export class GameObject implements IGameObject {
    * @param template The template to base the new GameObject on.
    * @return GameObject The newly-created GameObject.
    */
-   public static create(template?: GameObjectTemplate): GameObject {
+  public static create(template?: GameObjectTemplate): GameObject {
     return new GameObject(template);
   }
 
@@ -77,5 +76,4 @@ export class GameObject implements IGameObject {
   public static getMostRecentId(): GameObjectId {
     return GameObject._idIncrementor;
   }
-
 }

@@ -1,6 +1,6 @@
-import { Component } from './Component';
-import { IComponent } from './interfaces/IComponent';
-import { InputHandler } from '../Input/InputHandler';
+import { Component } from "./Component";
+import { IComponent } from "./interfaces/IComponent";
+import { InputHandler } from "../Input/InputHandler";
 
 export interface IInputComponentMembers extends IComponentMembers {}
 
@@ -9,14 +9,14 @@ export interface IInputComponentMembers extends IComponentMembers {}
  *
  * @extends [[Component]]
  */
-export class InputComponent extends Component implements IComponent, IInputComponentMembers {
-
+export class InputComponent extends Component
+  implements IComponent, IInputComponentMembers {
   /**
    * The InputComponent's component type id.
    */
   private static readonly _type: string = "InputComponent";
 
-  private static defaults: IInputComponentMembers = {}
+  private static defaults: IInputComponentMembers = {};
 
   private InputHandler: InputHandler;
 
@@ -38,5 +38,4 @@ export class InputComponent extends Component implements IComponent, IInputCompo
   public getTypeId(): string {
     return InputComponent._type;
   }
-
 }

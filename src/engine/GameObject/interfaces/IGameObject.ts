@@ -2,7 +2,6 @@
  * @interface IGameObject
  */
 export interface IGameObject {
-
   /**
    * Accessor for the private member `id`.
    *

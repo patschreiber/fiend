@@ -1,5 +1,5 @@
-import { Component } from './Component';
-import { IComponent } from './interfaces/IComponent';
+import { Component } from "./Component";
+import { IComponent } from "./interfaces/IComponent";
 
 export interface IBrainComponentMembers extends IComponentMembers {}
 
@@ -8,14 +8,14 @@ export interface IBrainComponentMembers extends IComponentMembers {}
  *
  * @extends [[Component]]
  */
-export class BrainComponent extends Component implements IComponent, IBrainComponentMembers {
-
+export class BrainComponent extends Component
+  implements IComponent, IBrainComponentMembers {
   /**
    * The LifeforceComponents's component type id.
    */
   private static readonly _type: string = "BrainComponent";
 
-  private static defaults: IBrainComponentMembers = {}
+  private static defaults: IBrainComponentMembers = {};
 
   /**
    * @constructor
@@ -35,5 +35,4 @@ export class BrainComponent extends Component implements IComponent, IBrainCompo
   public getTypeId(): string {
     return BrainComponent._type;
   }
-
 }

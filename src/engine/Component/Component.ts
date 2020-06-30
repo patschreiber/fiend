@@ -1,6 +1,6 @@
-import { IComponent } from './interfaces/IComponent';
-import { GameObjectId } from '../types/gameobjects';
-import { ComponentId } from '../types/components';
+import { IComponent } from "./interfaces/IComponent";
+import { GameObjectId } from "../types/gameobjects";
+import { ComponentId } from "../types/components";
 
 /**
  * The Component base class. // TODO: CHange name to BaseComponent
@@ -9,13 +9,12 @@ import { ComponentId } from '../types/components';
  * @abstract
  */
 export class Component implements IComponent {
-
   /**
    * Keeps track of the `id` of the last GameObject instantiated.
    *
    * @static
    */
-  private static _idIncrementor: number = 1;  // TODO: Make sure to save this when we unload the game.
+  private static _idIncrementor: number = 1; // TODO: Make sure to save this when we unload the game.
 
   /**
    * The id of the instance of the Component.
@@ -55,6 +54,7 @@ export class Component implements IComponent {
     return this._cid;
   }
 
-  public getTypeId(): string { return ""; }
-
+  public getTypeId(): string {
+    return "";
+  }
 }

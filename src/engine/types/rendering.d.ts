@@ -1,4 +1,4 @@
-import { ITexture } from '../Render/textures/interfaces/ITexture';
+import { ITexture } from "../Render/textures/interfaces/ITexture";
 
 /**
  * Provides a type for the Texture Pool that will house the loaded textures for
@@ -13,5 +13,5 @@ import { ITexture } from '../Render/textures/interfaces/ITexture';
  * ```
  */
 export type TexturePoolItem = {
-  [assetTypeId: string]: ITexture
+  [assetTypeId: string]: ITexture;
 };

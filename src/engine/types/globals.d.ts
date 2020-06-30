@@ -13,8 +13,8 @@ type Mutable<T> = {
  * position = {x:132,y:0}
  */
 type Coordinate = {
-  x: number,
-  y: number,
+  x: number;
+  y: number;
 };
 
 /**
@@ -29,9 +29,9 @@ type Coordinate = {
  * dimensions = {w:100,h:125}
  */
 type Dimension = {
-  w: number,
-  h: number,
-  l?: number,
+  w: number;
+  h: number;
+  l?: number;
 };
 
 /**
@@ -55,5 +55,5 @@ type Dimension = {
  * }
  */
 type EventContainer = {
-  [eventName: string]: Event|CustomEvent;
+  [eventName: string]: Event | CustomEvent;
 };

@@ -1,19 +1,18 @@
-import { ComponentManager } from './Component/ComponentManager';
-import { GameObject } from './GameObject';
-import { GameObjectManager } from './GameObject/GameObjectManager';
-import { InputHandler } from './Input/InputHandler';
-import { DebugKeyboardPlugin } from './Input/io_device_plugins/DebugKeyboardPlugin';
-import { MovementSystem } from './Input/MovementSystem';
-import { Renderer } from './Render/Renderer';
-import { SceneManager } from './Scene/SceneManager';
-import { Template } from './templates/Template';
+import { ComponentManager } from "./Component/ComponentManager";
+import { GameObject } from "./GameObject";
+import { GameObjectManager } from "./GameObject/GameObjectManager";
+import { InputHandler } from "./Input/InputHandler";
+import { DebugKeyboardPlugin } from "./Input/io_device_plugins/DebugKeyboardPlugin";
+import { MovementSystem } from "./Input/MovementSystem";
+import { Renderer } from "./Render/Renderer";
+import { SceneManager } from "./Scene/SceneManager";
+import { Template } from "./templates/Template";
 
 /**
  * The Game superclass. Operations to act upon the main game thread are found
  * here.
  */
 export class FiendGame {
-
   /**
    * The input handler that accepts player input.
    */
@@ -46,15 +45,18 @@ export class FiendGame {
   public Player: GameObject;
 
   /**
-   * The canvas in the DOM. What the game is rendered on.
+   * The canvas element in the DOM. An element an instance of the game is
+   * rendered in.
    */
-  public canvas: HTMLCanvasElement;
+  public gamePane: HTMLCanvasElement;
 
   /**
    * The HTML wrapper for the game. Assume everything in this container is part
-   * of the game.
+   * of the game, but doesn't necessarily imply it's the _game container_. The
+   * `canvas` is what renders an instance of the game. Conceivably, there could
+   * be multiple instances of the FiendGame running in this same container.
    */
-  public container: HTMLElement;
+  public container!: HTMLElement | null;
 
   /**
    * How frequently the game state updates, ideally. Defaults to 60 Hz, 16.6
@@ -73,7 +75,7 @@ export class FiendGame {
    * cancelAnimationFrame() to stop the main loop by telling the browser to
    * cancel the request that corresponds to our token.
    */
-  public stopToken: number|null;
+  public stopToken: number;
 
   /**
    * @constructor
@@ -84,22 +86,27 @@ export class FiendGame {
    * TODO: gamePlayWidth and height should probably be handled by tbe Camera.
    */
   constructor(gamePaneWidth: number, gamePaneHeight: number) {
-
     /**
      * Create the game pane and canvas.
      */
-    this.canvas = this.genCanvas(gamePaneWidth, gamePaneHeight);
+    this.gamePane = this.genCanvas(gamePaneWidth, gamePaneHeight);
     this.container = document.getElementById("fiend-game");
-    this.container.insertBefore(this.canvas, this.container.firstChild);
+    // If multiple instances of the game pane are already instantiated, or there
+    // are other elements in the container, this places our new instance in the
+    // first place.
+    if (this.container === null) {
+      throw new Error("Fiend needs a DOM element named `fiend-game` to bind to");
+    }
+    this.container.insertBefore(this.gamePane, this.container.firstChild);
 
-    this.stopToken = null;
+    this.stopToken = 0;
 
     this.tickLength = 60;
 
     this.lastFrameTime = 0;
 
-    this.Renderer = new Renderer(this.canvas);
-    this.InputHandler = new InputHandler(new DebugKeyboardPlugin());
+    this.Renderer = new Renderer(this.gamePane);
+    this.InputHandler = new InputHandler(new DebugKeyboardPlugin(this.gamePane));
     this.GameObjectManager = new GameObjectManager();
     this.ComponentManager = new ComponentManager();
     this.SceneManager = new SceneManager(
@@ -129,7 +136,7 @@ export class FiendGame {
    * TODO: We might want to have the browser viewport be the width and height of the canvas.
    */
   private genCanvas(w: number, h: number): HTMLCanvasElement {
-    let canvas = document.createElement('canvas');
+    let canvas = document.createElement("canvas");
     canvas.id = "game-pane";
     canvas.width = w;
     canvas.height = h;
@@ -147,6 +154,7 @@ export class FiendGame {
    */
   private _handleInput(delta: number): void {
     // this.InputHandler.
+    console.log('delta', delta);
   }
 
   /**
@@ -163,7 +171,6 @@ export class FiendGame {
    * ```
    */
   private _update(delta: number): void {
-
     // TODO: Remove clog.
     // console.log('delta :', delta);
 
@@ -174,7 +181,6 @@ export class FiendGame {
       // if (GameObject.getMostRecentId() < 1999) {
       //   console.log('GameObject.getMostRecentId() :', GameObject.getMostRecentId());
       // }
-
 
       // this.ComponentManager.removeComponent("PositionComponent", go.getId());
       // console.log('this.Com :', this.ComponentManager.getComponentContainer("PositionComponent"));
@@ -187,7 +193,6 @@ export class FiendGame {
    * Responsible for drawing the current game state to the screen.
    */
   private _draw(): void {
-
     // Draw the scene.
     // TODO: Renderer might have to be attached/related to SceneManager in some
     // way since we might need to know the world coordinates. Or not. The update()
@@ -211,25 +216,25 @@ export class FiendGame {
     // TODO: Flesh out.
   }
 
-/**
-  * The main game loop. We use requestAnimationFrame to be thread-safe and not
-  * dominate the browser when the player blurs focus on our tab.
-  *
-  * render() is passed tFrame because it is assumed that the render method will
-  *          calculate how long it has been since the most recently passed
-  *          update tick for extrapolation (purely cosmetic for fast devices).
-  *          It draws the scene.
-  *
-  * update() calculates the game state as of a given point in time.
-  *
-  * init()   Performs whatever tasks are needed before the main loop can run.
-  *
-  *
-  * @param {DOMHighResTimeStamp} tFrame The number of milliseconds since
-  * navigationStart (when the previous document is unloaded.
-  * window.requestAnimationFrame() always provides a DOMHighResTimeStamp to
-  * callbacks as an argument when they are executed.
-  */
+  /**
+   * The main game loop. We use requestAnimationFrame to be thread-safe and not
+   * dominate the browser when the player blurs focus on our tab.
+   *
+   * render() is passed tFrame because it is assumed that the render method will
+   *          calculate how long it has been since the most recently passed
+   *          update tick for extrapolation (purely cosmetic for fast devices).
+   *          It draws the scene.
+   *
+   * update() calculates the game state as of a given point in time.
+   *
+   * init()   Performs whatever tasks are needed before the main loop can run.
+   *
+   *
+   * @param {DOMHighResTimeStamp} tFrame The number of milliseconds since
+   * navigationStart (when the previous document is unloaded.
+   * window.requestAnimationFrame() always provides a DOMHighResTimeStamp to
+   * callbacks as an argument when they are executed.
+   */
   public main(tFrame: DOMHighResTimeStamp): void {
     // Store the ID returned from our main loop's most recent call to
     // requestAnimationFrame().
@@ -244,5 +249,4 @@ export class FiendGame {
     this._update(delta);
     this._draw();
   }
-
 }

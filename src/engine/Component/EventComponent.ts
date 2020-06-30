@@ -1,13 +1,13 @@
-import { IEventComponent } from './interfaces/IEventComponent';
-import { Component } from './Component';
-import { IComponent } from './interfaces/IComponent';
+import { IEventComponent } from "./interfaces/IEventComponent";
+import { Component } from "./Component";
+import { IComponent } from "./interfaces/IComponent";
 
 /**
  * The EventComponent class.
  * @implements [[IEventComponent]]
  */
-export class EventComponent extends Component implements IComponent, IEventComponent {
-
+export class EventComponent extends Component
+  implements IComponent, IEventComponent {
   /**
    * The type id of the component.
    */
@@ -45,7 +45,7 @@ export class EventComponent extends Component implements IComponent, IEventCompo
    * @param event An `Event` or `CustomEvent` that this EventComponent knows
    * about.
    */
-  public attach(event: Event|CustomEvent): void {
+  public attach(event: Event | CustomEvent): void {
     this.attachedEvents[event.type] = event;
   }
 
@@ -54,7 +54,7 @@ export class EventComponent extends Component implements IComponent, IEventCompo
    *
    * @param events The array of events to add.
    */
-  public attachMultiple(eventList: Array<Event|CustomEvent>): void {
+  public attachMultiple(eventList: Array<Event | CustomEvent>): void {
     for (let event of eventList) {
       this.attach(event);
     }
@@ -67,8 +67,9 @@ export class EventComponent extends Component implements IComponent, IEventCompo
    * @param eventName The event to emit.
    */
   public emit(eventName: string): void {
-    document.getElementById('game-pane')
-      .dispatchEvent(this.attachedEvents[eventName]);
+    let gamePane = document.getElementById("game-pane");
+    if (gamePane !== null) {
+      gamePane.dispatchEvent(this.attachedEvents[eventName]);
+    }
   }
-
 }

@@ -6,8 +6,8 @@ import {
   LifeforceComponent,
   PositionComponent,
   VelocityComponent,
-} from '../Component';
-import { RenderComponent } from '../Component/RenderComponent';
+} from "../Component";
+import { RenderComponent } from "../Component/RenderComponent";
 
 /**
  * The ComponentTypes type definition. This is useful for when a Component is
@@ -22,14 +22,14 @@ import { RenderComponent } from '../Component/RenderComponent';
  * ): ComponentTypes[K] {}
  */
 export type ComponentTypes = {
-  BrainComponent?: BrainComponent,
-  ColliderComponent?: ColliderComponent,
-  EventComponent?: EventComponent,
-  LifeforceComponent?: LifeforceComponent,
-  PositionComponent?: PositionComponent,
-  RenderComponent?: RenderComponent,
-  VelocityComponent?: VelocityComponent
-}
+  BrainComponent?: BrainComponent;
+  ColliderComponent?: ColliderComponent;
+  EventComponent?: EventComponent;
+  LifeforceComponent?: LifeforceComponent;
+  PositionComponent?: PositionComponent;
+  RenderComponent?: RenderComponent;
+  VelocityComponent?: VelocityComponent;
+};
 
 /**
  * Provides a type for use with Component ids.
@@ -44,25 +44,25 @@ export type ComponentTypes = {
  */
 export type ComponentId = number;
 
-  /**
-   * Provides a container to house a GameActor's attached Components. Each array
-   * index denotes a type of Component. For instance, array index 0 will always
-   * signify the PositionComponent, so if a (non-zero) value is present here, we
-   * know that that particular GameObject has a PositionComponent. Modifying
-   * the contents of this container should be done through an interface provided
-   * by the actor; it should not be modified directly. An actor may not have any
-   * Components, in which case all values for this array will be `0`.
-   *
-   * @example
-   * ```
-   * gameObjectId:[componentId,componentId,componentId,componentId]
-   * // Output
-   * 1001:[0,22,0,37,0,104,0,53]
-   * ```
-   */
-  type GameObjectComponentReference<C extends Component> = {
-    [gameObjectId: number]: ComponentId;
-  };
+/**
+ * Provides a container to house a GameActor's attached Components. Each array
+ * index denotes a type of Component. For instance, array index 0 will always
+ * signify the PositionComponent, so if a (non-zero) value is present here, we
+ * know that that particular GameObject has a PositionComponent. Modifying
+ * the contents of this container should be done through an interface provided
+ * by the actor; it should not be modified directly. An actor may not have any
+ * Components, in which case all values for this array will be `0`.
+ *
+ * @example
+ * ```
+ * gameObjectId:[componentId,componentId,componentId,componentId]
+ * // Output
+ * 1001:[0,22,0,37,0,104,0,53]
+ * ```
+ */
+type GameObjectComponentReference<C extends Component> = {
+  [gameObjectId: number]: ComponentId;
+};
 
 /**
  * The template for use with GaneObjects to help facilitate easy creation of
@@ -85,7 +85,7 @@ export type ComponentTemplate = [typeof Component, ComponentOverrides?];
  */
 export type ComponentPool = {
   [key: string]: Array<any>;
-}
+};
 
 /**
  * The Component values to override. We don't typecheck here, but do when the

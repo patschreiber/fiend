@@ -1,11 +1,10 @@
-import { ComponentId } from '../../types/components';
-import { GameObjectId } from '../../types/gameobjects';
+import { ComponentId } from "../../types/components";
+import { GameObjectId } from "../../types/gameobjects";
 
 /**
  * The IComponent interface.
  */
 export interface IComponent {
-
   /**
    * Retrieves the type id of the component. Used when fetching or checking a
    * specific component for a [[GameObject]].
@@ -21,5 +20,4 @@ export interface IComponent {
    * The instance id of the Component.
    */
   getId(): ComponentId;
-
 }

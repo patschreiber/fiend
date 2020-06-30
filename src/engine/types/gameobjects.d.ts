@@ -1,8 +1,6 @@
-import {
-  ComponentTemplate
-} from './components';
-import { GameObject } from '../GameObject';
-import { Component } from '../Component';
+import { ComponentTemplate } from "./components";
+import { GameObject } from "../GameObject";
+import { Component } from "../Component";
 
 /**
  * Provides a type for use with GameObject ids.
@@ -14,7 +12,7 @@ import { Component } from '../Component';
  * located at (which may cause issues depending on how the storage is ultimately
  * managed).
  */
- export type GameObjectId = number;
+export type GameObjectId = number;
 
 /**
  * The desired status for any given GameObject. The engine will move GameObjects
@@ -35,7 +33,7 @@ export const enum GameObjectStatus {
   Cull = "Cull",
   Sleep = "Sleep",
   Inactive = "Inactive",
-  Delete = "Delete"
+  Delete = "Delete",
 }
 
 /**
@@ -45,7 +43,7 @@ export const enum GameObjectStatus {
  */
 export const enum TemplateType {
   Player = "Player",
-  OrdinaryFolk = "OrdinaryFolk"
+  OrdinaryFolk = "OrdinaryFolk",
 }
 
 /**
@@ -53,10 +51,10 @@ export const enum TemplateType {
  * structure is loaded.
  */
 export type GameObjectTemplate = {
-  type: TemplateType,
+  type: TemplateType;
   components: Array<ComponentTemplate>;
   tags: Array<string>;
-}
+};
 
 /**
  * The `Array` type that holds `ManifestItems`.

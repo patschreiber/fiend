@@ -1,7 +1,7 @@
-import { ComponentManager } from '../../Component/ComponentManager';
-import { GameObjectManager } from '../../GameObject/GameObjectManager';
-import { SceneManagerState } from '../SceneManager';
-import { BaseScene } from '../scenes/BaseScene';
+import { ComponentManager } from "../../Component/ComponentManager";
+import { GameObjectManager } from "../../GameObject/GameObjectManager";
+import { SceneManagerState } from "../SceneManager";
+import { BaseScene } from "../scenes/BaseScene";
 
 /**
  * The interface for the [[SceneManager]] class.
@@ -9,25 +9,24 @@ import { BaseScene } from '../scenes/BaseScene';
  * @interface ISceneManager
  */
 export interface ISceneManager {
-
   /**
    * The current state of the SceneManager.
    */
   state: SceneManagerState;
 
-   /**
-    * The [[GameObjectManager]].
-    */
+  /**
+   * The [[GameObjectManager]].
+   */
   GameObjectManager: GameObjectManager;
 
-   /**
-    * The [[ComponentManager]].
-    */
+  /**
+   * The [[ComponentManager]].
+   */
   ComponentManager: ComponentManager;
 
-   /**
-    * The currently-loaded Scene.
-    */
+  /**
+   * The currently-loaded Scene.
+   */
   currentScene: BaseScene;
 
   /**
@@ -43,5 +42,4 @@ export interface ISceneManager {
    * @param scene The Scene to unload.
    */
   unloadScene(): void;
-
 }

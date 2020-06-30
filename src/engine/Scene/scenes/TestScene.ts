@@ -1,18 +1,17 @@
-import { OverworldAtlas } from '../../../atlases/OverworldAtlas';
-import { OrdinaryFolkTexture } from '../../Render/textures/ordinaryfolk.tex';
-import { PlayerTexture } from '../../Render/textures/player.tex';
-import { Asset } from '../../structs/enums/rendering_enums';
-import { Template } from '../../templates/Template';
-import { GameObjectManifest } from '../../types/gameobjects';
-import { IScene } from '../interfaces/IScene';
-import { BaseScene } from './BaseScene';
+import { OverworldAtlas } from "../../../atlases/OverworldAtlas";
+import { OrdinaryFolkTexture } from "../../Render/textures/ordinaryfolk.tex";
+import { PlayerTexture } from "../../Render/textures/player.tex";
+import { Asset } from "../../structs/enums/rendering_enums";
+import { Template } from "../../templates/Template";
+import { GameObjectManifest } from "../../types/gameobjects";
+import { IScene } from "../interfaces/IScene";
+import { BaseScene } from "./BaseScene";
 
 /**
  * The TestScene class.
  * This will be the Scene to test out new things.
  */
 export class TestScene extends BaseScene implements IScene {
-
   /**
    * @inheritdoc
    */
@@ -25,7 +24,7 @@ export class TestScene extends BaseScene implements IScene {
     Template.get("Player"),
     Template.get("OrdinaryFolk"),
     // Template.get(TemplateType.OrdinaryFolk), // You can use the TemplateType enum as well.
-    Template.mutate("Player", ["tags"], [["player_2", "special", "keep"]]) // Example of overriding a template's default values.
+    Template.mutate("Player", ["tags"], [["player_2", "special", "keep"]]), // Example of overriding a template's default values.
   ];
 
   /**
@@ -34,7 +33,7 @@ export class TestScene extends BaseScene implements IScene {
   public constructor() {
     super();
 
-    this.tileMap  = new OverworldAtlas();
+    this.tileMap = new OverworldAtlas();
 
     // TODO: Hardcoded for now. There will be a better way. When a GameObject is
     // created, we should check the texture pool to see if it's associated tex
@@ -42,14 +41,19 @@ export class TestScene extends BaseScene implements IScene {
     this.texturePool[Asset.Player] = new PlayerTexture();
     this.texturePool[Asset.OrdinaryFolk] = new OrdinaryFolkTexture();
 
-    console.log('this.initialGameObjectManifest :', this.initialGameObjectManifest);
+    console.log(
+      "this.initialGameObjectManifest :",
+      this.initialGameObjectManifest
+    );
 
     // TODO: This is a test to test event emission.
-    document.getElementById('game-pane').addEventListener(
-      'player_died',
-      (event: CustomEvent) => this.respondToGameObjectCreation(event),
-      false
-    );
+    document
+      .getElementById("game-pane")
+      .addEventListener(
+        "player_died",
+        (event: CustomEvent) => this.respondToGameObjectCreation(event),
+        false
+      );
   }
 
   /**
@@ -59,7 +63,6 @@ export class TestScene extends BaseScene implements IScene {
    * @param event The event to respond to.
    */
   public respondToGameObjectCreation(event: CustomEvent) {
-    console.log('event.detail.go_id :', event.detail.go_id);
+    console.log("event.detail.go_id :", event.detail.go_id);
   }
-
 }

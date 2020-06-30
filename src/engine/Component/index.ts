@@ -7,41 +7,40 @@
 /**
  * Progenitor classes for all Component classes in the game.
  */
-export * from './Component';
+export * from "./Component";
 
 /**
  * The Event component. Allows a GameObject to emit and/or listen for events.
  */
-export * from './EventComponent';
+export * from "./EventComponent";
 
 /**
  * The Lifeforce component. Adds health and all that comes with it when attached
  * to a GameObject.
  */
-export * from './LifeforceComponent';
+export * from "./LifeforceComponent";
 
 /**
  * The Brain component. Adds AI and behavior to a GameObject.
  */
-export * from './BrainComponent';
+export * from "./BrainComponent";
 
 /**
  * The Collider component. Adds collision detection to a GameObject.
  */
-export * from './ColliderComponent';
+export * from "./ColliderComponent";
 
 /**
  * The Velocity component. Gives the GameObject the need for speed.
  */
-export * from './VelocityComponent';
+export * from "./VelocityComponent";
 
 /**
  * The Position component. Adds a location for the GameObect.
  */
-export * from './PositionComponent';
+export * from "./PositionComponent";
 
 /**
  * The Render component. Gives the GameObject a shape that can be drawn.
  */
-export * from './RenderComponent';
-
+export * from "./RenderComponent";

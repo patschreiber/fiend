@@ -1,10 +1,9 @@
-import { GameObject } from '../../GameObject';
+import { GameObject } from "../../GameObject";
 
 /**
  * The IMovementSystem interface.
  */
 export interface IMovementSystem {
-
   /**
    * Handles user input and movement of GameObjects. Runs once per game loop.
    *
@@ -15,5 +14,4 @@ export interface IMovementSystem {
    * @see FiendGame.main()
    */
   update(go: GameObject, delta: number): void;
-
 }

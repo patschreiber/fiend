@@ -1,11 +1,10 @@
-import { GameObjectId, GameObjectTemplate } from '../../types/gameobjects';
-import { GameObject } from '../GameObject';
+import { GameObjectId, GameObjectTemplate } from "../../types/gameobjects";
+import { GameObject } from "../GameObject";
 
 /**
  * The IGameObjectManager interface.
  */
 export interface IGameObjectManager {
-
   /**
    * Game objects that are not present in the scene, but who’s state needs to be
    * maintained, go here. When a scene is unloaded, an entity marked with the
@@ -32,7 +31,7 @@ export interface IGameObjectManager {
   spawnFromTemplate(
     template: GameObjectTemplate,
     container?: Array<GameObject>
-  ): GameObjectId|false;
+  ): GameObjectId | false;
 
   /**
    * Removes a GameObject from being tracked by the game state. Depending on the
@@ -45,5 +44,4 @@ export interface IGameObjectManager {
    * @return If the GameObject was successfully dealt with or not.
    */
   removeGameObject(goid: GameObjectId): boolean;
-
 }

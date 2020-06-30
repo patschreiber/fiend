@@ -1,18 +1,17 @@
-import { BaseAtlas } from './BaseAtlas';
+import { BaseAtlas } from "./BaseAtlas";
 
 /**
  * The OverworldAtlas class.
  * @extends BaseAtlas
  */
 export class OverworldAtlas extends BaseAtlas {
-
   /**
    * @constructor
    */
   constructor() {
     super();
 
-    this.tileMapImg = window.F_LOADER.getImage('TESTNUMBERED');
+    this.tileMapImg = window.F_LOADER.getImage("TESTNUMBERED");
 
     this.gridElemPixelSize = 32;
     this.gridCols = 20;
@@ -71,5 +70,4 @@ export class OverworldAtlas extends BaseAtlas {
       ]
     ]
   }
-
 }

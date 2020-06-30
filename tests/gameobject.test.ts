@@ -1,9 +1,7 @@
-
-import { GameObject } from '../src/engine/GameObject';
-import { Template } from '../src/engine/templates/Template';
+import { GameObject } from "../src/engine/GameObject";
+import { Template } from "../src/engine/templates/Template";
 
 describe("GameObjects validity", () => {
-
   // A collection of GameObject ids.
   let goids = [
     GameObject.create(Template.get("Player")).getId(),
@@ -12,7 +10,7 @@ describe("GameObjects validity", () => {
   ];
 
   for (let goid in goids) {
-    it ('has a real ID', () => {
+    it("has a real ID", () => {
       expect(goid).not.toEqual(undefined);
       expect(goid).not.toEqual("undefined");
       expect(goid).not.toEqual(null);

@@ -1,6 +1,9 @@
-import { ButtonStatus, DefaultControlSchemes } from '../../structs/enums/input_enums';
-import { InputEvent } from '../../types/events';
-import { InputSignalMap, InputState } from '../../types/inputs';
+import {
+  ButtonStatus,
+  DefaultControlSchemes,
+} from "../../structs/enums/input_enums";
+import { InputEvent } from "../../types/events";
+import { InputSignalMap, InputState } from "../../types/inputs";
 
 /**
  * The IIODevicePlugin interface.
@@ -8,7 +11,6 @@ import { InputSignalMap, InputState } from '../../types/inputs';
  * compatibility with the [[InputHandler]].
  */
 export interface IIODevicePlugin {
-
   /**
    * Gets the current state of all the Buttons at the time of calling.
    *
@@ -56,5 +58,4 @@ export interface IIODevicePlugin {
    * @param controlScheme (optional) The control scheme to attach.
    */
   loadControlScheme(controlScheme?: DefaultControlSchemes): void;
-
 }

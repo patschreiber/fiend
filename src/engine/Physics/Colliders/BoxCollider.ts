@@ -1,6 +1,4 @@
 /**
  * The BoxCollider class.
  */
-export class BoxCollider {
-
-}
+export class BoxCollider {}

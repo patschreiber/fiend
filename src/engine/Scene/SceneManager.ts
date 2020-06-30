@@ -1,8 +1,8 @@
-import { BaseScene } from '.';
-import { ComponentManager } from '../Component/ComponentManager';
-import { GameObjectManager } from '../GameObject/GameObjectManager';
-import { ISceneManager } from './interfaces/ISceneManager';
-import { TestScene } from './scenes/TestScene';
+import { BaseScene } from ".";
+import { ComponentManager } from "../Component/ComponentManager";
+import { GameObjectManager } from "../GameObject/GameObjectManager";
+import { ISceneManager } from "./interfaces/ISceneManager";
+import { TestScene } from "./scenes/TestScene";
 
 /**
  * Defines the different states that the SceneManager can be in.
@@ -17,7 +17,7 @@ export enum SceneManagerState {
   Ready,
   Loading,
   Unloading,
-  Error
+  Error,
 }
 
 /**
@@ -28,7 +28,6 @@ export enum SceneManagerState {
  * that scene when a new one is loaded.
  */
 export class SceneManager implements ISceneManager {
-
   public state: SceneManagerState;
 
   public GameObjectManager: GameObjectManager;
@@ -88,5 +87,4 @@ export class SceneManager implements ISceneManager {
    * @param scene The Scene to unload.
    */
   public unloadScene(): void {}
-
 }

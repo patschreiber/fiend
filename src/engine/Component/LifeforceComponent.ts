@@ -1,9 +1,9 @@
-import { Component } from './Component';
-import { IComponent } from './interfaces/IComponent';
+import { Component } from "./Component";
+import { IComponent } from "./interfaces/IComponent";
 
 export interface ILifeforceComponentMembers extends IComponentMembers {
-  currentHP?: number,
-  maxHP?: number,
+  currentHP?: number;
+  maxHP?: number;
 }
 
 /**
@@ -15,8 +15,8 @@ export interface ILifeforceComponentMembers extends IComponentMembers {
  *
  * @extends [[Component]]
  */
-export class LifeforceComponent extends Component implements IComponent, ILifeforceComponentMembers {
-
+export class LifeforceComponent extends Component
+  implements IComponent, ILifeforceComponentMembers {
   /**
    * The LifeforceComponents's component type id.
    */
@@ -24,8 +24,8 @@ export class LifeforceComponent extends Component implements IComponent, ILifefo
 
   private static defaults: ILifeforceComponentMembers = {
     currentHP: 125,
-    maxHP: 125
-  }
+    maxHP: 125,
+  };
 
   /**
    * The current HP of the GameObject.
@@ -55,5 +55,4 @@ export class LifeforceComponent extends Component implements IComponent, ILifefo
   public getTypeId(): string {
     return LifeforceComponent._type;
   }
-
 }

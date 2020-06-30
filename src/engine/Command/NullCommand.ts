@@ -1,5 +1,5 @@
-import { Command } from './Command';
-import { ICommand } from './interfaces/ICommand';
+import { Command } from "./Command";
+import { ICommand } from "./interfaces/ICommand";
 
 /**
  * The NullCommand class.
@@ -7,7 +7,6 @@ import { ICommand } from './interfaces/ICommand';
  * so if a user doesn't have a mapped button, we don't have to check fo `null`.
  */
 export class NullCommand extends Command implements ICommand {
-
   /**
    * Executes the command.
    */

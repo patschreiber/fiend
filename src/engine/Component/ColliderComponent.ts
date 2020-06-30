@@ -1,5 +1,5 @@
-import { IComponent } from './interfaces/IComponent';
-import { Component } from './Component';
+import { IComponent } from "./interfaces/IComponent";
+import { Component } from "./Component";
 
 /**
  * The ColliderComponent component class.
@@ -10,7 +10,6 @@ import { Component } from './Component';
  * @extends [[Component]]
  */
 export class ColliderComponent extends Component implements IComponent {
-
   /**
    * The Lifeforce component.
    */
@@ -23,5 +22,4 @@ export class ColliderComponent extends Component implements IComponent {
   public getTypeId(): string {
     return ColliderComponent._typeId;
   }
-
 }

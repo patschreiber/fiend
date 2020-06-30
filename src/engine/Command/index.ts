@@ -7,15 +7,14 @@
 /**
  * The base command class.
  */
-export * from './Command';
+export * from "./Command";
 
-export * from './NullCommand';
+export * from "./NullCommand";
 
-export * from './MoveNorthCommand';
+export * from "./MoveNorthCommand";
 
-export * from './MoveSouthCommand';
+export * from "./MoveSouthCommand";
 
-export * from './MoveEastCommand';
+export * from "./MoveEastCommand";
 
-export * from './MoveWestCommand';
-
+export * from "./MoveWestCommand";

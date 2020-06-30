@@ -1,4 +1,4 @@
-import { GameObject } from '../../GameObject';
+import { GameObject } from "../../GameObject";
 
 /**
  * The ICommand interface.

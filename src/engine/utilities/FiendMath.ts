@@ -1,9 +1,7 @@
-
 /**
  * The FiendMath utility class.
  */
 export abstract class FiendMath {
-
   /**
    * Returns a number whose value is limited to the given range.
    *

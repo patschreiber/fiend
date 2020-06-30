@@ -6,4 +6,4 @@
 /**
  * Progenitor classes for all entities in the game.
  */
- export * from './PlayerDeathEvent';
+export * from "./PlayerDeathEvent";

@@ -5,52 +5,50 @@ import {
   PositionComponent,
   RenderComponent,
   VelocityComponent,
-} from '../Component';
-import { Asset } from '../structs/enums/rendering_enums';
-import { GameObjectTemplate, TemplateType } from '../types/gameobjects';
-import { ObjectMutator as OM } from '../utilities/ObjectMutator';
+} from "../Component";
+import { Asset } from "../structs/enums/rendering_enums";
+import { GameObjectTemplate, TemplateType } from "../types/gameobjects";
+import { ObjectMutator as OM } from "../utilities/ObjectMutator";
 
 /**
  * The structure of a template collection.
  */
 type TemplateStruct = {
   [templateKey: string]: GameObjectTemplate;
-
-}
+};
 /**
  * The Template class.
  */
 export class Template {
-
   /**
    * The structured Template data. Specific template data is available at each
    * key of the structure.
    */
   protected static readonly gameObjectTemplates: TemplateStruct = {
-    "Player": {
+    Player: {
       type: TemplateType.Player,
       components: [
         [ColliderComponent],
-        [LifeforceComponent, {currentHP: 100, maxHP: 100}],
-        [PositionComponent, {worldPosition: {x:200,y:200}}],
-        [RenderComponent, {textureId: Asset.Player}], // The value for key "Sprite" is the type id of the texture.
+        [LifeforceComponent, { currentHP: 100, maxHP: 100 }],
+        [PositionComponent, { worldPosition: { x: 200, y: 200 } }],
+        [RenderComponent, { textureId: Asset.Player }], // The value for key "Sprite" is the type id of the texture.
         [VelocityComponent],
       ],
-      tags: []
+      tags: [],
       // TODO: Add default model option
     },
-    "OrdinaryFolk": {
+    OrdinaryFolk: {
       type: TemplateType.OrdinaryFolk,
       components: [
         [BrainComponent],
         [LifeforceComponent],
         [PositionComponent],
-        [RenderComponent, {textureId: Asset.OrdinaryFolk}],
+        [RenderComponent, { textureId: Asset.OrdinaryFolk }],
         [VelocityComponent],
       ],
-      tags: ["ghost", "no collider"]
+      tags: ["ghost", "no collider"],
     },
-  }
+  };
 
   /**
    * Retrieves a specified GameObjectTemplate.

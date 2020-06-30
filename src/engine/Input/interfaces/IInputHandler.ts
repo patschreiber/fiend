@@ -1,17 +1,16 @@
-import { IIODevicePlugin } from '../../Input';
-import { Action, Button } from '../../structs/enums/input_enums';
-import { ButtonState, InputState } from '../../types/inputs';
+import { IIODevicePlugin } from "../../Input";
+import { Action, Button } from "../../structs/enums/input_enums";
+import { ButtonState, InputState } from "../../types/inputs";
 
 /**
  * The InputHandler interface.
  */
 export interface IInputHandler {
-
   /**
    * The referenced I/O Device Plugin. Think Keyboard, controller, joystick,
    * etc.
    */
-  controller: IIODevicePlugin
+  controller: IIODevicePlugin;
 
   /**
    * Retrieves the current input state. Call getInputState instead of reading it
@@ -31,6 +30,5 @@ export interface IInputHandler {
    *
    * @return The state of the button or null if no button was found.
    */
-  getButtonState(needle: Button|Action): ButtonState|null;
-
+  getButtonState(needle: Button | Action): ButtonState | null;
 }

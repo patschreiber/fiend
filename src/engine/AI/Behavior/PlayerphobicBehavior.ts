@@ -1,6 +1,4 @@
 /**
  * The PlayerphobicBehavior class.
  */
-export class PlayerphobicBehavior {
-
-}
+export class PlayerphobicBehavior {}

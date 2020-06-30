@@ -2,7 +2,6 @@
 // import { GameObject } from '../../GameObject';
 // import { IGameActor } from '../interfaces/IGameActor';
 
-
 // /**
 //  * The base GameActor class. All GameObjects that can influence things in the
 //  * environment will derive from the GameActor class.

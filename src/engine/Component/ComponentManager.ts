@@ -1,23 +1,27 @@
-import { ComponentId, ComponentPool, ComponentTemplate, ComponentTypes } from '../types/components';
-import { GameObjectId } from '../types/gameobjects';
-import { RenderComponent } from './../Component';
-import { BrainComponent } from './BrainComponent';
-import { ColliderComponent } from './ColliderComponent';
-import { Component } from './Component';
-import { ComponentFactory } from './ComponentFactory/ComponentFactory';
-import { EventComponent } from './EventComponent';
-import { IComponentManager } from './interfaces/IComponentManager';
-import { LifeforceComponent } from './LifeforceComponent';
-import { PositionComponent } from './PositionComponent';
-import { VelocityComponent } from './VelocityComponent';
+import {
+  ComponentId,
+  ComponentPool,
+  ComponentTemplate,
+  ComponentTypes,
+} from "../types/components";
+import { GameObjectId } from "../types/gameobjects";
+import { RenderComponent } from "./../Component";
+import { BrainComponent } from "./BrainComponent";
+import { ColliderComponent } from "./ColliderComponent";
+import { Component } from "./Component";
+import { ComponentFactory } from "./ComponentFactory/ComponentFactory";
+import { EventComponent } from "./EventComponent";
+import { IComponentManager } from "./interfaces/IComponentManager";
+import { LifeforceComponent } from "./LifeforceComponent";
+import { PositionComponent } from "./PositionComponent";
+import { VelocityComponent } from "./VelocityComponent";
 
 /**
  * The ComponentManager class.
  * The ComponentManager is responsible for orchestrating all currently-active
  * Components that belong to [[GameObject]] entities. There are a few
  */
- export class ComponentManager implements IComponentManager {
-
+export class ComponentManager implements IComponentManager {
   /**
    * The data structure to house the active Components.
    */
@@ -49,15 +53,14 @@ import { VelocityComponent } from './VelocityComponent';
     component: new (overrides?: Partial<T>) => Component,
     goid: GameObjectId,
     overrides?: Partial<T>
-  ): ComponentId|null {
-
+  ): ComponentId | null {
     try {
       let comp = ComponentFactory.create(component, overrides);
       this._activePools[comp.getTypeId()][goid] = comp;
 
       return comp.getId();
     } catch (e) {
-      console.error(e, {type: "ComponentCreationError"});
+      console.error(e, { type: "ComponentCreationError" });
 
       return null;
     }
@@ -72,7 +75,7 @@ import { VelocityComponent } from './VelocityComponent';
    *
    * @return If the Component was successfully removed or not.
    */
-   public removeComponent<K extends keyof ComponentTypes>(
+  public removeComponent<K extends keyof ComponentTypes>(
     component: K,
     goid: GameObjectId
   ): boolean {
@@ -96,8 +99,7 @@ import { VelocityComponent } from './VelocityComponent';
   public getComponent<K extends keyof ComponentTypes>(
     component: K,
     goid: GameObjectId
-  ): ComponentTypes[K]|null {
-
+  ): ComponentTypes[K] | null {
     let attachedComponent = this.getComponentContainer(component)[goid];
     // `undefined` is a scourge, so we just return null if the object is null
     // or undefined.
@@ -122,7 +124,6 @@ import { VelocityComponent } from './VelocityComponent';
     componentType: K,
     goid: GameObjectId
   ): boolean {
-
     let instance = this.getComponent(componentType, goid);
 
     // If the Compomemt instance exists (is attached), we tell the caller that
@@ -156,11 +157,10 @@ import { VelocityComponent } from './VelocityComponent';
    *
    * @return If the Components were successfully created.
    */
-   public spawnFromTemplate(
+  public spawnFromTemplate(
     templateComponentCollection: Array<ComponentTemplate>,
     goid: GameObjectId
   ): boolean {
-
     // Creates a new Component instance for every Component template we receive.
     for (let componentTemplate of templateComponentCollection) {
       let compType = componentTemplate[0];
@@ -172,13 +172,15 @@ import { VelocityComponent } from './VelocityComponent';
       // faulty component shouldn't necessarily crash the game with an
       // exception.
       if (cid === null) {
-        console.log('component_creation_warning :', `There was a problem when
+        console.log(
+          "component_creation_warning :",
+          `There was a problem when
         creating Component of type ${compType} for GameObject (id:${goid}).
-        Make sure the GameObject has the correct Components attached to it`);
+        Make sure the GameObject has the correct Components attached to it`
+        );
       }
     }
 
     return true; //Temp
   }
-
 }
